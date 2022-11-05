@@ -1,0 +1,56 @@
+html {
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  font-size: 62.5%;
+}
+
+body {
+  font: 1.6rem 'Nunito', sans-serif;
+  margin: 0;
+  color: var(--color-text-80);
+  background: var(--color-background);
+  overflow-x: hidden;
+}
+
+@media screen and (min-width: 768px) {
+  html {
+    margin-right: calc(100% - 100vw);
+  }
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+p {
+  margin: 0;
+  padding: 0;
+  line-height: 1;
+}
+
+p {
+  font-family: 'Nunito', sans-serif;
+}
+
+button {
+  all: unset;
+}
+
+a,
+a:hover,
+a:active,
+:visited {
+  list-style: none;
+  text-decoration: none;
+  color: inherit;
+}
+
+.no-scroll {
+  overflow: hidden;
+}
+
+* {
+  box-sizing: border-box;
+}
