@@ -12,6 +12,7 @@ import {
   QueryClientProvider,
 } from "@tanstack/react-query";
 import { useState } from "react";
+import Nav from "components/Nav";
 
 const MyApp: AppType<{ session: Session | null; dehydratedState: unknown }> = ({
   Component,
@@ -24,6 +25,7 @@ const MyApp: AppType<{ session: Session | null; dehydratedState: unknown }> = ({
       <QueryClientProvider client={queryClient}>
         <Hydrate state={pageProps.dehydratedState}>
           <Global styles={globalStyles} />
+          <Nav />
           <Component {...pageProps} />
         </Hydrate>
       </QueryClientProvider>

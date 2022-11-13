@@ -11,7 +11,7 @@ export const styledAvatar = styled.img<{
   width: ${({ size }) => {
     switch (size) {
       case "large":
-        return "6rem";
+        return "8rem";
 
       case "medium":
         return "4rem";

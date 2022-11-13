@@ -1,31 +1,44 @@
+// components
+import Container from "components/container";
 import UserAvatar from "components/user/avatar";
 import Link from "next/link";
-import * as g from "styles/globalStyles";
+
+// styles
 import * as s from "./styles";
 
 const AristHeader = () => {
   return (
-    <g.container variant="content">
-      <s.banner
-        src="https://pbs.twimg.com/profile_banners/838395700131946500/1658481774/1500x500"
-        alt=""
-      />
+    <Container variant="content">
+      <Banner />
       <UserAvatar
-        src="https://pbs.twimg.com/profile_images/1554662305052315649/88VUtMxF_400x400.jpg"
+        src="https://pbs.twimg.com/profile_images/1586703300279554050/l6_h_Az1_400x400.jpg"
         alt="Avatar misuo"
         size="large"
       />
       <s.user_name variant="title-02">misuo (ミソグ)</s.user_name>
-    </g.container>
+    </Container>
   );
 };
 
-export const AristHeaderDense = () => {
+interface BannerProps extends React.ImgHTMLAttributes<HTMLImageElement> {
+  noMargin?: boolean;
+}
+export const Banner = (props: BannerProps) => {
   return (
-    <Link href="/artist/1/portfolio">
+    <s.banner
+      src="https://pbs.twimg.com/profile_banners/838395700131946500/1658481774/1500x500"
+      {...props}
+      alt=""
+    />
+  );
+};
+
+export const AristHeaderDense = ({ hrefBack }: { hrefBack: string }) => {
+  return (
+    <Link href={hrefBack} passHref>
       <s.arist_header_dense_container>
         <UserAvatar
-          src="https://pbs.twimg.com/profile_images/1554662305052315649/88VUtMxF_400x400.jpg"
+          src="https://pbs.twimg.com/profile_banners/838395700131946500/1658481774/1500x500"
           alt="Avatar misuo"
           size="medium"
         />

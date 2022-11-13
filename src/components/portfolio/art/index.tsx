@@ -8,9 +8,9 @@ const PortfolioArt = () => {
   return (
     <s.container>
       <s.art src="https://pbs.twimg.com/media/FZNGHRbacAAo5sy?format=jpg&name=large" />
-      <s.card>
+      {/* <s.card>
         <CommissionCard />
-      </s.card>
+      </s.card> */}
     </s.container>
   );
 };

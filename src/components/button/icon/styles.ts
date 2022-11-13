@@ -1,13 +1,27 @@
 import { css } from "@emotion/react";
 import styled from "@emotion/styled";
-import { ButtonIconVariant } from ".";
+import { ButtonIconSize, ButtonIconVariant } from ".";
 
 interface ButtonProps {
   variant?: ButtonIconVariant;
+  size?: ButtonIconSize;
 }
 export const button = styled.button<ButtonProps>`
-  padding: 0.8rem;
-  margin: -0.8rem;
+  ${({ size }) => {
+    switch (size) {
+      case "small":
+        return css`
+          padding: 0.4rem;
+          margin: -0.4rem;
+        `;
+
+      default:
+        return css`
+          padding: 0.8rem;
+          margin: -0.8rem;
+        `;
+    }
+  }}
   border-radius: 222rem;
   cursor: pointer;
   transition: background-color 0.2s ease;

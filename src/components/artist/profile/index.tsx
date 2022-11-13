@@ -3,25 +3,32 @@ import PortfolioGrid from "components/portfolio/grid";
 import CommissionsGrid from "components/commission/grid";
 
 // styles
-import * as Tabs from "@radix-ui/react-tabs";
 import * as t from "components/tabs";
-import * as g from "styles/globalStyles";
+import * as s from "./styles";
+import services from "service";
 
 const ArtistProfile = ({ defaultValue }: { defaultValue: string }) => {
-  const Container = g.container.withComponent(Tabs.Root);
-
   const handleValueChange = (value: string) =>
     window.history.replaceState(window.history.state, "", `${value}`);
+  const { data } = services.useCommissionList();
 
   return (
-    <Container defaultValue={defaultValue} onValueChange={handleValueChange}>
-      <t.list>
-        <t.trigger value="commissions">Commissions</t.trigger>
-        <t.trigger value="portfolio">Portfolio</t.trigger>
-      </t.list>
-      <PortfolioGrid />
-      <CommissionsGrid />
-    </Container>
+    <t.root defaultValue={defaultValue} onValueChange={handleValueChange}>
+      <s.container variant="transparent">
+        <t.list>
+          <t.trigger value="commissions">Commissions</t.trigger>
+          <t.trigger value="portfolio">Portfolio</t.trigger>
+        </t.list>
+        <t.content value="portfolio">
+          <PortfolioGrid />
+        </t.content>
+        <t.content value="commissions">
+          {data && (
+            <CommissionsGrid href="/artist/1/commission/" commissions={data} />
+          )}
+        </t.content>
+      </s.container>
+    </t.root>
   );
 };
 

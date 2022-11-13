@@ -41,40 +41,45 @@ interface ContainerProps {
 }
 
 export const with_background = styled.div<ContainerProps>`
-  background: ${({ variant }) => getBackgroundContainer(variant)};
   position: relative;
+`;
 
-  &::before {
-    content: "";
-    position: absolute;
-    top: 0;
-    height: 100%;
-    left: -50vw;
-    right: -50vw;
-    background: ${({ variant }) => getBackgroundContainer(variant)};
-    z-index: -1;
+export const container = styled.div<ContainerProps>`
+  width: 100vw;
+  padding: 2rem;
+  background: ${({ variant }) => getBackgroundContainer(variant)};
+
+  ${mq.fromDesktopSm} {
+    padding: 2rem 20rem;
   }
 `;
 
-export const container = styled(with_background)<ContainerProps>`
-  width: 100vw;
-  padding: 2rem;
+export const paper_divider = styled.div`
+  height: 0.1rem;
+  width: calc(100% + 4rem);
+  margin: 0 -2rem;
+  background-color: var(--color-divider);
 
-  ${mq.fromDesktopSm} {
-    max-width: 103.2rem;
-    margin: 0 auto;
+  ${mq.fromTabletSm} {
+    width: calc(100% + 4.8rem);
+    margin: 0 -2.4rem;
   }
 `;
 
 export const paper_container = styled.div`
   display: flex;
-  max-width: 64rem;
-  margin: 2rem 2rem 0;
-  width: calc(100% - 4rem);
+  margin: 0;
+  width: 100%;
+  padding: 2rem 2rem;
 
   ${mq.fromMobileLg} {
     width: 100%;
-    margin: 2rem auto 0;
+  }
+
+  ${mq.fromTabletSm} {
+    padding: 0;
+    max-width: 64rem;
+    margin: 2rem auto;
   }
 `;
 
@@ -85,10 +90,14 @@ interface PaperProps {
 export const paper = styled(paper_container)<PaperProps>`
   background: var(--color-content);
   border-radius: 0.8rem;
-  padding: 2.4rem;
+  padding: 2rem;
   display: flex;
   flex-direction: column;
   gap: 2rem;
+
+  ${mq.fromTabletSm} {
+    padding: 2rem 2.4rem;
+  }
 
   ${({ loading }) =>
     loading &&

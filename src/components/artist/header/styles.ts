@@ -2,10 +2,13 @@ import styled from "@emotion/styled";
 import Typography from "components/typography";
 import { mq } from "styles/theme";
 
-export const banner = styled.img`
+interface BannerProps {
+  noMargin?: boolean;
+}
+export const banner = styled.img<BannerProps>`
   height: 12rem;
   width: calc(100% + 4rem);
-  margin: -2rem -2rem 2rem;
+  margin: ${({ noMargin }) => (noMargin ? "0 -2rem" : "-2rem 2rem -2rem")};
   object-fit: cover;
 
   ${mq.fromTabletSm} {
@@ -13,7 +16,7 @@ export const banner = styled.img`
   }
 
   ${mq.fromDesktopSm} {
-    margin: 0 0 2rem;
+    margin: ${({ noMargin }) => (noMargin ? "0" : "0 0 2rem")};
     width: 100%;
     height: 20rem;
     border-radius: 0.8rem;
@@ -31,7 +34,8 @@ export const arist_header_dense_container = styled.a`
   text-underline-offset: 0.4rem;
   cursor: pointer;
 
-  &:hover {
+  &:hover,
+  &:focus {
     text-decoration: underline;
   }
 `;

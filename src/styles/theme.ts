@@ -42,7 +42,7 @@ export const colors = {
     "40": "rgba(0, 0, 0, 0.42);",
     "20": "rgba(0, 0, 0, 0.08);",
   },
-  divider: "rgba(0, 0, 0, 0.12)",
+  divider: "rgba(0, 0, 0, 0.08)",
   success: {
     light: "#F6FFF8",
     main: "#50A773",

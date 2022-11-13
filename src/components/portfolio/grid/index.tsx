@@ -19,7 +19,7 @@ const PortfolioGrid = ({ header }: { header?: React.ReactNode }) => {
               />
             </s.imagem_container>
           </Link>
-          <s.imagem_container>
+          {/* <s.imagem_container>
             <s.img
               src="https://pbs.twimg.com/media/FgOI12paAAEENhV?format=jpg&name=medium"
               alt=""
@@ -54,7 +54,7 @@ const PortfolioGrid = ({ header }: { header?: React.ReactNode }) => {
               src="https://pbs.twimg.com/media/FfnzfNoVEAASnQ-?format=jpg&name=medium"
               alt=""
             />
-          </s.imagem_container>
+          </s.imagem_container> */}
         </Masonry>
       </ResponsiveMasonry>
     </s.container>

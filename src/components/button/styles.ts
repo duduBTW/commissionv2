@@ -14,7 +14,7 @@ export const button = styled.button<ButtonProps>`
   box-sizing: border-box;
   text-align: center;
   padding: 0.8rem 1.6rem;
-  width: ${({ fullWidth }) => (fullWidth ? "100%" : "auto")};
+  width: ${({ fullWidth }) => (fullWidth ? "100%" : "min-content")};
   border-radius: 0.8rem;
   border: 0.1rem solid transparent;
   font-family: "Poppins";

@@ -1,13 +1,14 @@
+// components
 import { AristHeaderDense } from "components/artist/header";
+import Container from "components/container";
 import PortfolioArt from "components/portfolio/art";
-import * as g from "styles/globalStyles";
 
 const ArtistPortfolioPage = () => {
   return (
-    <g.container>
-      <AristHeaderDense />
+    <Container>
+      <AristHeaderDense hrefBack="/artist/1/portfolio" />
       <PortfolioArt />
-    </g.container>
+    </Container>
   );
 };
 

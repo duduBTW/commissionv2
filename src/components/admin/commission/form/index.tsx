@@ -42,13 +42,11 @@ const AdminCommissionForm = ({
         />
         <InputCurrency control={control} name="price" label="Preco *" />
         <InputEditor control={control} name="description" label="Descricao *" />
-      </g.paper>
-
-      <g.paper_container>
+        <g.paper_divider />
         <s.submit_button loading={loading} type="submit">
           {submitLabel}
         </s.submit_button>
-      </g.paper_container>
+      </g.paper>
     </form>
   );
 };

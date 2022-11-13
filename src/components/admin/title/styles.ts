@@ -7,8 +7,10 @@ export const container = styled(g.paper_container)`
   display: flex;
   align-items: center;
   gap: 1.2rem;
+  background-color: var(--color-content);
 
-  ${mq.fromMobileLg} {
+  ${mq.fromTabletSm} {
+    background-color: transparent;
     padding: 0;
   }
 `;

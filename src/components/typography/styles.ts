@@ -24,8 +24,8 @@ export const styledText = styled.div<StyledTextProps>`
           font-family: "Poppins";
           font-style: normal;
           font-weight: 700;
-          font-size: 2rem;
-          line-height: 3.2rem;
+          font-size: 2.8rem;
+          line-height: 4.2rem;
         `;
       case "title-02":
         return css`
@@ -35,11 +35,19 @@ export const styledText = styled.div<StyledTextProps>`
           font-size: 2.2rem;
           line-height: 3.4rem;
         `;
-      case "title-04":
+      case "title-03":
         return css`
           font-family: "Poppins";
           font-style: normal;
           font-weight: 700;
+          font-size: 2rem;
+          line-height: 3.2rem;
+        `;
+      case "title-04":
+        return css`
+          font-family: "Poppins";
+          font-style: normal;
+          font-weight: 500;
           font-size: 1.6rem;
           line-height: 2.4rem;
         `;

@@ -1,21 +1,21 @@
 import type { NextPage } from "next";
-import * as g from "styles/globalStyles";
 
 // components
 import OrderGrid from "components/order/grid";
 import ArtistGrid from "components/artist/grid";
+import Container from "components/container";
 
 const Home: NextPage = () => {
   return (
     <>
-      <g.container variant="content">
+      <Container variant="content">
         <OrderGrid label="Meus pedidos" />
-      </g.container>
-      <g.container>
+      </Container>
+      <Container>
         <ArtistGrid label="Artistas populares" />
         <div style={{ height: "2rem" }}></div>
         <ArtistGrid label="Artistas novos" />
-      </g.container>
+      </Container>
     </>
   );
 };
