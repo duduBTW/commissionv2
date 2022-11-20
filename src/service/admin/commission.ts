@@ -39,9 +39,9 @@ export type CommissionImageSchema = z.infer<typeof commissionImageSchema>;
 // -- Methods
 // Create commission
 export const insertCommission = async (data: CommissionSchema) =>
-  await axios.post<{
+  await api.post<{
     id: string;
-  }>("http://localhost:3000/api/admin/commission", data);
+  }>("/api/admin/commission", data);
 
 // Get commission by id
 export const getCommission =
