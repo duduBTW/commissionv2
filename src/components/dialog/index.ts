@@ -37,6 +37,7 @@ export const overlay = styled(Dialog.Overlay)`
   inset: 0;
   z-index: 2;
   animation: ${overlayShow} 150ms cubic-bezier(0.16, 1, 0.3, 1);
+  backdrop-filter: blur(0.4rem);
 `;
 
 export const content = styled(Dialog.Content)`
@@ -50,6 +51,8 @@ export const content = styled(Dialog.Content)`
   height: calc(100% - 2rem);
   padding: 2rem;
   z-index: 2;
+  border-top-right-radius: 0.8rem;
+  border-top-left-radius: 0.8rem;
   animation: ${contentShowMobile} 150ms cubic-bezier(0.16, 1, 0.3, 1);
 
   &:focus {
