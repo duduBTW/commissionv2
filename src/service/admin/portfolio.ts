@@ -1,6 +1,7 @@
 import { useQuery } from "@tanstack/react-query";
 import axios from "axios";
 import { IncomingHttpHeaders } from "http";
+import api from "service/api";
 import * as z from "zod";
 
 // -- Schemas
@@ -18,22 +19,16 @@ export type PortfolioSchema = z.infer<typeof portfolioSchema>;
 // -- Methods
 // Create portfolio
 export const insertPortfolio = async (body: PortfolioSchema) => {
-  const { data } = await axios.post(
-    `http://localhost:3000/api/admin/portfolio`,
-    body
-  );
+  const { data } = await api.post(`/api/admin/portfolio`, body);
 
   return data;
 };
 
 // Get portfolio list
 export const getPortfolioList = (headers?: IncomingHttpHeaders) => async () => {
-  const { data } = await axios.get<PortfolioSchema[]>(
-    `http://localhost:3000/api/admin/portfolio`,
-    {
-      headers: { Cookie: headers?.cookie },
-    }
-  );
+  const { data } = await api.get<PortfolioSchema[]>(`/api/admin/portfolio`, {
+    headers: { Cookie: headers?.cookie },
+  });
 
   return data;
 };
@@ -42,8 +37,8 @@ export const getPortfolioList = (headers?: IncomingHttpHeaders) => async () => {
 export const updatePortfolio = async (body: PortfolioSchema) => {
   if (!body.id) return null;
 
-  const { data } = await axios.put<PortfolioSchema>(
-    `http://localhost:3000/api/admin/portfolio/${body.id}`,
+  const { data } = await api.put<PortfolioSchema>(
+    `/api/admin/portfolio/${body.id}`,
     body
   );
 
@@ -52,8 +47,8 @@ export const updatePortfolio = async (body: PortfolioSchema) => {
 
 // Delete portfolio
 export const deletePortfolio = async (portfolioId: string) => {
-  const { data } = await axios.delete<PortfolioSchema>(
-    `http://localhost:3000/api/admin/portfolio/${portfolioId}`
+  const { data } = await api.delete<PortfolioSchema>(
+    `/api/admin/portfolio/${portfolioId}`
   );
 
   return data;

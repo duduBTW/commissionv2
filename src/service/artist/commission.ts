@@ -1,6 +1,7 @@
 import { useQuery } from "@tanstack/react-query";
 import axios from "axios";
 import { IncomingHttpHeaders } from "http";
+import api from "service/api";
 import * as z from "zod";
 
 export const commissionListSchema = z.object({
@@ -35,8 +36,8 @@ export type CommissionItemSchema = z.infer<typeof commissionItemSchema>;
 // Get list of commissions
 export const getCommissionList =
   (artistId: string, headers?: IncomingHttpHeaders) => async () => {
-    const { data } = await axios.get<CommissionListSchema[]>(
-      `http://localhost:3000/api/artist/${artistId}/commissions`,
+    const { data } = await api.get<CommissionListSchema[]>(
+      `/api/artist/${artistId}/commissions`,
       {
         headers: { Cookie: headers?.cookie },
       }
@@ -49,8 +50,8 @@ export const getCommissionList =
 export const getCommission =
   (artistId: string, commissionId: string, headers?: IncomingHttpHeaders) =>
   async () => {
-    const { data } = await axios.get<CommissionItemSchema>(
-      `http://localhost:3000/api/artist/${artistId}/commissions/${commissionId}`,
+    const { data } = await api.get<CommissionItemSchema>(
+      `/api/artist/${artistId}/commissions/${commissionId}`,
       {
         headers: { Cookie: headers?.cookie },
       }

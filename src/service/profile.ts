@@ -1,9 +1,9 @@
 import { useQuery } from "@tanstack/react-query";
-import axios from "axios";
 import { IncomingHttpHeaders } from "http";
 import * as z from "zod";
 import { Session } from "next-auth";
 import { useRouter } from "next/router";
+import api from "./api";
 
 // -- Schemas
 export const createProfileSchema = z.object({
@@ -26,30 +26,22 @@ export type CreateProfileSchema = z.infer<typeof createProfileSchema>;
 // -- Methods
 // Get logged user
 export const getProfile = (headers?: IncomingHttpHeaders) => async () => {
-  const { data } = await axios.get<ProfileSchema>(
-    `http://localhost:3000/api/profile`,
-    {
-      headers: { Cookie: headers?.cookie },
-    }
-  );
+  const { data } = await api.get<ProfileSchema>(`/api/profile`, {
+    headers: { Cookie: headers?.cookie },
+  });
 
   return data;
 };
 
 // Update user
 export const updateProfile = async (body: CreateProfileSchema) => {
-  const { data } = await axios.put<ProfileSchema>(
-    `http://localhost:3000/api/profile`,
-    body
-  );
+  const { data } = await api.put<ProfileSchema>(`/api/profile`, body);
 
   return data;
 };
 
 const fetchSession = async () => {
-  const { data: session } = await axios.get<Session>(
-    "http://localhost:3000/api/auth/session"
-  );
+  const { data: session } = await api.get<Session>("/api/auth/session");
   if (Object.keys(session).length) {
     return session;
   }

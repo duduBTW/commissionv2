@@ -1,6 +1,7 @@
 import { useQuery } from "@tanstack/react-query";
 import axios from "axios";
 import { IncomingHttpHeaders } from "http";
+import api from "service/api";
 import * as z from "zod";
 
 // -- Schemas
@@ -45,8 +46,8 @@ export const insertCommission = async (data: CommissionSchema) =>
 // Get commission by id
 export const getCommission =
   (id: string, headers?: IncomingHttpHeaders) => async () => {
-    const data = await axios.get<CommissionSchema>(
-      `http://localhost:3000/api/admin/commission/${id}`,
+    const data = await api.get<CommissionSchema>(
+      `/api/admin/commission/${id}`,
       {
         headers: { Cookie: headers?.cookie },
       }
@@ -58,8 +59,8 @@ export const getCommission =
 // Get list of commissions
 export const getCommissionList =
   (headers?: IncomingHttpHeaders) => async () => {
-    const { data } = await axios.get<AdminCommissionListSchema[]>(
-      `http://localhost:3000/api/admin/commission`,
+    const { data } = await api.get<AdminCommissionListSchema[]>(
+      `/api/admin/commission`,
       {
         headers: { Cookie: headers?.cookie },
       }
@@ -71,8 +72,8 @@ export const getCommissionList =
 // Update commissions
 export const updateCommission =
   (commissionId: string) => async (body: CommissionSchema) => {
-    const { data } = await axios.put<AdminCommissionListSchema[]>(
-      `http://localhost:3000/api/admin/commission/${commissionId}`,
+    const { data } = await api.put<AdminCommissionListSchema[]>(
+      `/api/admin/commission/${commissionId}`,
       body
     );
 
@@ -82,8 +83,8 @@ export const updateCommission =
 // Insert image
 export const insertImageCommission =
   (id: string) => async (body: CommissionImageSchema) => {
-    const { data } = await axios.post<CommissionImageSchema>(
-      `http://localhost:3000/api/admin/commission/${id}/images`,
+    const { data } = await api.post<CommissionImageSchema>(
+      `/api/admin/commission/${id}/images`,
       body
     );
 
@@ -93,8 +94,8 @@ export const insertImageCommission =
 // Update image
 export const updateImageCommission =
   (commissionId: string) => async (body: CommissionImageSchema) => {
-    const { data } = await axios.put<CommissionImageSchema>(
-      `http://localhost:3000/api/admin/commission/${commissionId}/images`,
+    const { data } = await api.put<CommissionImageSchema>(
+      `/api/admin/commission/${commissionId}/images`,
       body
     );
 
@@ -104,8 +105,8 @@ export const updateImageCommission =
 // Delete image
 export const deleteImageCommission =
   (commissionId: string) => async (id: string) => {
-    const { data } = await axios.delete<CommissionImageSchema>(
-      `http://localhost:3000/api/admin/commission/${commissionId}/images/${id}`
+    const { data } = await api.delete<CommissionImageSchema>(
+      `/api/admin/commission/${commissionId}/images/${id}`
     );
 
     return data;
@@ -113,8 +114,8 @@ export const deleteImageCommission =
 
 // Get images of a commission
 export const getCommissionImageList = (id: string) => async () => {
-  const { data } = await axios.get<CommissionImageSchema[]>(
-    `http://localhost:3000/api/admin/commission/${id}/images`
+  const { data } = await api.get<CommissionImageSchema[]>(
+    `/api/admin/commission/${id}/images`
   );
 
   return data;
