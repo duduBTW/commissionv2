@@ -10,7 +10,13 @@ import * as s from "./styles";
 const AdminSearch = ({ createHref }: { createHref?: string }) => {
   return (
     <s.container>
-      <InputBase placeholder="Search..." type="text" name="" id="" />
+      <InputBase
+        variant="outlined"
+        placeholder="Search..."
+        type="text"
+        name=""
+        id=""
+      />
       {createHref && (
         <Link href={createHref}>
           <Button variant="secondary">

@@ -1,13 +1,13 @@
-import { useMemo } from "react";
-import { CommissionListSchema } from "service/commission";
+import { AdminCommissionListSchema } from "service/admin/commission";
 
 // components
 import Link from "next/link";
 
 // styles
 import * as s from "./styles";
+import usePrice from "utils/usePrice";
 
-interface Props extends CommissionListSchema {
+interface Props extends AdminCommissionListSchema {
   href: string;
 }
 
@@ -19,14 +19,7 @@ const CommissionCard = ({
   miniature,
   href,
 }: Props) => {
-  const formattedPrice = useMemo(
-    () =>
-      Intl.NumberFormat("pt-br", {
-        style: "currency",
-        currency: "BRL",
-      }).format(price),
-    [price]
-  );
+  const formattedPrice = usePrice(price);
 
   return (
     <Link href={`${href}/${id}`}>

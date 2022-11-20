@@ -30,6 +30,18 @@ const MyProfileForm = ({ onSubmit, loading, ...formProps }: Props) => {
       <g.paper loading={loading}>
         <InputText
           control={control}
+          name="discord"
+          variant="outlined"
+          label="Discord *"
+        />
+        <InputText
+          control={control}
+          name="twitter"
+          variant="outlined"
+          label="Twitter *"
+        />
+        <InputText
+          control={control}
           name="userName"
           variant="outlined"
           label="Nome de usuario *"

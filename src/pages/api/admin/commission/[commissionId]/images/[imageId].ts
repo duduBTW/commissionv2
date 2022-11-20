@@ -1,10 +1,7 @@
-import { NextApiRequest, NextApiResponse } from "next";
+import apiMiddleware from "server/apiMiddleware";
 import { prisma } from "server/db/client";
 
-const commissionImageApi = async (
-  req: NextApiRequest,
-  res: NextApiResponse
-) => {
+export default apiMiddleware.admin(async (req, res) => {
   const imageId = req.query["imageId"];
   if (typeof imageId !== "string") {
     return res.status(401).send({});
@@ -26,7 +23,7 @@ const commissionImageApi = async (
     console.error(error);
     return res.status(500).send(error);
   }
-};
+});
 
 const deleteImageCommission = ({ id }: { id: string }) => {
   return prisma.commissionImage.delete({
@@ -35,5 +32,3 @@ const deleteImageCommission = ({ id }: { id: string }) => {
     },
   });
 };
-
-export default commissionImageApi;

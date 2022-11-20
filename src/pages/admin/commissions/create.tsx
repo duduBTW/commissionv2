@@ -1,14 +1,14 @@
+import { useMutation } from "@tanstack/react-query";
 import { useRouter } from "next/router";
 import services from "service";
 
 // components
-import { useMutation } from "@tanstack/react-query";
 import AdminCommissionForm from "components/admin/commission/form";
 import AdmindHeader from "components/admin/title";
 
 const CommissionsCreatePage = () => {
   const { push } = useRouter();
-  const { mutate, isLoading } = useMutation(services.insertCommission, {
+  const { mutate, isLoading } = useMutation(services.admin.insertCommission, {
     onSuccess: ({ data: { id } }) => push(id),
   });
 

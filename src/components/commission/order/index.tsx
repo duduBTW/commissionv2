@@ -1,25 +1,47 @@
 import { useState } from "react";
+import usePrice from "utils/usePrice";
+import services from "service";
+import { mq } from "styles/theme";
+import { CommissionItemSchema } from "service/artist/commission";
+import { Thumbs, Lazy, Mousewheel, Keyboard, Navigation } from "swiper";
+import { Swiper as SwiperClass } from "swiper/types";
+import { css } from "@emotion/css";
+
+// components
 import Button from "components/button";
 import Typography from "components/typography";
 import ArrowDownSLineIcon from "remixicon-react/ArrowDownSLineIcon";
 import ArrowUpSLineIcon from "remixicon-react/ArrowUpSLineIcon";
 import { Swiper, SwiperSlide } from "swiper/react";
-import { Thumbs, Lazy, Mousewheel } from "swiper";
-import "swiper/css/navigation";
-
-import { Swiper as SwiperClass } from "swiper/types";
-import "swiper/css";
-import "swiper/css/thumbs";
-import "swiper/css/navigation";
-import { css } from "@emotion/css";
+import ButtonIcon from "components/button/icon";
 
 // styles
 import * as g from "styles/globalStyles";
 import * as s from "./styles";
-import ButtonIcon from "components/button/icon";
-import { mq } from "styles/theme";
+import { useRouter } from "next/router";
 
-const CommissionOrder = () => {
+const CommissionOrder = ({
+  commission,
+  isMobile = false,
+  onLoginDialogOpenChange,
+}: {
+  commission: CommissionItemSchema;
+  isMobile?: boolean;
+  onLoginDialogOpenChange?(open: boolean): void;
+}) => {
+  const { push, asPath } = useRouter();
+  const { data: session } = services.useSession();
+  const formattedPrice = usePrice(commission.price);
+
+  const handleSpeakWithArtistClick = () => {
+    if (!session?.user) {
+      onLoginDialogOpenChange?.(true);
+      return;
+    }
+
+    push(`${asPath}/order`);
+  };
+
   return (
     <g.paper
       className={css`
@@ -30,10 +52,14 @@ const CommissionOrder = () => {
         }
       `}
     >
-      <Typography variant="title-01">Drawing - Full Body</Typography>
-      <CommissionOrderImages />
+      <Typography variant="title-01">{commission.name}</Typography>
+      <CommissionOrderImages isMobile={isMobile} images={commission.images} />
       <Typography variant="body-01" color="text.40">
-        Arte de corpo todo do personagem selecionado.
+        <div
+          dangerouslySetInnerHTML={{
+            __html: commission.descriptionHtml,
+          }}
+        />
       </Typography>
       <div
         className={css`
@@ -45,51 +71,52 @@ const CommissionOrder = () => {
         `}
       />
       <Typography variant="title-03" color="success.main">
-        R$ 150,00
+        {formattedPrice}
       </Typography>
-      <Button fullWidth>Falar com o artista</Button>
+      <Button onClick={handleSpeakWithArtistClick} fullWidth>
+        Falar com o artista
+      </Button>
     </g.paper>
   );
 };
 
-const CommissionOrderImages = () => {
+const CommissionOrderImages = ({
+  images,
+  isMobile,
+}: {
+  images: CommissionItemSchema["images"];
+  isMobile: boolean;
+}) => {
   const [thumbsSwiper, setThumbsSwiper] = useState<SwiperClass | null>(null);
   const [mainSwiper, setMainSwiper] = useState<SwiperClass | undefined>();
-
-  console.log("mainSwiper?.isEnd", mainSwiper?.isEnd);
 
   return (
     <s.images_container>
       <Swiper
         loop
         thumbs={{ swiper: thumbsSwiper }}
-        modules={[Thumbs, Lazy]}
+        modules={[Thumbs, Lazy, Keyboard, Navigation]}
         autoHeight
         slidesPerView={1}
         onSwiper={setMainSwiper}
+        navigation={isMobile}
         lazy={true}
+        keyboard={{
+          enabled: true,
+        }}
         onSlideNextTransitionStart={() => {
           thumbsSwiper?.slideNext();
         }}
         onSlidePrevTransitionStart={() => {
           thumbsSwiper?.slidePrev();
         }}
+        spaceBetween={12}
       >
-        <SwiperSlide>
-          <s.image_main src="https://pbs.twimg.com/media/FZNGHRbacAAo5sy?format=jpg&name=large" />
-        </SwiperSlide>
-        <SwiperSlide>
-          <s.image_main src="https://pbs.twimg.com/media/FYqNgiKVUAEY0Tj?format=jpg&name=4096x4096" />
-        </SwiperSlide>
-        <SwiperSlide>
-          <s.image_main src="https://pbs.twimg.com/media/FXooLX8acAEGz5Q?format=jpg&name=large" />
-        </SwiperSlide>
-        <SwiperSlide>
-          <s.image_main src="https://pbs.twimg.com/media/FW3wMJMaIAE_rz6?format=jpg&name=large" />
-        </SwiperSlide>
-        <SwiperSlide>
-          <s.image_main src="https://pbs.twimg.com/media/FUeFfOPaIAA4L2H?format=jpg&name=large" />
-        </SwiperSlide>
+        {images.map((image) => (
+          <SwiperSlide key={image.id}>
+            <ImageMain {...image} />
+          </SwiperSlide>
+        ))}
       </Swiper>
 
       <s.image_selector>
@@ -104,28 +131,54 @@ const CommissionOrderImages = () => {
           mousewheel
           watchSlidesProgress
         >
-          <s.image_miniature_container>
-            <s.image_miniature
-              active
-              src="https://pbs.twimg.com/media/FZNGHRbacAAo5sy?format=jpg&name=large"
-            />
-          </s.image_miniature_container>
-          <s.image_miniature_container>
-            <s.image_miniature src="https://pbs.twimg.com/media/FYqNgiKVUAEY0Tj?format=jpg&name=4096x4096" />
-          </s.image_miniature_container>
-          <s.image_miniature_container>
-            <s.image_miniature src="https://pbs.twimg.com/media/FXooLX8acAEGz5Q?format=jpg&name=large" />
-          </s.image_miniature_container>
-          <s.image_miniature_container>
-            <s.image_miniature src="https://pbs.twimg.com/media/FW3wMJMaIAE_rz6?format=jpg&name=large" />
-          </s.image_miniature_container>
-          <s.image_miniature_container>
-            <s.image_miniature src="https://pbs.twimg.com/media/FUeFfOPaIAA4L2H?format=jpg&name=large" />
-          </s.image_miniature_container>
+          {images.map(({ id, url }) => (
+            <s.image_miniature_container key={id}>
+              <s.image_miniature active src={url} />
+            </s.image_miniature_container>
+          ))}
         </s.image_swiper>
         <Controls swiper={mainSwiper} />
       </s.image_selector>
     </s.images_container>
+  );
+};
+
+const ImageMain = ({
+  id,
+  url,
+  height,
+  width,
+  hash,
+}: CommissionItemSchema["images"][0]) => {
+  const [isLoaded, setLoaded] = useState(false);
+  const [isLoadStarted, setLoadStarted] = useState(false);
+
+  const handleLoad = () => setLoaded(true);
+  const handleLoadStarted = () => setLoadStarted(true);
+
+  return (
+    <s.image_main_container
+      style={{
+        aspectRatio: width / height,
+      }}
+    >
+      <s.image_main
+        key={id}
+        src={url}
+        loading="lazy"
+        onLoad={handleLoad}
+        beforeLoad={handleLoadStarted}
+      />
+
+      {!isLoaded && isLoadStarted && (
+        <s.image_main_hash
+          width={"100%"}
+          resolutionY={32}
+          punch={1}
+          hash={hash}
+        />
+      )}
+    </s.image_main_container>
   );
 };
 

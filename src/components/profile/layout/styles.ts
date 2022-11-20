@@ -6,7 +6,7 @@ export const container = styled.div`
   gap: 2rem;
   width: 100%;
   justify-content: center;
-  padding-bottom: 5.6rem;
+  padding-bottom: 8rem;
 
   ${mq.fromDesktopSm} {
     padding-bottom: 0rem;
@@ -43,9 +43,10 @@ export const side_nav = styled.aside`
 export const side_nav_item = styled.button`
   user-select: none;
   flex: 1;
-  padding: 0.6rem 1.2rem;
+  padding: 0.8rem 1.2rem;
   display: flex;
   flex-direction: column;
+  gap: 0.4rem;
   align-items: center;
   justify-content: center;
 

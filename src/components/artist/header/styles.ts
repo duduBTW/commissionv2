@@ -5,20 +5,40 @@ import { mq } from "styles/theme";
 interface BannerProps {
   noMargin?: boolean;
 }
+
 export const banner = styled.img<BannerProps>`
-  height: 12rem;
+  height: 16rem;
   width: calc(100% + 4rem);
-  margin: ${({ noMargin }) => (noMargin ? "0 -2rem" : "-2rem 2rem -2rem")};
+  margin: ${({ noMargin }) => (noMargin ? "0 -2rem" : "-2rem -2rem 2rem")};
   object-fit: cover;
 
   ${mq.fromTabletSm} {
-    height: 18rem;
+    height: 20rem;
   }
 
   ${mq.fromDesktopSm} {
     margin: ${({ noMargin }) => (noMargin ? "0" : "0 0 2rem")};
     width: 100%;
+    height: 24rem;
+    border-radius: 0.8rem;
+  }
+`;
+
+export const banner_placeholder = styled.div<BannerProps>`
+  background-color: var(--color-primary-l);
+
+  height: 16rem;
+  width: calc(100% + 4rem);
+  margin: ${({ noMargin }) => (noMargin ? "0 -2rem" : "-2rem -2rem 2rem")};
+
+  ${mq.fromTabletSm} {
     height: 20rem;
+  }
+
+  ${mq.fromDesktopSm} {
+    margin: ${({ noMargin }) => (noMargin ? "0" : "0 0 2rem")};
+    width: 100%;
+    height: 24rem;
     border-radius: 0.8rem;
   }
 `;

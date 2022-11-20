@@ -1,19 +1,40 @@
 import styled from "@emotion/styled";
+import { Blurhash } from "react-blurhash";
 import { mq } from "styles/theme";
 import { Swiper, SwiperSlide } from "swiper/react";
+import { LazyLoadImage } from "react-lazy-load-image-component";
 
 export const images_container = styled.div`
+  --swiper-navigation-color: var(--color-primary);
+
   display: flex;
   gap: 4rem;
   width: 100%;
 `;
-export const image_main = styled.img`
+export const image_main_container = styled.div`
+  position: relative;
+  min-height: 20rem;
+`;
+export const image_main = styled(LazyLoadImage)`
   width: 100%;
-  border-radius: 4px;
+  height: max-content;
+  border-radius: 0.8rem;
 
   object-fit: contain;
   object-position: left top;
   margin-right: auto;
+`;
+
+export const image_main_hash = styled(Blurhash)`
+  width: 100%;
+  object-fit: cover;
+  border-radius: 0.8rem;
+  position: absolute !important;
+  top: 0 !important;
+  left: 0 !important;
+  height: 100% !important;
+
+  z-index: 1 !important;
 `;
 
 export const image_selector = styled.div`
@@ -50,7 +71,7 @@ export const image_miniature_container = styled(SwiperSlide)`
     cursor: default;
     img {
       opacity: 1;
-      border: 0.2rem solid var(--color-divider);
+      border: 0.3rem solid var(--color-divider);
     }
 
     &:hover {
@@ -77,6 +98,6 @@ export const image_miniature = styled.img<ImageMiniatureProps>`
   object-fit: cover;
   object-position: top;
   border-radius: 0.4rem;
-  opacity: 0.6;
+  opacity: 0.4;
   border: 0.2rem solid transparent;
 `;

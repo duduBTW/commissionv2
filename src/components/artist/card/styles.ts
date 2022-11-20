@@ -23,8 +23,16 @@ export const cover = styled.img`
   height: 8rem;
   width: 100%;
   object-fit: cover;
-  object-position: top;
+  object-position: center;
   border-radius: 0.8rem;
+`;
+
+export const cover_placeholder = styled.div`
+  grid-area: cover;
+  height: 8rem;
+  width: 100%;
+  border-radius: 0.8rem;
+  background-color: var(--color-primary-l);
 `;
 
 export const userAvatar = styled(UserAvatar)`

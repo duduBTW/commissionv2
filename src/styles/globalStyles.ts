@@ -66,7 +66,12 @@ export const paper_divider = styled.div`
   }
 `;
 
-export const paper_container = styled.div`
+interface PaperProps {
+  loading?: boolean;
+  size?: "small" | "medium";
+}
+
+export const paper_container = styled.div<PaperProps>`
   display: flex;
   margin: 0;
   width: 100%;
@@ -78,14 +83,20 @@ export const paper_container = styled.div`
 
   ${mq.fromTabletSm} {
     padding: 0;
-    max-width: 64rem;
+    max-width: ${({ size }) => {
+      switch (size) {
+        case "medium":
+          return "64rem";
+        case "small":
+          return "40rem";
+
+        default:
+          return "64rem";
+      }
+    }};
     margin: 2rem auto;
   }
 `;
-
-interface PaperProps {
-  loading?: boolean;
-}
 
 export const paper = styled(paper_container)<PaperProps>`
   background: var(--color-content);

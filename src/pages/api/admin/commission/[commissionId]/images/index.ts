@@ -1,11 +1,8 @@
-import { NextApiRequest, NextApiResponse } from "next";
+import apiMiddleware from "server/apiMiddleware";
 import { prisma } from "server/db/client";
-import { commissionImageSchema } from "service/commission";
+import { commissionImageSchema } from "service/admin/commission";
 
-const commissionImagesApi = async (
-  req: NextApiRequest,
-  res: NextApiResponse
-) => {
+export default apiMiddleware.admin(async (req, res) => {
   const commissionId = req.query["commissionId"];
   if (typeof commissionId !== "string") {
     return res.status(401).send({});
@@ -41,7 +38,7 @@ const commissionImagesApi = async (
     console.error(error);
     return res.status(500).send(error);
   }
-};
+});
 
 const insetImageCommission = ({
   body,
@@ -87,5 +84,3 @@ const updateImageCommission = ({ body }: { body: unknown }) => {
     },
   });
 };
-
-export default commissionImagesApi;

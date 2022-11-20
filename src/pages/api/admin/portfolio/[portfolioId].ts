@@ -1,8 +1,8 @@
-import { NextApiRequest, NextApiResponse } from "next";
+import apiMiddleware from "server/apiMiddleware";
 import { prisma } from "server/db/client";
-import { portfolioSchema } from "service/portfolio";
+import { portfolioSchema } from "service/admin/portfolio";
 
-const portfolioApi = async (req: NextApiRequest, res: NextApiResponse) => {
+export default apiMiddleware.admin(async (req, res) => {
   const portfolioId = req.query["portfolioId"];
   if (typeof portfolioId !== "string") {
     return res.status(401).send({});
@@ -31,7 +31,7 @@ const portfolioApi = async (req: NextApiRequest, res: NextApiResponse) => {
     console.error(error);
     return res.status(500).send(error);
   }
-};
+});
 
 const updatePortfolio = ({
   body,
@@ -61,5 +61,3 @@ const deletePortfolio = ({ portfolioId }: { portfolioId: string }) =>
       id: portfolioId,
     },
   });
-
-export default portfolioApi;

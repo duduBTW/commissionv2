@@ -1,23 +1,24 @@
-import { NextApiRequest, NextApiResponse } from "next";
-import { CommissionListSchema, commissionSchema } from "service/commission";
+import {
+  AdminCommissionListSchema,
+  commissionSchema,
+} from "service/admin/commission";
 import { prisma } from "server/db/client";
+import apiMiddleware from "server/apiMiddleware";
 
-const commissionApi = async (req: NextApiRequest, res: NextApiResponse) => {
-  // const session = await getServerAuthSession({ req, res });
-  // if (!session)
-  //   return res.status(401).send({
-  //     error:
-  //       "You must be signed in to view the protected content on this page.",
-  //   });
-
+export default apiMiddleware.admin(async (req, res, user) => {
   try {
     switch (req.method) {
       case "GET":
-        return res.send(await getCommissionList());
+        return res.send(
+          await getCommissionList({
+            userId: user.id,
+          })
+        );
       case "POST":
         return res.send(
           await insetCommission({
             body: req.body,
+            userId: user.id,
           })
         );
 
@@ -28,9 +29,15 @@ const commissionApi = async (req: NextApiRequest, res: NextApiResponse) => {
     console.error(error);
     return res.status(500).send(error);
   }
-};
+});
 
-export const insetCommission = async ({ body }: { body: unknown }) => {
+export const insetCommission = async ({
+  body,
+  userId,
+}: {
+  body: unknown;
+  userId: string;
+}) => {
   const {
     description: { html, json },
     name,
@@ -43,14 +50,26 @@ export const insetCommission = async ({ body }: { body: unknown }) => {
       descriptionJson: json,
       name,
       price,
+      user: {
+        connect: {
+          id: userId,
+        },
+      },
     },
   });
 };
 
-export const getCommissionList = async (): Promise<
-  CommissionListSchema[] | null
-> => {
+export const getCommissionList = async ({
+  userId,
+}: {
+  userId: string;
+}): Promise<AdminCommissionListSchema[] | null> => {
   const commissions = await prisma.commission.findMany({
+    where: {
+      user: {
+        id: userId,
+      },
+    },
     include: {
       images: true,
     },
@@ -69,5 +88,3 @@ export const getCommissionList = async (): Promise<
     };
   });
 };
-
-export default commissionApi;

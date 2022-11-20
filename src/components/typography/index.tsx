@@ -33,6 +33,7 @@ export interface Props {
   children: React.ReactNode;
   ml?: number;
   className?: string;
+  center?: boolean;
 }
 
 const Typography = ({

@@ -1,8 +1,8 @@
-import { NextApiRequest, NextApiResponse } from "next";
-import { commissionSchema, CommissionSchema } from "service/commission";
+import { commissionSchema, CommissionSchema } from "service/admin/commission";
 import { prisma } from "server/db/client";
+import apiMiddleware from "server/apiMiddleware";
 
-const commissionItemApi = async (req: NextApiRequest, res: NextApiResponse) => {
+export default apiMiddleware.admin(async (req, res) => {
   const commissionId = req.query["commissionId"];
   if (typeof commissionId !== "string") {
     return res.status(401).send({});
@@ -32,7 +32,7 @@ const commissionItemApi = async (req: NextApiRequest, res: NextApiResponse) => {
     console.error(error);
     return res.status(500).send(error);
   }
-};
+});
 
 export const updateCommission = async ({
   commissionId,
@@ -84,5 +84,3 @@ export const getCommission = async ({
     id,
   };
 };
-
-export default commissionItemApi;

@@ -1,4 +1,4 @@
-import { CommissionSchema } from "service/commission";
+import { CommissionSchema } from "service/admin/commission";
 import services from "service";
 
 import { SubmitHandler, useForm, UseFormProps } from "react-hook-form";
@@ -26,7 +26,7 @@ const AdminCommissionForm = ({
   ...formProps
 }: Props) => {
   const formMethods = useForm<CommissionSchema>({
-    resolver: zodResolver(services.commissionSchema),
+    resolver: zodResolver(services.admin.commissionSchema),
     ...formProps,
   });
 

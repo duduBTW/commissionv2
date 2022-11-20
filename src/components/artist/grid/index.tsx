@@ -1,3 +1,5 @@
+import { ArtistListItemSchema } from "service/artist";
+
 // styles
 import * as s from "./styles";
 
@@ -5,12 +7,20 @@ import * as s from "./styles";
 import Typography from "components/typography";
 import ArtistCard from "../card";
 
-const ArtistGrid = ({ label }: { label?: string }) => {
+const ArtistGrid = ({
+  label,
+  artists,
+}: {
+  label?: string;
+  artists: ArtistListItemSchema[];
+}) => {
   return (
     <>
       {label ? <Typography variant="subtitle-01">{label}</Typography> : null}
       <s.grid>
-        <ArtistCard />
+        {artists.map((artist) => (
+          <ArtistCard {...artist} key={artist.id} />
+        ))}
       </s.grid>
     </>
   );

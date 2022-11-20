@@ -9,21 +9,24 @@ const AdminDashboardPage: NextPage<{ defaultValue: string }> = ({
   return <AdminDashboard defaultValue={defaultValue} />;
 };
 
-export const getServerSideProps: GetServerSideProps = async ({ query }) => {
+export const getServerSideProps: GetServerSideProps = async ({
+  query,
+  req,
+}) => {
   const selectedTab = String(query.slug?.[0] ?? "home");
 
   const queryClient = new QueryClient();
   if (selectedTab === "portfolio") {
     await queryClient.prefetchQuery(
-      [services.usePortfolioKey],
-      services.getPortfolioList
+      [services.admin.usePortfolioKey],
+      services.admin.getPortfolioList(req.headers)
     );
   }
 
   if (selectedTab === "commissions") {
     await queryClient.prefetchQuery(
-      [services.useCommissionListKey],
-      services.getCommissionList
+      [services.admin.useCommissionListKey],
+      services.admin.getCommissionList(req.headers)
     );
   }
 

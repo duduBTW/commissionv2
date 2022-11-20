@@ -1,5 +1,6 @@
 import { useQuery } from "@tanstack/react-query";
 import axios from "axios";
+import { IncomingHttpHeaders } from "http";
 import * as z from "zod";
 
 // -- Schemas
@@ -12,7 +13,7 @@ export const commissionSchema = z.object({
   }),
   price: z.number().min(1, { message: "Required" }),
 });
-export const commissionListSchema = z.object({
+export const adminCommissionListSchema = z.object({
   id: z.string().optional(),
   name: z.string(),
   descriptionHtml: z.string(),
@@ -29,7 +30,9 @@ export const commissionImageSchema = z.object({
 
 // -- Types
 export type CommissionSchema = z.infer<typeof commissionSchema>;
-export type CommissionListSchema = z.infer<typeof commissionListSchema>;
+export type AdminCommissionListSchema = z.infer<
+  typeof adminCommissionListSchema
+>;
 export type CommissionImageSchema = z.infer<typeof commissionImageSchema>;
 
 // -- Methods
@@ -37,31 +40,39 @@ export type CommissionImageSchema = z.infer<typeof commissionImageSchema>;
 export const insertCommission = async (data: CommissionSchema) =>
   await axios.post<{
     id: string;
-  }>("http://localhost:3000/api/commission", data);
+  }>("http://localhost:3000/api/admin/commission", data);
 
 // Get commission by id
-export const getCommission = (id: string) => async () => {
-  const data = await axios.get<CommissionSchema>(
-    `http://localhost:3000/api/commission/${id}`
-  );
+export const getCommission =
+  (id: string, headers?: IncomingHttpHeaders) => async () => {
+    const data = await axios.get<CommissionSchema>(
+      `http://localhost:3000/api/admin/commission/${id}`,
+      {
+        headers: { Cookie: headers?.cookie },
+      }
+    );
 
-  return data.data;
-};
+    return data.data;
+  };
 
 // Get list of commissions
-export const getCommissionList = async () => {
-  const { data } = await axios.get<CommissionListSchema[]>(
-    `http://localhost:3000/api/commission`
-  );
+export const getCommissionList =
+  (headers?: IncomingHttpHeaders) => async () => {
+    const { data } = await axios.get<AdminCommissionListSchema[]>(
+      `http://localhost:3000/api/admin/commission`,
+      {
+        headers: { Cookie: headers?.cookie },
+      }
+    );
 
-  return data;
-};
+    return data;
+  };
 
 // Update commissions
 export const updateCommission =
   (commissionId: string) => async (body: CommissionSchema) => {
-    const { data } = await axios.put<CommissionListSchema[]>(
-      `http://localhost:3000/api/commission/${commissionId}`,
+    const { data } = await axios.put<AdminCommissionListSchema[]>(
+      `http://localhost:3000/api/admin/commission/${commissionId}`,
       body
     );
 
@@ -72,7 +83,7 @@ export const updateCommission =
 export const insertImageCommission =
   (id: string) => async (body: CommissionImageSchema) => {
     const { data } = await axios.post<CommissionImageSchema>(
-      `http://localhost:3000/api/commission/${id}/images`,
+      `http://localhost:3000/api/admin/commission/${id}/images`,
       body
     );
 
@@ -83,7 +94,7 @@ export const insertImageCommission =
 export const updateImageCommission =
   (commissionId: string) => async (body: CommissionImageSchema) => {
     const { data } = await axios.put<CommissionImageSchema>(
-      `http://localhost:3000/api/commission/${commissionId}/images`,
+      `http://localhost:3000/api/admin/commission/${commissionId}/images`,
       body
     );
 
@@ -94,7 +105,7 @@ export const updateImageCommission =
 export const deleteImageCommission =
   (commissionId: string) => async (id: string) => {
     const { data } = await axios.delete<CommissionImageSchema>(
-      `http://localhost:3000/api/commission/${commissionId}/images/${id}`
+      `http://localhost:3000/api/admin/commission/${commissionId}/images/${id}`
     );
 
     return data;
@@ -103,21 +114,21 @@ export const deleteImageCommission =
 // Get images of a commission
 export const getCommissionImageList = (id: string) => async () => {
   const { data } = await axios.get<CommissionImageSchema[]>(
-    `http://localhost:3000/api/commission/${id}/images`
+    `http://localhost:3000/api/admin/commission/${id}/images`
   );
 
   return data;
 };
 
 // -- Hooks
-export const useCommissionListKey = "commission-list";
+export const useCommissionListKey = "admin-commission-list";
 export const useCommissionList = () =>
-  useQuery([useCommissionListKey], getCommissionList);
+  useQuery([useCommissionListKey], getCommissionList());
 
-export const useCommissionKey = "commission-item";
+export const useCommissionKey = "admin-commission-item";
 export const useCommission = (id: string) =>
   useQuery([useCommissionKey, id], getCommission(id));
 
-export const useCommissionImageListKey = "commission-image-list";
+export const useCommissionImageListKey = "admin-commission-image-list";
 export const useCommissionImageList = (id: string) =>
   useQuery([useCommissionImageListKey, id], getCommissionImageList(id));

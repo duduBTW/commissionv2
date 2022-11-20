@@ -1,18 +1,17 @@
 import { useState } from "react";
 
 // components
+import Masonry, { ResponsiveMasonry } from "react-responsive-masonry";
 import SendPlane2LineIcon from "remixicon-react/SendPlane2LineIcon";
 import DeleteBin4LineIcon from "remixicon-react/DeleteBin4LineIcon";
-import Masonry, { ResponsiveMasonry } from "react-responsive-masonry";
 import Button from "components/button";
 import InputBase from "components/input/base";
-import Typography from "components/typography";
 import ButtonIcon from "components/button/icon";
 
 // styles
 import * as g from "styles/globalStyles";
 import * as s from "./styles";
-import { CommissionImageSchema } from "service/commission";
+import { CommissionImageSchema } from "service/admin/commission";
 import encodeImageToBlurhash from "utils/encodeImageToBlurhash";
 import {
   LazyComponentProps,
@@ -79,7 +78,7 @@ const AdminImages = ({
     <Container loading={loading}>
       <s.header onSubmit={handleSubmit}>
         <InputBase
-          variant={variant === "content" ? "contained" : "outlined"}
+          variant={"outlined"}
           disabled={loading || loadingInternal}
           value={inputValue}
           onChange={({ target: { value } }) => setInputValue(value)}
@@ -94,7 +93,7 @@ const AdminImages = ({
         </Button>
       </s.header>
 
-      {images.length > 0 ? (
+      {!!(images.length > 0) && (
         <ResponsiveMasonry columnsCountBreakPoints={columnsCountBreakPoints}>
           <Masonry gutter="1.2rem">
             {images.map((image) => (
@@ -109,13 +108,13 @@ const AdminImages = ({
             ))}
           </Masonry>
         </ResponsiveMasonry>
-      ) : null}
+      )}
     </Container>
   );
 };
 
-const ImageCard = ({
-  image: { url, hash, width, height, id },
+export const ImageCard = ({
+  image,
   variant,
   scrollPosition,
   onUpdate,
@@ -123,16 +122,12 @@ const ImageCard = ({
 }: {
   image: Image;
   variant: g.ContainerVariant;
-  scrollPosition: LazyComponentProps["scrollPosition"];
+  scrollPosition?: LazyComponentProps["scrollPosition"];
   onUpdate?: (data: CommissionImageSchema) => void;
   onDelete?: (id: string) => void;
 }) => {
+  const { url, id } = image;
   const [inputValue, setInputValue] = useState("");
-  const [isLoaded, setLoaded] = useState(false);
-  const [isLoadStarted, setLoadStarted] = useState(false);
-
-  const handleLoad = () => setLoaded(true);
-  const handleLoadStarted = () => setLoadStarted(true);
 
   const updateImage = async () => {
     if (url !== inputValue && id && validURL(inputValue)) {
@@ -146,30 +141,12 @@ const ImageCard = ({
 
   return (
     <s.card variant={variant}>
-      <s.img_container
-        style={{
-          aspectRatio: width / height,
-        }}
-      >
-        <s.img
-          key={id}
-          onLoad={handleLoad}
-          beforeLoad={handleLoadStarted}
-          loading="lazy"
-          src={url}
-          variant={variant}
-          scrollPosition={scrollPosition}
-        />
-        {!isLoaded && isLoadStarted && (
-          <s.hash
-            width={"100%"}
-            resolutionY={32}
-            punch={1}
-            hash={hash}
-            variant={variant}
-          />
-        )}
-      </s.img_container>
+      <LazyImage
+        scrollPosition={scrollPosition}
+        variant={variant}
+        image={image}
+        onClick={() => window.open(url, "_blank")}
+      />
       <s.info
         onSubmit={(e) => {
           e.preventDefault();
@@ -194,6 +171,55 @@ const ImageCard = ({
         </ButtonIcon>
       </s.info>
     </s.card>
+  );
+};
+
+export const LazyImage = ({
+  image: { hash, height, url, width, id },
+  variant,
+  scrollPosition,
+  onClick,
+  children,
+}: {
+  image: Image;
+  variant: g.ContainerVariant;
+  scrollPosition?: LazyComponentProps["scrollPosition"];
+  onClick?: React.MouseEventHandler<HTMLImageElement>;
+  children?: React.ReactNode;
+}) => {
+  const [isLoaded, setLoaded] = useState(false);
+  const [isLoadStarted, setLoadStarted] = useState(false);
+
+  const handleLoad = () => setLoaded(true);
+  const handleLoadStarted = () => setLoadStarted(true);
+
+  return (
+    <s.img_container
+      style={{
+        aspectRatio: width / height,
+      }}
+    >
+      {children}
+      <s.img
+        key={id}
+        onLoad={handleLoad}
+        beforeLoad={handleLoadStarted}
+        loading="lazy"
+        src={url}
+        variant={variant}
+        scrollPosition={scrollPosition}
+        onClick={onClick}
+      />
+      {!isLoaded && isLoadStarted && (
+        <s.hash
+          width={"100%"}
+          resolutionY={32}
+          punch={1}
+          hash={hash}
+          variant={variant}
+        />
+      )}
+    </s.img_container>
   );
 };
 

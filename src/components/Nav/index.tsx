@@ -1,4 +1,4 @@
-import { useSession } from "next-auth/react";
+import services from "service";
 import { signOut } from "next-auth/react";
 
 // styles
@@ -10,9 +10,10 @@ import UserAvatar from "components/user/avatar";
 import ButtonIcon from "components/button/icon";
 import Search2LineIcon from "remixicon-react/Search2LineIcon";
 import Link from "next/link";
+import Button from "components/button";
 
 const Nav = () => {
-  const { data: session } = useSession();
+  const { data: session } = services.useSession();
 
   return (
     <s.nav>
@@ -25,12 +26,23 @@ const Nav = () => {
         <ButtonIcon variant="primary">
           <Search2LineIcon />
         </ButtonIcon>
-        {session?.user?.image && (
+        {session?.user?.image ? (
           <menu.root>
             <menu.trigger>
-              <UserAvatar src={session.user.image} />
+              <UserAvatar
+                src={
+                  session.user.profilePicture ??
+                  session.user.image ??
+                  "https://placewaifu.com/image/100/100"
+                }
+              />
             </menu.trigger>
             <menu.content sideOffset={8} align="end">
+              {session.user.admin ? (
+                <Link href="/admin/dashboard/home">
+                  <menu.item>Dashboard</menu.item>
+                </Link>
+              ) : null}
               <Link href="/profile">
                 <menu.item>Minha conta</menu.item>
               </Link>
@@ -40,6 +52,12 @@ const Nav = () => {
               <menu.item onClick={() => signOut()}>Sair</menu.item>
             </menu.content>
           </menu.root>
+        ) : (
+          <Link href="/login">
+            <Button variant="secondary" fullWidth>
+              Sing in
+            </Button>
+          </Link>
         )}
       </s.user>
     </s.nav>

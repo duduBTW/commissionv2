@@ -6,6 +6,7 @@ interface StyledTextProps {
   variant: TextVariant;
   color?: TextColorVariant;
   ml: number;
+  center?: boolean;
 }
 
 export const styledText = styled.div<StyledTextProps>`
@@ -31,7 +32,7 @@ export const styledText = styled.div<StyledTextProps>`
         return css`
           font-family: "Poppins";
           font-style: normal;
-          font-weight: 900;
+          font-weight: 800;
           font-size: 2.2rem;
           line-height: 3.4rem;
         `;
@@ -83,6 +84,7 @@ export const styledText = styled.div<StyledTextProps>`
   }}
 
   color: ${({ color }) => getColor(color)};
+  text-align: ${({ center }) => (center ? "center" : "left")};
 `;
 
 const getColor = (color?: TextColorVariant): string => {

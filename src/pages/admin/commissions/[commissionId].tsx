@@ -12,11 +12,11 @@ import AdmindHeader from "components/admin/title";
 import AdminImages from "components/admin/images";
 
 const CommissionsEditPage = ({ commissionId }: { commissionId: string }) => {
-  const { data: commission } = services.useCommission(commissionId);
+  const { data: commission } = services.admin.useCommission(commissionId);
   const { data: images, refetch: refetchImages } =
-    services.useCommissionImageList(commissionId);
+    services.admin.useCommissionImageList(commissionId);
   const { mutate: insertImage, isLoading: insertingImages } = useMutation(
-    services.insertImageCommission(commissionId),
+    services.admin.insertImageCommission(commissionId),
     {
       onSuccess: () => {
         refetchImages();
@@ -24,7 +24,7 @@ const CommissionsEditPage = ({ commissionId }: { commissionId: string }) => {
     }
   );
   const { mutate: updateImage, isLoading: updatingImages } = useMutation(
-    services.updateImageCommission(commissionId),
+    services.admin.updateImageCommission(commissionId),
     {
       onSuccess: () => {
         refetchImages();
@@ -32,7 +32,7 @@ const CommissionsEditPage = ({ commissionId }: { commissionId: string }) => {
     }
   );
   const { mutate: deleteImage, isLoading: deletingImages } = useMutation(
-    services.deleteImageCommission(commissionId),
+    services.admin.deleteImageCommission(commissionId),
     {
       onSuccess: () => {
         refetchImages();
@@ -41,7 +41,7 @@ const CommissionsEditPage = ({ commissionId }: { commissionId: string }) => {
   );
 
   const { mutate: updateCommission, isLoading: updatingCommission } =
-    useMutation(services.updateCommission(commissionId));
+    useMutation(services.admin.updateCommission(commissionId));
 
   if (!commission) return <></>;
   return (
@@ -80,7 +80,10 @@ const CommissionsEditPage = ({ commissionId }: { commissionId: string }) => {
   );
 };
 
-export const getServerSideProps: GetServerSideProps = async ({ params }) => {
+export const getServerSideProps: GetServerSideProps = async ({
+  params,
+  req,
+}) => {
   const commissionId = params?.["commissionId"];
   if (typeof commissionId !== "string")
     return {
@@ -89,8 +92,8 @@ export const getServerSideProps: GetServerSideProps = async ({ params }) => {
 
   const queryClient = new QueryClient();
   await queryClient.prefetchQuery(
-    [services.useCommissionKey, commissionId],
-    services.getCommission(commissionId)
+    [services.admin.useCommissionKey, commissionId],
+    services.admin.getCommission(commissionId, req.headers)
   );
 
   return {

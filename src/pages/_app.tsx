@@ -1,6 +1,9 @@
 import "../styles/globals.css";
 import "sanitize.css";
 import globalStyles from "styles/globalStyles";
+import "swiper/css";
+import "swiper/css/thumbs";
+import "swiper/css/navigation";
 
 import type { AppType } from "next/app";
 import type { Session } from "next-auth";
@@ -25,7 +28,7 @@ const MyApp: AppType<{ session: Session | null; dehydratedState: unknown }> = ({
       <QueryClientProvider client={queryClient}>
         <Hydrate state={pageProps.dehydratedState}>
           <Global styles={globalStyles} />
-          <Nav />
+          {(Component as any).layout === false ? <></> : <Nav />}
           <Component {...pageProps} />
         </Hydrate>
       </QueryClientProvider>

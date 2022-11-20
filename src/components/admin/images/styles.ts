@@ -8,7 +8,7 @@ export const header = styled.form`
   gap: 0.8rem;
   position: sticky;
   top: 0.8rem;
-  z-index: 3;
+  z-index: 5;
 `;
 
 export const grid = styled.div`

@@ -1,4 +1,4 @@
-import { usePortfolio } from "service/portfolio";
+import { usePortfolio } from "service/admin/portfolio";
 import { useMutation } from "@tanstack/react-query";
 import services from "service";
 
@@ -51,7 +51,7 @@ const DashBoard = () => {
 };
 
 const Commission = () => {
-  const { data: commissions } = services.useCommissionList();
+  const { data: commissions } = services.admin.useCommissionList();
 
   return (
     <Container>
@@ -76,7 +76,7 @@ const Commission = () => {
 const Portfolio = () => {
   const { data: images, refetch } = usePortfolio();
   const { mutate: insertPortfolio, isLoading: isInserting } = useMutation(
-    services.insertPortfolio,
+    services.admin.insertPortfolio,
     {
       onSuccess: () => {
         refetch();
@@ -85,7 +85,7 @@ const Portfolio = () => {
   );
 
   const { mutate: updatePortfolio, isLoading: isUpdating } = useMutation(
-    services.updatePortfolio,
+    services.admin.updatePortfolio,
     {
       onSuccess: () => {
         refetch();
@@ -94,7 +94,7 @@ const Portfolio = () => {
   );
 
   const { mutate: deletePortfolio, isLoading: isDeleting } = useMutation(
-    services.deletePortfolio,
+    services.admin.deletePortfolio,
     {
       onSuccess: () => {
         refetch();

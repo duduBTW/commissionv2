@@ -1,5 +1,10 @@
 import services from "service";
-import { dehydrate, QueryClient, useMutation } from "@tanstack/react-query";
+import {
+  dehydrate,
+  QueryClient,
+  useMutation,
+  useQueryClient,
+} from "@tanstack/react-query";
 import { GetServerSideProps } from "next";
 
 // components
@@ -7,9 +12,18 @@ import ProfileLayout from "components/profile/layout";
 import MyProfileForm from "components/profile/myProfile/form";
 
 const ProfilePage = () => {
+  const queryClient = useQueryClient();
   const { data: profile } = services.useProfile();
   const { mutate: updateProfile, isLoading } = useMutation(
-    services.updateProfile
+    services.updateProfile,
+    {
+      onSuccess: () => {
+        queryClient.invalidateQueries({
+          queryKey: [services.useSessionKey],
+          exact: true,
+        });
+      },
+    }
   );
 
   if (!profile) return <div>:(</div>;
