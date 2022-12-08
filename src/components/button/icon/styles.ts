@@ -25,6 +25,7 @@ export const button = styled.button<ButtonProps>`
   border-radius: 222rem;
   cursor: pointer;
   transition: background-color 0.2s ease;
+  user-select: none;
 
   &:hover,
   &:focus {

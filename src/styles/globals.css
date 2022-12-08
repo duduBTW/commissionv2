@@ -56,3 +56,7 @@ a:active,
 * {
   box-sizing: border-box;
 }
+
+strong {
+  color: var(--color-primary);
+}

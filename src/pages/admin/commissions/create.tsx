@@ -4,7 +4,7 @@ import services from "service";
 
 // components
 import AdminCommissionForm from "components/admin/commission/form";
-import AdmindHeader from "components/admin/title";
+import AdminHeader from "components/admin/title";
 
 const CommissionsCreatePage = () => {
   const { push } = useRouter();
@@ -14,9 +14,9 @@ const CommissionsCreatePage = () => {
 
   return (
     <>
-      <AdmindHeader backHref="/admin/dashboard/commissions">
+      <AdminHeader backHref="/admin/dashboard/commissions">
         Nova commission
-      </AdmindHeader>
+      </AdminHeader>
       <AdminCommissionForm onSubmit={(d) => mutate(d)} loading={isLoading} />
     </>
   );

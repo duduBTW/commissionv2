@@ -12,6 +12,14 @@ interface StyledTextProps {
 export const styledText = styled.div<StyledTextProps>`
   ${({ variant }) => {
     switch (variant) {
+      case "price":
+        return css`
+          font-family: "Nunito";
+          font-style: normal;
+          font-weight: 500;
+          font-size: 2.4rem;
+          line-height: 3.2rem;
+        `;
       case "body-01":
         return css`
           font-family: "Nunito";
@@ -24,8 +32,8 @@ export const styledText = styled.div<StyledTextProps>`
         return css`
           font-family: "Poppins";
           font-style: normal;
-          font-weight: 700;
-          font-size: 2.8rem;
+          font-weight: 800;
+          font-size: 3.2rem;
           line-height: 4.2rem;
         `;
       case "title-02":
@@ -41,6 +49,7 @@ export const styledText = styled.div<StyledTextProps>`
           font-family: "Poppins";
           font-style: normal;
           font-weight: 700;
+          letter-spacing: 0.02rem;
           font-size: 2rem;
           line-height: 3.2rem;
         `;

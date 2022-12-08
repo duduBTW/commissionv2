@@ -34,30 +34,53 @@ interface ImageInputsImgProps {
 }
 export const img_container = styled.div`
   position: relative;
+  overflow: hidden;
+
+  &:hover,
+  &focus {
+    img {
+      transform: scale(1.12);
+      opacity: 0.82;
+    }
+
+    &::after {
+      content: "";
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: var(--color-primary);
+      pointer-events: none;
+    }
+  }
+
+  &:active {
+    img {
+      transition-duration: 0.2s;
+      transform: scale(1);
+    }
+  }
 `;
 
 export const img = styled(LazyLoadImage)<ImageInputsImgProps>`
   width: 100%;
   object-fit: cover;
-  position: relative;
-  border-radius: 0.8rem;
-  border: 0.3rem solid
+  /* border: 0.3rem solid
     ${({ variant }) =>
-      variant === "background"
-        ? "var(--color-background)"
-        : "var(--color-content)"};
+    variant === "background"
+      ? "var(--color-background)"
+      : "var(--color-content)"}; */
   cursor: pointer;
 
   position: absolute;
   top: 0;
   left: 0;
+  width: 100%;
   height: 100%;
   z-index: 2;
-  transition: opacity 0.2s ease;
-
-  &:hover {
-    opacity: 0.82;
-  }
+  transition: transform 0.54s cubic-bezier(0.81, 0.52, 0.4, 0.75),
+    opacity 1s ease;
 `;
 
 export const hash = styled(Blurhash)<ImageInputsImgProps>`

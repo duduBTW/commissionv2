@@ -4,7 +4,8 @@ import { Rings } from "react-loader-spinner";
 import * as s from "./styles";
 
 export type ButtonVariants = "primary" | "secondary";
-interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
+export interface ButtonProps
+  extends React.ButtonHTMLAttributes<HTMLButtonElement> {
   variant?: ButtonVariants;
   fullWidth?: boolean;
   loading?: boolean;

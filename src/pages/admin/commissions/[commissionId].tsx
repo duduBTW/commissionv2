@@ -8,11 +8,49 @@ import * as g from "styles/globalStyles";
 
 // components
 import AdminCommissionForm from "components/admin/commission/form";
-import AdmindHeader from "components/admin/title";
+import AdminCommissionsCategorys from "components/admin/commission/categorys";
 import AdminImages from "components/admin/images";
+import AdminHeader from "components/admin/title";
 
 const CommissionsEditPage = ({ commissionId }: { commissionId: string }) => {
   const { data: commission } = services.admin.useCommission(commissionId);
+  const { mutate: updateCommission, isLoading: updatingCommission } =
+    useMutation(services.admin.updateCommission(commissionId));
+
+  if (!commission) return <></>;
+  return (
+    <>
+      <AdminHeader backHref="/admin/dashboard/commissions">
+        Editar commission
+      </AdminHeader>
+      <t.root defaultValue="info">
+        <g.paper_container>
+          <t.list variant="background">
+            <t.trigger value="info">Informacoes</t.trigger>
+            <t.trigger value="images">Imagens</t.trigger>
+            <t.trigger value="categorias">Categorias</t.trigger>
+          </t.list>
+        </g.paper_container>
+        <t.content value="info">
+          <AdminCommissionForm
+            loading={updatingCommission}
+            onSubmit={(d) => updateCommission(d)}
+            defaultValues={commission}
+            submitLabel="Salvar"
+          />
+        </t.content>
+        <t.content value="images">
+          <CommissionsEditImages commissionId={commissionId} />
+        </t.content>
+        <t.content value="categorias">
+          <AdminCommissionsCategorys commissionId={commissionId} />
+        </t.content>
+      </t.root>
+    </>
+  );
+};
+
+const CommissionsEditImages = ({ commissionId }: { commissionId: string }) => {
   const { data: images, refetch: refetchImages } =
     services.admin.useCommissionImageList(commissionId);
   const { mutate: insertImage, isLoading: insertingImages } = useMutation(
@@ -20,6 +58,10 @@ const CommissionsEditPage = ({ commissionId }: { commissionId: string }) => {
     {
       onSuccess: () => {
         refetchImages();
+
+        setTimeout(() => {
+          window.scrollTo(0, document.body.scrollHeight);
+        }, 100);
       },
     }
   );
@@ -39,44 +81,16 @@ const CommissionsEditPage = ({ commissionId }: { commissionId: string }) => {
       },
     }
   );
+  if (!images) return <></>;
 
-  const { mutate: updateCommission, isLoading: updatingCommission } =
-    useMutation(services.admin.updateCommission(commissionId));
-
-  if (!commission) return <></>;
   return (
-    <>
-      <AdmindHeader backHref="/admin/dashboard/commissions">
-        Editar commission
-      </AdmindHeader>
-      <t.root defaultValue="info">
-        <g.paper_container>
-          <t.list variant="background">
-            <t.trigger value="info">Informacoes</t.trigger>
-            <t.trigger value="images">Imagens</t.trigger>
-          </t.list>
-        </g.paper_container>
-        <t.content value="info">
-          <AdminCommissionForm
-            loading={updatingCommission}
-            onSubmit={(d) => updateCommission(d)}
-            defaultValues={commission}
-            submitLabel="Salvar"
-          />
-        </t.content>
-        <t.content value="images">
-          {images && (
-            <AdminImages
-              loading={insertingImages || updatingImages || deletingImages}
-              insertImage={(d) => insertImage(d)}
-              onUpdate={(d) => updateImage(d)}
-              onDelete={(id) => deleteImage(id)}
-              images={images}
-            />
-          )}
-        </t.content>
-      </t.root>
-    </>
+    <AdminImages
+      loading={insertingImages || updatingImages || deletingImages}
+      insertImage={(d) => insertImage(d)}
+      onUpdate={(d) => updateImage(d)}
+      onDelete={(id) => deleteImage(id)}
+      images={images}
+    />
   );
 };
 

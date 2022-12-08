@@ -28,10 +28,12 @@ const ArtistProfile = ({
         </t.list>
         <t.content value="portfolio">
           {portfolio && (
-            <PortfolioGrid artistId={artistId} portfolio={portfolio} />
+            <s.tab_content>
+              <PortfolioGrid artistId={artistId} portfolio={portfolio} />
+            </s.tab_content>
           )}
         </t.content>
-        <t.content value="commissions">
+        <t.content asChild value="commissions">
           {commissions && (
             <CommissionsGrid
               href={`/artist/${artistId}/commission/`}

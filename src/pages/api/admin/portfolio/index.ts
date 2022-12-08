@@ -36,7 +36,7 @@ const getPortfolioList = ({ userId }: { userId: string }) =>
       },
     },
   });
-const insetPortfolio = ({
+export const insetPortfolio = ({
   body,
   userId,
 }: {

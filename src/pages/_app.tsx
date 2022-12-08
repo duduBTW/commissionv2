@@ -21,7 +21,16 @@ const MyApp: AppType<{ session: Session | null; dehydratedState: unknown }> = ({
   Component,
   pageProps: { session, ...pageProps },
 }) => {
-  const [queryClient] = useState(() => new QueryClient());
+  const [queryClient] = useState(
+    () =>
+      new QueryClient({
+        defaultOptions: {
+          queries: {
+            refetchOnWindowFocus: false,
+          },
+        },
+      })
+  );
 
   return (
     <SessionProvider session={session}>

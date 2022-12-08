@@ -1,3 +1,4 @@
+import { useRouter } from "next/router";
 import { useState } from "react";
 import usePrice from "utils/usePrice";
 import services from "service";
@@ -18,7 +19,6 @@ import ButtonIcon from "components/button/icon";
 // styles
 import * as g from "styles/globalStyles";
 import * as s from "./styles";
-import { useRouter } from "next/router";
 
 const CommissionOrder = ({
   commission,
@@ -70,7 +70,7 @@ const CommissionOrder = ({
           }
         `}
       />
-      <Typography variant="title-03" color="success.main">
+      <Typography variant="price" color="success.main">
         {formattedPrice}
       </Typography>
       <Button onClick={handleSpeakWithArtistClick} fullWidth>

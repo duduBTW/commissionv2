@@ -1,20 +1,79 @@
+import { keyframes } from "@emotion/react";
 import styled from "@emotion/styled";
 import * as DropdownMenuPrimitive from "@radix-ui/react-dropdown-menu";
 import { PropsWithChildren } from "react";
 
-const contentStyles = {
-  minWidth: "16rem",
-  zIndex: 2,
-  backgroundColor: "white",
-  borderRadius: 6,
-  padding: 8,
-  boxShadow:
-    "0px 12px 38px -10px rgba(31, 0, 0, 0.34), 0px 8px 20px -15px rgba(24, 22, 22, 0.2)",
-};
+const slideUpAndFade = keyframes`
+  from {
+    opacity: 0;
+    transform: translateY(0.4rem);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+`;
 
-const StyledContent = styled(DropdownMenuPrimitive.Content)({
-  ...contentStyles,
-});
+const slideRightAndFade = keyframes`
+  from {
+    opacity: 0;
+    transform: translateX(-0.4rem);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+`;
+
+const slideDownAndFade = keyframes`
+  from {
+    opacity: 0;
+    transform: translateY(-0.4rem);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+`;
+
+const slideLeftAndFade = keyframes`
+  from {
+    opacity: 0;
+    transform: translateX(0.4rem);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+`;
+
+const StyledContent = styled(DropdownMenuPrimitive.Content)`
+  min-width: 16rem;
+  z-index: 5;
+  background-color: var(--color-content);
+  border-radius: 0.8rem;
+  padding: 0.8rem;
+  box-shadow: 0px 0px 38px 12px var(--color-primary-l),
+    0px 8px 20px -15px var(--color-primary-d);
+  animation-duration: 400ms;
+  animation-timing-function: cubic-bezier(0.16, 1, 0.3, 1);
+
+  &[data-side="top"] {
+    animation-name: ${slideDownAndFade};
+  }
+
+  &[data-side="bottom"] {
+    animation-name: ${slideUpAndFade};
+  }
+
+  &[data-side="left"] {
+    animation-name: ${slideRightAndFade};
+  }
+
+  &[data-side="right"] {
+    animation-name: ${slideLeftAndFade};
+  }
+`;
 
 const StyledArrow = styled(DropdownMenuPrimitive.Arrow)({
   fill: "white",
@@ -48,11 +107,16 @@ const StyledItem = styled(DropdownMenuPrimitive.Item)`
 
 const Trigger = styled(DropdownMenuPrimitive.Trigger)`
   cursor: pointer;
+  & > * {
+    border: 0.1rem solid var(--color-divider);
+  }
 
   &:active,
   &:focus,
   &:hover {
-    opacity: 0.62;
+    & > * {
+      border-color: var(--color-primary);
+    }
   }
 `;
 

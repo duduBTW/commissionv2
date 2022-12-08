@@ -16,6 +16,9 @@ export const styledAvatar = styled.img<{
       case "medium":
         return "4rem";
 
+      case "default":
+        return "3.2rem";
+
       case "small":
         return "2.4rem";
     }

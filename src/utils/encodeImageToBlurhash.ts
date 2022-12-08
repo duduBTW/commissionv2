@@ -1,6 +1,6 @@
 import { encode } from "blurhash";
 
-const loadImage = async (src: string): Promise<HTMLImageElement> =>
+export const loadImage = async (src: string): Promise<HTMLImageElement> =>
   new Promise((resolve, reject) => {
     const img = new Image();
     img.onload = () => resolve(img);
@@ -10,7 +10,7 @@ const loadImage = async (src: string): Promise<HTMLImageElement> =>
     img.src = src;
   });
 
-const getImageData = (image: HTMLImageElement) => {
+export const getImageData = (image: HTMLImageElement) => {
   const canvas = document.createElement("canvas");
   canvas.width = image.width;
   canvas.height = image.height;
@@ -18,6 +18,12 @@ const getImageData = (image: HTMLImageElement) => {
   context?.drawImage(image, 0, 0);
 
   return context?.getImageData(0, 0, image.width, image.height);
+};
+
+export const getEncodeProps = async (src: string) => {
+  const image = await loadImage(src);
+
+  return getImageData(image);
 };
 
 const encodeImageToBlurhash = async (imageUrl: string) => {

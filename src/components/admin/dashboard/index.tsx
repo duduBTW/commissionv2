@@ -12,6 +12,8 @@ import AdminSearch from "components/admin/search";
 import CommissionsGrid from "components/commission/grid";
 import AdminImages from "components/admin/images";
 import Container from "components/container";
+import Button from "components/button";
+import FileCopy2LineIcon from "remixicon-react/FileCopy2LineIcon";
 
 const AdminDashboard = ({ defaultValue }: { defaultValue: string }) => {
   const handleValueChange = (value: string) =>
@@ -55,19 +57,21 @@ const Commission = () => {
 
   return (
     <Container>
-      <t.content value="commissions">
-        <AdminSearch createHref={"/admin/commissions/create"} />
-        <div
-          style={{
-            height: "2rem",
-          }}
-        />
-        {commissions && (
-          <CommissionsGrid
-            href="/admin/commissions"
-            commissions={commissions}
+      <t.content value="commissions" asChild>
+        <>
+          <AdminSearch createHref={"/admin/commissions/create"} />
+          <div
+            style={{
+              height: "2rem",
+            }}
           />
-        )}
+          {commissions && (
+            <CommissionsGrid
+              href="/admin/commissions"
+              commissions={commissions}
+            />
+          )}
+        </>
       </t.content>
     </Container>
   );
@@ -80,6 +84,10 @@ const Portfolio = () => {
     {
       onSuccess: () => {
         refetch();
+
+        setTimeout(() => {
+          window.scrollTo(0, document.body.scrollHeight);
+        }, 100);
       },
     }
   );
@@ -102,6 +110,13 @@ const Portfolio = () => {
     }
   );
 
+  const { mutate: copyCommToPort, isLoading: isCopyingCommToPort } =
+    useMutation(services.admin.copyCommToPort, {
+      onSuccess: () => {
+        refetch();
+      },
+    });
+
   if (!images) return <div></div>;
   return (
     <AdminImages
@@ -113,13 +128,23 @@ const Portfolio = () => {
       columnsCountBreakPoints={{ 400: 1, 680: 2, 1000: 3 }}
       variant="content"
       container={PortfolioContainer}
-    />
+    >
+      <Button
+        disabled={isInserting || isUpdating || isDeleting}
+        loading={isCopyingCommToPort}
+        type="button"
+        variant="secondary"
+        onClick={() => copyCommToPort()}
+      >
+        <FileCopy2LineIcon />
+      </Button>
+    </AdminImages>
   );
 };
 
 const PortfolioContainer = ({ children }: { children: React.ReactNode }) => {
   return (
-    <t.content value="portfolio">
+    <t.content asChild value="portfolio">
       <s.portfolio_container>{children}</s.portfolio_container>
     </t.content>
   );

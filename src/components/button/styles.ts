@@ -22,6 +22,7 @@ export const button = styled.button<ButtonProps>`
   font-weight: 500;
   font-size: 1.6rem;
   line-height: 2rem;
+  user-select: none;
 
   ${({ variant }) => {
     switch (variant) {
@@ -60,7 +61,7 @@ export const button = styled.button<ButtonProps>`
     loading &&
     css`
       pointer-events: none;
-      user-select: none;
+      z-index: 3;
     `};
 `;
 

@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 
 // components
 import Masonry, { ResponsiveMasonry } from "react-responsive-masonry";
@@ -12,7 +12,9 @@ import ButtonIcon from "components/button/icon";
 import * as g from "styles/globalStyles";
 import * as s from "./styles";
 import { CommissionImageSchema } from "service/admin/commission";
-import encodeImageToBlurhash from "utils/encodeImageToBlurhash";
+import encodeImageToBlurhash, {
+  getEncodeProps,
+} from "utils/encodeImageToBlurhash";
 import {
   LazyComponentProps,
   trackWindowScroll,
@@ -29,6 +31,7 @@ interface Image {
 
 interface Props extends LazyComponentProps {
   container?: React.ElementType;
+  children?: React.ReactNode;
   variant?: g.ContainerVariant;
   columnsCountBreakPoints?: {
     [key: number]: number;
@@ -42,6 +45,7 @@ interface Props extends LazyComponentProps {
 
 const AdminImages = ({
   container,
+  children,
   variant = "background",
   columnsCountBreakPoints = { 440: 1, 768: 2 },
   images,
@@ -53,29 +57,93 @@ const AdminImages = ({
 }: Props) => {
   const [loadingInternal, setLoadingInternal] = useState(false);
   const [inputValue, setInputValue] = useState("");
+  const workerRef = useRef<Worker>();
 
   const Container = container ?? g.paper;
 
+  useEffect(() => {
+    workerRef.current = new Worker(
+      new URL("../../../../worker.ts", import.meta.url)
+    );
+    workerRef.current.onmessage = (
+      event: MessageEvent<{
+        type: string;
+        url: string;
+        hash: string;
+        width: number;
+        height: number;
+        id: string;
+      }>
+    ) => {
+      console.log(`WebWorker Response => ${event.data}`);
+      switch (event.data.type) {
+        case "insert":
+          insertImage({
+            url: event.data.url,
+            width: event.data.width,
+            height: event.data.height,
+            hash: event.data.hash,
+          });
+
+          setLoadingInternal(false);
+          break;
+        case "update":
+          onUpdate?.({
+            url: event.data.url,
+            width: event.data.width,
+            height: event.data.height,
+            hash: event.data.hash,
+            id: event.data.id,
+          });
+
+          setLoadingInternal(false);
+          break;
+
+        default:
+          break;
+      }
+    };
+    return () => {
+      workerRef.current?.terminate();
+    };
+  }, []);
+
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    setLoadingInternal(true);
+    setInputValue("");
 
-    try {
-      if (validURL(inputValue)) {
-        setLoadingInternal(true);
-        insertImage({
-          url: inputValue,
-          ...(await encodeImageToBlurhash(inputValue)),
-        });
+    const encodeProps = await getEncodeProps(inputValue);
+    workerRef.current?.postMessage({
+      payload: encodeProps,
+      info: {
+        url: inputValue,
+        type: "insert",
+      },
+    });
+  };
 
-        setInputValue("");
-      }
-    } finally {
-      setLoadingInternal(false);
-    }
+  const handleUpdate = async (
+    inputValue: string,
+    previusUrl: string,
+    id?: string | undefined
+  ) => {
+    if (previusUrl === inputValue || !id || !validURL(inputValue)) return;
+    setLoadingInternal(true);
+
+    const encodeProps = await getEncodeProps(inputValue);
+    workerRef.current?.postMessage({
+      payload: encodeProps,
+      info: {
+        url: inputValue,
+        type: "update",
+        id,
+      },
+    });
   };
 
   return (
-    <Container loading={loading}>
+    <Container loading={loading || loadingInternal}>
       <s.header onSubmit={handleSubmit}>
         <InputBase
           variant={"outlined"}
@@ -91,6 +159,7 @@ const AdminImages = ({
         >
           <SendPlane2LineIcon />
         </Button>
+        {children}
       </s.header>
 
       {!!(images.length > 0) && (
@@ -98,8 +167,8 @@ const AdminImages = ({
           <Masonry gutter="1.2rem">
             {images.map((image) => (
               <ImageCard
+                handleUpdate={handleUpdate}
                 onDelete={onDelete}
-                onUpdate={onUpdate}
                 scrollPosition={scrollPosition}
                 variant={variant}
                 image={image}
@@ -117,27 +186,21 @@ export const ImageCard = ({
   image,
   variant,
   scrollPosition,
-  onUpdate,
+  handleUpdate,
   onDelete,
 }: {
   image: Image;
   variant: g.ContainerVariant;
   scrollPosition?: LazyComponentProps["scrollPosition"];
-  onUpdate?: (data: CommissionImageSchema) => void;
+  handleUpdate?: (
+    inputValue: string,
+    previusUrl: string,
+    id: string | undefined
+  ) => void;
   onDelete?: (id: string) => void;
 }) => {
   const { url, id } = image;
   const [inputValue, setInputValue] = useState("");
-
-  const updateImage = async () => {
-    if (url !== inputValue && id && validURL(inputValue)) {
-      onUpdate?.({
-        id,
-        url: inputValue,
-        ...(await encodeImageToBlurhash(inputValue)),
-      });
-    }
-  };
 
   return (
     <s.card variant={variant}>
@@ -151,12 +214,12 @@ export const ImageCard = ({
         onSubmit={(e) => {
           e.preventDefault();
 
-          updateImage();
+          handleUpdate?.(inputValue, url, id);
         }}
       >
         <InputBase
           onChange={({ target: { value } }) => setInputValue(value)}
-          onBlur={updateImage}
+          onBlur={() => handleUpdate?.(inputValue, url, id)}
           placeholder="https://example.com/"
           defaultValue={url}
           variant={variant === "background" ? "contained" : "outlined"}

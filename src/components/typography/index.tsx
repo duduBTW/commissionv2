@@ -23,6 +23,7 @@ export type TextVariant =
   | "subtitle-01"
   | "subtitle-02"
   | "caption"
+  | "price"
   | "body-01";
 
 export type TextColorVariant = DotNestedKeys<typeof colors>;

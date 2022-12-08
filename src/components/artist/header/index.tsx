@@ -20,7 +20,7 @@ const AristHeader = ({
     <Container variant="content">
       <Banner noMargin={false} src={banner} alt={`${userName} banner`} />
       <UserAvatar src={profilePicture} alt="Avatar misuo" size="large" />
-      <s.user_name variant="title-02">{userName}</s.user_name>
+      <s.user_name variant="title-03">{userName}</s.user_name>
     </Container>
   );
 };

@@ -1,20 +1,21 @@
 import styled from "@emotion/styled";
 import { EditorContent } from "@tiptap/react";
 import { mq } from "styles/theme";
+import { InputVariant } from "../base";
 
-export const container = styled.div`
-  margin: 0 -2rem;
-  border-top: 0.1rem solid var(--color-divider);
-
-  ${mq.fromMobileLg} {
-    margin: 0;
-    border: 0.1rem solid var(--color-divider);
-    border-radius: 0.8rem;
-  }
+interface InputProps {
+  variant?: InputVariant;
+}
+export const container = styled.div<InputProps>`
+  margin: 0;
+  border: ${({ variant }) =>
+    variant === "outlined" ? "0.1rem solid var(--color-divider)" : "none"};
+  border-radius: 0.8rem;
 `;
 
 export const content = styled(EditorContent)`
   .ProseMirror {
+    background-color: var(--color-content);
     outline: none;
     padding: 1rem 1.2em;
     border-radius: 0.8rem;

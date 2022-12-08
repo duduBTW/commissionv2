@@ -1,13 +1,19 @@
 // components
 import Link from "next/link";
-import Button from "components/button";
+import Button, { ButtonProps } from "components/button";
 import InputBase from "../../input/base";
 import AddLineIcon from "remixicon-react/AddLineIcon";
 
 // styles
 import * as s from "./styles";
 
-const AdminSearch = ({ createHref }: { createHref?: string }) => {
+const AdminSearch = ({
+  createHref,
+  createButtonProps,
+}: {
+  createHref?: string;
+  createButtonProps?: Partial<ButtonProps>;
+}) => {
   return (
     <s.container>
       <InputBase
@@ -19,7 +25,7 @@ const AdminSearch = ({ createHref }: { createHref?: string }) => {
       />
       {createHref && (
         <Link href={createHref}>
-          <Button variant="secondary">
+          <Button variant="secondary" {...createButtonProps}>
             <AddLineIcon />
           </Button>
         </Link>

@@ -6,7 +6,7 @@ import ArrowLeftLineIcon from "remixicon-react/ArrowLeftLineIcon";
 // styles
 import * as s from "./styles";
 
-const AdmindHeader = ({
+const AdminHeader = ({
   children,
   backHref,
 }: {
@@ -27,4 +27,4 @@ const AdmindHeader = ({
   );
 };
 
-export default AdmindHeader;
+export default AdminHeader;

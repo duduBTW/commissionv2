@@ -18,10 +18,10 @@ const PortfolioGrid = ({
   artistId: string;
 }) => {
   return (
-    <s.container value="portfolio">
+    <>
       {header ? <s.header>{header}</s.header> : null}
       <ResponsiveMasonry columnsCountBreakPoints={{ 546: 2, 768: 3, 900: 3 }}>
-        <Masonry gutter="1.2rem">
+        <Masonry gutter="0">
           {portfolio.map((portfolioImage) => (
             <Link
               key={portfolioImage.id}
@@ -34,7 +34,7 @@ const PortfolioGrid = ({
           ))}
         </Masonry>
       </ResponsiveMasonry>
-    </s.container>
+    </>
   );
 };
 

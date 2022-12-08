@@ -54,6 +54,15 @@ export const deletePortfolio = async (portfolioId: string) => {
   return data;
 };
 
+// Copy commission images to portfolio
+export const copyCommToPort = async () => {
+  const { data } = await api.post<PortfolioSchema[]>(
+    `/api/admin/portfolio/copy_comm_to_port`
+  );
+
+  return data;
+};
+
 // -- Hooks
 export const usePortfolioKey = "portfolio-list";
 export const usePortfolio = () =>

@@ -25,7 +25,11 @@ const InputText = <T extends FieldValues = FieldValues>({
   });
 
   return (
-    <div>
+    <div
+      style={{
+        width: "100%",
+      }}
+    >
       {label ? (
         <>
           <Typography variant="subtitle-02" color="text.60">
@@ -35,9 +39,9 @@ const InputText = <T extends FieldValues = FieldValues>({
         </>
       ) : null}
       <InputBase
+        onBlur={onBlur}
         {...inputBaseProps}
         name={name}
-        onBlur={onBlur}
         ref={ref}
         onChange={(e) => onChange(e.target.value)}
         value={value}

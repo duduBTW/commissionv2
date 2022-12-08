@@ -1,7 +1,7 @@
 // styles
 import * as s from "./styles";
 
-export type UserAvatarSize = "small" | "medium" | "large";
+export type UserAvatarSize = "small" | "default" | "medium" | "large";
 interface Props extends React.ImgHTMLAttributes<HTMLImageElement> {
   size?: UserAvatarSize;
 }

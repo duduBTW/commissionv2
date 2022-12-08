@@ -28,6 +28,22 @@ export const commissionImageSchema = z.object({
   width: z.number(),
   height: z.number(),
 });
+export const commissionCategoryCreateSchema = z.object({
+  name: z.string().min(1, { message: "Required" }),
+  description: z
+    .object({
+      json: z.string().nullable(),
+      html: z.string().nullable(),
+    })
+    .nullable()
+    .optional(),
+});
+
+export const commissionCategorySchema = z
+  .object({
+    id: z.string(),
+  })
+  .merge(commissionCategoryCreateSchema);
 
 // -- Types
 export type CommissionSchema = z.infer<typeof commissionSchema>;
@@ -35,6 +51,10 @@ export type AdminCommissionListSchema = z.infer<
   typeof adminCommissionListSchema
 >;
 export type CommissionImageSchema = z.infer<typeof commissionImageSchema>;
+export type CommissionCategoryCreateSchema = z.infer<
+  typeof commissionCategoryCreateSchema
+>;
+export type CommissionCategorySchema = z.infer<typeof commissionCategorySchema>;
 
 // -- Methods
 // Create commission
@@ -121,6 +141,54 @@ export const getCommissionImageList = (id: string) => async () => {
   return data;
 };
 
+// Insert category
+export const insertCategoryCommission =
+  (id: string) => async (body: CommissionCategoryCreateSchema) => {
+    const { data } = await api.post<CommissionCategoryCreateSchema>(
+      `/api/admin/commission/${id}/categorys`,
+      body
+    );
+
+    return data;
+  };
+
+// Get category list
+export const getCommissionCategoryList = (commissionId: string) => async () => {
+  const { data } = await api.get<CommissionCategorySchema[]>(
+    `/api/admin/commission/${commissionId}/categorys`
+  );
+
+  return data;
+};
+
+// Insert category
+export const updateCommissionCategory =
+  (id: string) =>
+  async ({
+    body,
+    categoryId,
+  }: {
+    body: CommissionCategoryCreateSchema;
+    categoryId: string;
+  }) => {
+    const { data } = await api.put<CommissionCategorySchema[]>(
+      `/api/admin/commission/${id}/categorys/${categoryId}`,
+      body
+    );
+
+    return data;
+  };
+
+// Insert category
+export const deleteCommissionCategory =
+  (id: string) => async (categoryId: string) => {
+    const { data } = await api.delete<CommissionCategorySchema[]>(
+      `/api/admin/commission/${id}/categorys/${categoryId}`
+    );
+
+    return data;
+  };
+
 // -- Hooks
 export const useCommissionListKey = "admin-commission-list";
 export const useCommissionList = () =>
@@ -133,3 +201,14 @@ export const useCommission = (id: string) =>
 export const useCommissionImageListKey = "admin-commission-image-list";
 export const useCommissionImageList = (id: string) =>
   useQuery([useCommissionImageListKey, id], getCommissionImageList(id));
+
+export const useCommissionCategoryListKey = "admin-commission-category-list";
+export const useCommissionCategoryList = (
+  id: string,
+  queryConfig?: Parameters<typeof useQuery<CommissionCategorySchema[]>>[2]
+) =>
+  useQuery(
+    [useCommissionCategoryListKey, id],
+    getCommissionCategoryList(id),
+    queryConfig
+  );

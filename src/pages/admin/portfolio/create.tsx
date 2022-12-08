@@ -1,10 +1,10 @@
 // components
 import AdminPorfolioForm from "components/admin/portfolio/form";
-import AdmindHeader from "components/admin/title";
+import AdminHeader from "components/admin/title";
 
 const PortfolioCreatePage = () => (
   <>
-    <AdmindHeader>Novo Nova imagem portfolio</AdmindHeader>
+    <AdminHeader>Novo Nova imagem portfolio</AdminHeader>
     <AdminPorfolioForm />
   </>
 );

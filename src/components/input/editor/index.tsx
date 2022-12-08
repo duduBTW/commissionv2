@@ -1,5 +1,6 @@
 import { Control, FieldValues, Path, useController } from "react-hook-form";
 import { useEditor } from "@tiptap/react";
+import { InputVariant } from "../base";
 import StarterKit from "@tiptap/starter-kit";
 
 // components
@@ -12,12 +13,14 @@ interface InputEditorProps<T extends FieldValues = FieldValues> {
   label?: string;
   name: Path<T>;
   control: Control<T>;
+  variant?: InputVariant;
 }
 
 const InputEditor = <T extends FieldValues = FieldValues>({
   name,
   label,
   control,
+  variant = "outlined",
 }: InputEditorProps<T>) => {
   const {
     field: { onChange, onBlur, ref, value },
@@ -57,7 +60,7 @@ const InputEditor = <T extends FieldValues = FieldValues>({
           <div style={{ height: "0.4rem" }} />
         </>
       ) : null}
-      <s.container>
+      <s.container variant={variant}>
         <s.content onBlur={onBlur} ref={ref} editor={editor} />
       </s.container>
     </div>
