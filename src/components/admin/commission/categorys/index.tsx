@@ -78,7 +78,7 @@ export const AdminCommissionsCategorys = ({
                 type="button"
                 variant="secondary"
               >
-                Exclur
+                Excluir
               </Button>
             }
           />

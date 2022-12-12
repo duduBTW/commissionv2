@@ -17,7 +17,7 @@ const ProfileLayout = ({ children }: { children: React.ReactNode }) => {
             <span>Minha conta</span>
           </s.side_nav_item>
         </LinkActive>
-        <LinkActive href="/profile/orders" activeClassName="active">
+        <LinkActive href="/profile/order" activeClassName="active">
           <s.side_nav_item>
             <s.side_nav_icon>
               <Image2LineIcon size="2rem" />

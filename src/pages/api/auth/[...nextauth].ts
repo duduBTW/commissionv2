@@ -15,6 +15,8 @@ export const authOptions: NextAuthOptions = {
         session.user.id = user.id;
         session.user.admin = Boolean(user.adminId);
         session.user.profilePicture = user.profilePicture;
+        session.user.discord = user.discord;
+        session.user.twitter = user.twitter;
       }
       return session;
     },

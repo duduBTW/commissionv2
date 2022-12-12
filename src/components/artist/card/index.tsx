@@ -13,14 +13,12 @@ const ArtistCard = ({
   userName: string;
 }) => {
   return (
-    <Link href={`/artist/${id}/commissions`}>
-      <a>
-        <s.container>
-          {banner ? <s.cover src={banner} /> : <s.cover_placeholder />}
-          <s.userAvatar src={profilePicture} />
-          <s.userName variant="title-04">{userName}</s.userName>
-        </s.container>
-      </a>
+    <Link passHref href={`/artist/${id}/commissions`}>
+      <s.container>
+        {banner ? <s.cover src={banner} /> : <s.cover_placeholder />}
+        <s.userAvatar src={profilePicture} />
+        <s.userName variant="title-04">{userName}</s.userName>
+      </s.container>
     </Link>
   );
 };

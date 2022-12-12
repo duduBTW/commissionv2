@@ -22,7 +22,7 @@ const AdminHeader = ({
           </ButtonIcon>
         </Link>
       )}
-      <s.title variant="title-03">{children}</s.title>
+      <s.title variant="title-04">{children}</s.title>
     </s.container>
   );
 };

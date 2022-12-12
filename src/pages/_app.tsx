@@ -14,13 +14,17 @@ import {
   QueryClient,
   QueryClientProvider,
 } from "@tanstack/react-query";
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import Nav from "components/Nav";
+import LoadingBar, { LoadingBarRef } from "react-top-loading-bar";
+import { useRouter } from "next/router";
 
 const MyApp: AppType<{ session: Session | null; dehydratedState: unknown }> = ({
   Component,
   pageProps: { session, ...pageProps },
 }) => {
+  const router = useRouter();
+  const progressRef = useRef<LoadingBarRef>(null);
   const [queryClient] = useState(
     () =>
       new QueryClient({
@@ -32,11 +36,29 @@ const MyApp: AppType<{ session: Session | null; dehydratedState: unknown }> = ({
       })
   );
 
+  useEffect(() => {
+    const handleStart = (url: string) =>
+      url !== router.asPath && progressRef.current?.continuousStart();
+    const handleComplete = (url: string) =>
+      url === router.asPath && progressRef.current?.complete();
+
+    router.events.on("routeChangeStart", handleStart);
+    router.events.on("routeChangeComplete", handleComplete);
+    router.events.on("routeChangeError", handleComplete);
+
+    return () => {
+      router.events.off("routeChangeStart", handleStart);
+      router.events.off("routeChangeComplete", handleComplete);
+      router.events.off("routeChangeError", handleComplete);
+    };
+  });
+
   return (
     <SessionProvider session={session}>
       <QueryClientProvider client={queryClient}>
         <Hydrate state={pageProps.dehydratedState}>
           <Global styles={globalStyles} />
+          <LoadingBar color="var(--color-primary-d)" ref={progressRef} />
           {(Component as any).layout === false ? <></> : <Nav />}
           <Component {...pageProps} />
         </Hydrate>

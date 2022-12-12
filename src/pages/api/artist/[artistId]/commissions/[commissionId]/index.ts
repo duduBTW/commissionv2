@@ -11,6 +11,7 @@ const artistItemApi = async (req: NextApiRequest, res: NextApiResponse) => {
   try {
     switch (req.method) {
       case "GET":
+        await new Promise((r) => setTimeout(r, 2000));
         return res.send(await getArtistCommission(artistId, commissionId));
 
       default:

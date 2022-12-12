@@ -32,23 +32,23 @@ export const styledText = styled.div<StyledTextProps>`
         return css`
           font-family: "Poppins";
           font-style: normal;
-          font-weight: 800;
-          font-size: 3.2rem;
-          line-height: 4.2rem;
+          font-weight: 700;
+          font-size: 3rem;
+          line-height: 4rem;
         `;
       case "title-02":
         return css`
           font-family: "Poppins";
           font-style: normal;
-          font-weight: 800;
-          font-size: 2.2rem;
-          line-height: 3.4rem;
+          font-weight: 700;
+          font-size: 2.4rem;
+          line-height: 3.6rem;
         `;
       case "title-03":
         return css`
           font-family: "Poppins";
           font-style: normal;
-          font-weight: 700;
+          font-weight: 600;
           letter-spacing: 0.02rem;
           font-size: 2rem;
           line-height: 3.2rem;
@@ -57,13 +57,13 @@ export const styledText = styled.div<StyledTextProps>`
         return css`
           font-family: "Poppins";
           font-style: normal;
-          font-weight: 500;
+          font-weight: 600;
           font-size: 1.6rem;
           line-height: 2.4rem;
         `;
       case "subtitle-01":
         return css`
-          font-family: "Poppins";
+          font-family: "Nunito";
           font-style: normal;
           font-weight: 600;
           font-size: 1.6rem;
@@ -73,13 +73,13 @@ export const styledText = styled.div<StyledTextProps>`
         return css`
           font-family: "Nunito";
           font-style: normal;
-          font-weight: 700;
+          font-weight: 600;
           font-size: 1.4rem;
           line-height: 2.2rem;
         `;
       case "caption":
         return css`
-          font-family: "Poppins";
+          font-family: "Nunito";
           font-style: normal;
           font-weight: 500;
           letter-spacing: 0.02rem;
@@ -108,6 +108,8 @@ const getColor = (color?: TextColorVariant): string => {
       return "var(--color-text-40)";
     case "success.main":
       return "var(--color-success)";
+    case "content":
+      return "var(--color-content)";
 
     default:
       return "";

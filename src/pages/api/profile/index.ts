@@ -42,6 +42,13 @@ const getUser = (id: string) =>
     where: {
       id,
     },
+    select: {
+      id: true,
+      adminId: true,
+      profilePicture: true,
+      discord: true,
+      twitter: true,
+    },
   });
 
 export default profileApi;

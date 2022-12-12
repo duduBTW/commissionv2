@@ -20,6 +20,8 @@ const AristPage = ({
     <>
       <AristHeader {...artist} />
       <ArtistProfile artistId={artistId} defaultValue={defaultValue} />
+
+      <div style={{ height: "6rem" }} />
     </>
   );
 };

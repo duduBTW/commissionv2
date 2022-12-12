@@ -1,8 +1,13 @@
-import services from "service";
 import React, { useCallback, useEffect, useState } from "react";
-import { useSwipeable } from "react-swipeable";
+import services from "service";
 import constate from "constate";
+import { useSwipeable } from "react-swipeable";
 import { v4 as uuidv4 } from "uuid";
+import { useForm } from "react-hook-form";
+import { useRouter } from "next/router";
+import { ArtistCommissionOrderParams } from "pages/artist/[artistId]/commission/[commissionId]/order";
+import { useMutation } from "@tanstack/react-query";
+import { User } from "next-auth";
 
 // components
 import Button from "components/button";
@@ -24,9 +29,10 @@ import OrderConfirmacao from "./confirmacao";
 
 // styles
 import * as s from "./styles";
-import { useForm } from "react-hook-form";
+import OrderCategotys from "components/order/category";
+import Container from "components/container";
 
-type Message = {
+export type Message = {
   id: string;
   value: string;
   type: "text" | "image";
@@ -34,40 +40,72 @@ type Message = {
 
 const scrollToBottom = () => window.scrollTo(0, document.body.scrollHeight);
 
-const useArtistCommissionorder = () => {
+const useArtistCommissionorder = ({
+  params,
+}: {
+  params: ArtistCommissionOrderParams;
+}) => {
+  const { query, push } = useRouter();
   const [currentPage, setCurrentPage] = useState("");
   const [messages, setMessages] = useState<Record<string, Message[]>>({});
+  const { mutate: newOrder, ...newOrderStatus } = useMutation(
+    services.artist.newOrder(params.artistId, params.commissionId),
+    {
+      onSuccess: ({ id }) => push(`/profile/order/${id}`),
+    }
+  );
+
+  useEffect(() => {
+    const { commissionId, artistId } = query;
+    if (commissionId && artistId) {
+      setMessages(
+        JSON.parse(
+          localStorage.getItem(`order_${artistId}_${commissionId}`) ?? "{}"
+        )
+      );
+    }
+  }, [query]);
 
   const postMessage = useCallback(
     (message: Omit<Message, "id">) => {
-      setMessages((m) => ({
-        ...m,
+      const newMessages = {
+        ...messages,
         [currentPage]: [
-          ...(m[currentPage] ?? []),
+          ...(messages[currentPage] ?? []),
           {
             id: uuidv4(),
             ...message,
           },
         ],
-      }));
-    },
-    [currentPage]
-  );
+      };
 
-  // useEffect(() => {
-  //   console.log("changed");
-  //   setTimeout(() => {
-  //     scrollToBottom();
-  //   }, 10);
-  // }, [currentPage, messages]);
+      setMessages(newMessages);
+
+      // Saves offline
+      const { commissionId, artistId } = query;
+      if (commissionId && artistId) {
+        localStorage.setItem(
+          `order_${artistId}_${commissionId}`,
+          JSON.stringify(newMessages)
+        );
+      }
+
+      setTimeout(() => {
+        scrollToBottom();
+      }, 10);
+    },
+    [currentPage, messages, query]
+  );
 
   const handleCurrentPageChange = (page: string) => {
     setCurrentPage(page);
   };
 
-  useEffect(() => {
-    console.log("messages: ", messages);
-  }, [messages]);
+  const handleFinishSubmit = (user: Partial<User>) =>
+    newOrder({
+      messages,
+      user,
+    });
 
   return {
     message: {
@@ -75,28 +113,33 @@ const useArtistCommissionorder = () => {
       handleCurrentPageChange,
       currentPage,
       messages,
+      newOrder,
+      handleFinishSubmit,
     },
+    params,
+    status: newOrderStatus,
   };
 };
 
-const [OrderProvider, useMessage] = constate(
+export const [OrderProvider, useMessage, useParams, useOrderStatus] = constate(
   useArtistCommissionorder,
-  (value) => value.message
+  (value) => value.message,
+  (value) => value.params,
+  (value) => value.status
 );
 
-const ArtistCommissionOrder = ({ commissionId }: { commissionId: string }) => {
+const ArtistCommissionOrder = ({ ...params }: ArtistCommissionOrderParams) => {
   return (
-    <OrderProvider>
-      <ArtistCommissionOrderContent commissionId={commissionId} />
+    <OrderProvider params={params}>
+      <Container>
+        <OrderCategotys />
+      </Container>
     </OrderProvider>
   );
 };
 
-const ArtistCommissionOrderContent = ({
-  commissionId,
-}: {
-  commissionId: string;
-}) => {
+const ArtistCommissionOrderContent = () => {
+  const { commissionId } = useParams();
   const { handleCurrentPageChange, currentPage } = useMessage();
   const { isLoading } = services.admin.useCommissionCategoryList(commissionId, {
     onSuccess: (categorys) => {
@@ -149,13 +192,13 @@ const ArtistCommissionOrderContent = ({
     >
       <s.container {...swipeHandlers}>
         <s.side_nav>
-          <SideBarContent commissionId={commissionId} />
+          <SideBarContent />
         </s.side_nav>
 
         <s.content>
-          <MobileNav openMobileDialog={() => setDrawerDialog(true)} />
+          {/* <MobileNav openMobileDialog={() => setDrawerDialog(true)} /> */}
           <DesktopNav />
-          <MessageList commissionId={commissionId} />
+          <MessageList />
         </s.content>
         <Footer />
       </s.container>
@@ -169,16 +212,13 @@ const ArtistCommissionOrderContent = ({
         }
       />
       <TutorialDialog open={tutorialDialog} onOpenChange={setTutorialDialog} />
-      <MobileDrawer
-        commissionId={commissionId}
-        onOpenChange={setDrawerDialog}
-        open={drawerDialog}
-      />
+      <MobileDrawer onOpenChange={setDrawerDialog} open={drawerDialog} />
     </Tabs.Root>
   );
 };
 
-const SideBarContent = ({ commissionId }: { commissionId: string }) => {
+export const SideBarContent = () => {
+  const { commissionId } = useParams();
   const { data: categorys } =
     services.admin.useCommissionCategoryList(commissionId);
 
@@ -186,9 +226,9 @@ const SideBarContent = ({ commissionId }: { commissionId: string }) => {
 
   return (
     <s.category_list>
-      <s.nav>
+      {/* <s.nav>
         <Logo size="small" />
-      </s.nav>
+      </s.nav> */}
       {categorys.map(({ id, name }) => (
         <s.category_item key={id} value={id}>
           {name}
@@ -202,14 +242,21 @@ const SideBarContent = ({ commissionId }: { commissionId: string }) => {
 };
 
 const DesktopNav = () => {
+  const { artistId, commissionId } = useParams();
+  const { data: commission, isLoading } = services.artist.useCommission(
+    artistId,
+    commissionId
+  );
   const { currentPage } = useMessage();
 
+  if (isLoading) return <></>;
+  if (!commission) return <></>;
   return (
     <s.nav>
       {currentPage !== "confirmacao" ? (
-        <Link href="/artist/clag3u5vl0003u7vw3w032fsc/commission/clag442wr0000u7jkgwv52maj">
+        <Link href={`/artist/${artistId}/commission/${commissionId}`}>
           <a>
-            <Typography variant="title-04">Drawing - Full Body</Typography>
+            <Typography variant="title-04">{commission.name}</Typography>
           </a>
         </Link>
       ) : (
@@ -220,30 +267,11 @@ const DesktopNav = () => {
   );
 };
 
-const MobileNav = ({ openMobileDialog }: { openMobileDialog: () => void }) => {
-  return (
-    <s.mobile_nav>
-      <ButtonIcon
-        onClick={openMobileDialog}
-        style={{
-          marginRight: "1.6rem",
-        }}
-      >
-        <Menu4LineIcon size="2rem" />
-      </ButtonIcon>
-      <Typography>Corpo</Typography>
-      <ArrowDropRightLineIcon size="2rem" />
-      <Typography>Cabelo</Typography>
-      <ArrowDropRightLineIcon size="2rem" />
-      <Typography>...</Typography>
-    </s.mobile_nav>
-  );
-};
-
-const MessageList = ({ commissionId }: { commissionId: string }) => {
+export const MessageList = () => {
+  const { artistId, commissionId } = useParams();
   const { data: categorys } =
     services.admin.useCommissionCategoryList(commissionId);
-  const { messages } = useMessage();
+  const { messages, handleFinishSubmit } = useMessage();
 
   return (
     <>
@@ -270,7 +298,11 @@ const MessageList = ({ commissionId }: { commissionId: string }) => {
       ))}
       <Tabs.Content asChild value="outro"></Tabs.Content>
       <Tabs.Content asChild value="confirmacao">
-        <OrderConfirmacao />
+        <OrderConfirmacao
+          onSubmit={handleFinishSubmit}
+          commissionId={commissionId}
+          artistId={artistId}
+        />
       </Tabs.Content>
     </>
   );
@@ -438,9 +470,7 @@ const TutorialDialog = ({
 const MobileDrawer = ({
   open,
   onOpenChange,
-  commissionId,
 }: {
-  commissionId: string;
   open: boolean;
   onOpenChange: (open: boolean) => void;
 }) => {
@@ -456,7 +486,7 @@ const MobileDrawer = ({
               </ButtonIcon>
             </s.drawer_header>
           </dialog.close>
-          <SideBarContent commissionId={commissionId} />
+          <SideBarContent />
 
           <s.drawer_footer>
             <UserNav align="start" />

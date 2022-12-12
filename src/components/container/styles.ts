@@ -21,9 +21,13 @@ interface ContainerProps {
 
 export const container = styled.div<ContainerProps>`
   width: 100vw;
-  padding: 2rem;
+  padding: 2.4rem 2rem;
   background: ${({ variant }) => getBackgroundContainer(variant)};
   position: relative;
+
+  ${mq.fromDesktopSm} {
+    padding: 2.4rem;
+  }
 `;
 
 export const content = styled.div`

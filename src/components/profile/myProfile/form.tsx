@@ -12,6 +12,7 @@ import InputImage from "components/input/image";
 import UserAvatar from "components/user/avatar";
 import { Banner } from "components/artist/header";
 import Button from "components/button";
+import Typography from "components/typography";
 
 interface Props extends UseFormProps<CreateProfileSchema> {
   onSubmit: SubmitHandler<CreateProfileSchema>;
@@ -20,7 +21,7 @@ interface Props extends UseFormProps<CreateProfileSchema> {
 
 const MyProfileForm = ({ onSubmit, loading, ...formProps }: Props) => {
   const formMethods = useForm<CreateProfileSchema>({
-    resolver: zodResolver(services.profileSchema),
+    resolver: zodResolver(services.profile.profileSchema),
     ...formProps,
   });
 
@@ -28,6 +29,7 @@ const MyProfileForm = ({ onSubmit, loading, ...formProps }: Props) => {
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
       <g.paper loading={loading}>
+        <Typography variant="subtitle-01">Minha conta</Typography>
         <InputText
           control={control}
           name="discord"

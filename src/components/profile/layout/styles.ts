@@ -3,7 +3,7 @@ import { mq } from "styles/theme";
 
 export const container = styled.div`
   display: flex;
-  gap: 2rem;
+  gap: 1.2rem;
   width: 100%;
   justify-content: center;
   padding-bottom: 8rem;
@@ -30,6 +30,7 @@ export const side_nav = styled.aside`
   left: 0;
 
   ${mq.fromTabletSm} {
+    background-color: transparent;
     position: relative;
     width: min-content;
     margin: 2rem 0;
@@ -71,7 +72,7 @@ export const side_nav_item = styled.button`
 
   ${mq.fromTabletSm} {
     flex-direction: row;
-    gap: 0.8rem;
+    gap: 1.2rem;
     justify-content: start;
     position: relative;
     font-size: 1.6rem;

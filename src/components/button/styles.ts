@@ -13,15 +13,15 @@ export const button = styled.button<ButtonProps>`
   cursor: pointer;
   box-sizing: border-box;
   text-align: center;
-  padding: 0.8rem 1.6rem;
+  padding: 1rem 1.6rem;
   width: ${({ fullWidth }) => (fullWidth ? "100%" : "min-content")};
   border-radius: 0.8rem;
   border: 0.1rem solid transparent;
   font-family: "Poppins";
   font-style: normal;
   font-weight: 500;
-  font-size: 1.6rem;
-  line-height: 2rem;
+  font-size: 1.7rem;
+  line-height: 1.7rem;
   user-select: none;
 
   ${({ variant }) => {

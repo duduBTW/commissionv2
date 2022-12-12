@@ -3,7 +3,7 @@ import Container from "components/container";
 import { mq } from "styles/theme";
 
 export const container = styled(Container)`
-  margin: -2rem 0;
+  margin: -2.4rem 0;
 
   .content {
     display: flex;

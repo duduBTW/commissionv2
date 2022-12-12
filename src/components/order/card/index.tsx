@@ -1,27 +1,56 @@
+import { ProfileOrderListItemSchema } from "service/profile/order";
+
 // components
 import Typography from "components/typography";
 import UserAvatar from "components/user/avatar";
 
 // styles
 import * as s from "./styles";
+import Link from "next/link";
 
-const OrderCard = () => {
+const getTypeLabel = (type: string) => {
+  switch (type) {
+    case "not_approved":
+      return "Aguardando aprovação";
+
+    default:
+      return "?";
+  }
+};
+
+const OrderCard = ({
+  type,
+  name,
+  backgroundImage,
+  user,
+  href,
+}: {
+  type: string;
+  name: string;
+  backgroundImage?: string;
+  user?: {
+    userName: string;
+    profilePicture: string;
+  };
+  href: string;
+}) => {
   return (
-    <s.container>
-      <s.status color="primary.main" variant="subtitle-02">
-        Aguardando aprovação
-      </s.status>
-      <s.title variant="title-04">Drawing - Pog</s.title>
-      <s.user>
-        <UserAvatar
-          size="small"
-          src="https://pbs.twimg.com/profile_images/1563859347855343616/vqTnT94-_400x400.png"
-        />
-        <Typography variant="caption" color="text.60">
-          iltusa (いっさ)
-        </Typography>
-      </s.user>
-    </s.container>
+    <Link passHref href={href}>
+      <s.container backgroundImage={backgroundImage ?? ""}>
+        <s.status color="primary.main" variant="subtitle-02">
+          {getTypeLabel(type)}
+        </s.status>
+        <s.title variant="title-04">{name}</s.title>
+        {user && (
+          <s.user>
+            <UserAvatar size="small" src={user.profilePicture} />
+            <Typography variant="caption" color="text.60">
+              {user.userName}
+            </Typography>
+          </s.user>
+        )}
+      </s.container>
+    </Link>
   );
 };
 

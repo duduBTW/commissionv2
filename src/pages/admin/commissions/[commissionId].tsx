@@ -13,15 +13,20 @@ import AdminImages from "components/admin/images";
 import AdminHeader from "components/admin/title";
 
 const CommissionsEditPage = ({ commissionId }: { commissionId: string }) => {
-  const { data: commission } = services.admin.useCommission(commissionId);
+  const { data: commission, refetch } =
+    services.admin.useCommission(commissionId);
   const { mutate: updateCommission, isLoading: updatingCommission } =
-    useMutation(services.admin.updateCommission(commissionId));
+    useMutation(services.admin.updateCommission(commissionId), {
+      onSuccess: () => {
+        refetch();
+      },
+    });
 
   if (!commission) return <></>;
   return (
     <>
       <AdminHeader backHref="/admin/dashboard/commissions">
-        Editar commission
+        {commission.name}
       </AdminHeader>
       <t.root defaultValue="info">
         <g.paper_container>
@@ -31,7 +36,7 @@ const CommissionsEditPage = ({ commissionId }: { commissionId: string }) => {
             <t.trigger value="categorias">Categorias</t.trigger>
           </t.list>
         </g.paper_container>
-        <t.content value="info">
+        <t.content asChild value="info">
           <AdminCommissionForm
             loading={updatingCommission}
             onSubmit={(d) => updateCommission(d)}
@@ -39,10 +44,10 @@ const CommissionsEditPage = ({ commissionId }: { commissionId: string }) => {
             submitLabel="Salvar"
           />
         </t.content>
-        <t.content value="images">
+        <t.content asChild value="images">
           <CommissionsEditImages commissionId={commissionId} />
         </t.content>
-        <t.content value="categorias">
+        <t.content asChild value="categorias">
           <AdminCommissionsCategorys commissionId={commissionId} />
         </t.content>
       </t.root>

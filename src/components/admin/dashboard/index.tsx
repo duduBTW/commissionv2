@@ -14,6 +14,8 @@ import AdminImages from "components/admin/images";
 import Container from "components/container";
 import Button from "components/button";
 import FileCopy2LineIcon from "remixicon-react/FileCopy2LineIcon";
+import OrderCard from "components/order/card";
+import { AdminOrderListItemSchema } from "service/admin/order";
 
 const AdminDashboard = ({ defaultValue }: { defaultValue: string }) => {
   const handleValueChange = (value: string) =>
@@ -40,14 +42,46 @@ const AdminDashboard = ({ defaultValue }: { defaultValue: string }) => {
 };
 
 const DashBoard = () => {
+  const { data: ordersNotApproved } = services.admin.useOrderList({
+    type: "not_approved",
+  });
+  const { data: orders } = services.admin.useOrderList({
+    exclude_type: "not_approved",
+  });
+
+  const renderOrderCard = ({
+    id,
+    commission,
+    type,
+    user,
+  }: AdminOrderListItemSchema) => (
+    <OrderCard
+      type={type}
+      name={commission.name}
+      key={id}
+      user={user}
+      href={`/admin/order/${id}`}
+    />
+  );
+
   return (
-    <t.content value="home">
-      <Container variant="content">
-        <OrderGrid label="Novos pedidos" />
-      </Container>
-      <Container>
-        <OrderGrid header={<AdminSearch />} />
-      </Container>
+    <t.content asChild value="home">
+      <>
+        <Container variant="content">
+          {ordersNotApproved && (
+            <OrderGrid orders={ordersNotApproved} label="Novos pedidos">
+              {renderOrderCard}
+            </OrderGrid>
+          )}
+        </Container>
+        {orders && Boolean(orders.length > 0) && (
+          <Container>
+            <OrderGrid orders={orders} header={<AdminSearch />}>
+              {renderOrderCard}
+            </OrderGrid>
+          </Container>
+        )}
+      </>
     </t.content>
   );
 };

@@ -22,15 +22,17 @@ const CommissionCard = ({
   const formattedPrice = usePrice(price);
 
   return (
-    <Link href={`${href}/${id}`}>
-      <a>
-        <s.container>
-          <s.miniature src={miniature} />
-          <s.title variant="title-04">{name}</s.title>
-          <s.description color="text.40">{descriptionHtml}</s.description>
-          <s.price color="success.main">{formattedPrice}</s.price>
-        </s.container>
-      </a>
+    <Link href={`${href}/${id}`} passHref>
+      <s.container>
+        <s.miniature src={miniature} />
+        <s.title variant="title-03" color="primary.main">
+          {name}
+        </s.title>
+        <s.description color="text.40">{descriptionHtml}</s.description>
+        <s.price variant="title-04" color="text.60">
+          {formattedPrice}
+        </s.price>
+      </s.container>
     </Link>
   );
 };

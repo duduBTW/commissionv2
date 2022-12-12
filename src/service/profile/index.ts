@@ -3,7 +3,7 @@ import { IncomingHttpHeaders } from "http";
 import * as z from "zod";
 import { Session } from "next-auth";
 import { useRouter } from "next/router";
-import api from "./api";
+import api from "../api";
 
 // -- Schemas
 export const createProfileSchema = z.object({

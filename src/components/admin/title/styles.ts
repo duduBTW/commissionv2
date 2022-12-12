@@ -6,7 +6,7 @@ import { mq } from "styles/theme";
 export const container = styled(g.paper_container)`
   display: flex;
   align-items: center;
-  gap: 1.2rem;
+  gap: 1.6rem;
   background-color: var(--color-content);
 
   ${mq.fromTabletSm} {
@@ -17,5 +17,4 @@ export const container = styled(g.paper_container)`
 
 export const title = styled(Typography)`
   flex: 1;
-  text-align: right;
 `;

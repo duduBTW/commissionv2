@@ -11,6 +11,7 @@ import ButtonIcon from "components/button/icon";
 import Search2LineIcon from "remixicon-react/Search2LineIcon";
 import Link from "next/link";
 import Button from "components/button";
+import { useState } from "react";
 
 const Nav = () => {
   return (
@@ -42,7 +43,8 @@ export const UserNav = ({
   size?: UserAvatarSize;
   align?: "start" | "center" | "end" | undefined;
 }) => {
-  const { data: session } = services.useSession();
+  const [open, setOpen] = useState(false);
+  const { data: session } = services.profile.useSession();
 
   if (!session?.user?.image) {
     return (
@@ -53,7 +55,7 @@ export const UserNav = ({
   }
 
   return (
-    <menu.root>
+    <menu.root open={open} onOpenChange={setOpen}>
       <menu.trigger>
         <UserAvatar
           size={size}
@@ -64,7 +66,7 @@ export const UserNav = ({
           }
         />
       </menu.trigger>
-      <menu.content sideOffset={8} align={align}>
+      <menu.content onClick={() => setOpen(false)} sideOffset={8} align={align}>
         {session.user.admin ? (
           <Link href="/admin/dashboard/home">
             <menu.item>Dashboard</menu.item>
@@ -73,7 +75,7 @@ export const UserNav = ({
         <Link href="/profile">
           <menu.item>Minha conta</menu.item>
         </Link>
-        <Link href="/profile/orders">
+        <Link href="/profile/order">
           <menu.item>Meus pedidos</menu.item>
         </Link>
         <menu.item onClick={() => signOut()}>Sair</menu.item>

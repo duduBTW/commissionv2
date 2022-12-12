@@ -8,7 +8,7 @@ export const images_container = styled.div`
   --swiper-navigation-color: var(--color-primary);
 
   display: flex;
-  gap: 4rem;
+  gap: 2.4rem;
   width: 100%;
 `;
 export const image_main_container = styled.div`

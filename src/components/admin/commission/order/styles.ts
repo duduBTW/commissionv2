@@ -65,7 +65,7 @@ export const divider = styled.div`
   margin: 0 -2rem;
   width: calc(100% + 4rem);
   height: 0.1rem;
-  background-color: var(--color-primary-l);
+  background-color: var(--color-divider);
 `;
 
 export const actions = styled.form`

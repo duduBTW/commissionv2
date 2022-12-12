@@ -3,6 +3,8 @@ import { DefaultSession } from "next-auth";
 export interface UserSession {
   id: string;
   profilePicture?: string;
+  discord?: string;
+  twitter?: string;
   admin: boolean;
 }
 
@@ -16,6 +18,8 @@ declare module "next-auth" {
 
   interface User {
     adminId: string | null;
+    discord: string | null;
+    twitter: string | null;
     profilePicture?: string;
   }
 }

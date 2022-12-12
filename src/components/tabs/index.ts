@@ -75,5 +75,9 @@ export const trigger = styled(Tabs.Trigger)`
   }
 `;
 
-export const content = styled(Tabs.Content)``;
-export const root = styled(Tabs.Root)``;
+export const content = styled(Tabs.Content)`
+  height: 100%;
+`;
+export const root = styled(Tabs.Root)`
+  height: 100%;
+`;

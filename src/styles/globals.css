@@ -10,6 +10,7 @@ body {
   color: var(--color-text-80);
   background: var(--color-background);
   overflow-x: hidden;
+  height: 100%;
 }
 
 /* @media screen and (min-width: 768px) {

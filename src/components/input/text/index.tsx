@@ -32,7 +32,7 @@ const InputText = <T extends FieldValues = FieldValues>({
     >
       {label ? (
         <>
-          <Typography variant="subtitle-02" color="text.60">
+          <Typography variant="subtitle-02" color="text.40">
             {label}
           </Typography>
           <div style={{ height: "0.4rem" }} />

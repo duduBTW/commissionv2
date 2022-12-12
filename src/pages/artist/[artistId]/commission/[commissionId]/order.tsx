@@ -1,22 +1,32 @@
+import { GetServerSideProps, NextPage } from "next";
+
+// components
 import ArtistCommissionOrder from "components/admin/commission/order";
-import { GetServerSideProps } from "next";
+
+interface ArtistCommissionOrderPageProps {
+  params: ArtistCommissionOrderParams;
+}
+
+export interface ArtistCommissionOrderParams {
+  commissionId: string;
+  artistId: string;
+}
 
 const ArtistCommissionOrderPage = ({
-  commissionId,
-}: {
-  commissionId: string;
-}) => {
-  return <ArtistCommissionOrder commissionId={commissionId} />;
+  params,
+}: ArtistCommissionOrderPageProps) => {
+  return <ArtistCommissionOrder {...params} />;
 };
 
-ArtistCommissionOrderPage.layout = false;
-
-export const getServerSideProps: GetServerSideProps = async ({ params }) => {
+export const getServerSideProps: GetServerSideProps<
+  ArtistCommissionOrderPageProps
+> = async ({ params }) => {
   const commissionId = String(params?.commissionId);
+  const artistId = String(params?.artistId);
 
   return {
     props: {
-      commissionId,
+      params: { commissionId, artistId },
     },
   };
 };

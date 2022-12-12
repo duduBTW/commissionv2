@@ -13,13 +13,13 @@ import MyProfileForm from "components/profile/myProfile/form";
 
 const ProfilePage = () => {
   const queryClient = useQueryClient();
-  const { data: profile } = services.useProfile();
+  const { data: profile } = services.profile.useProfile();
   const { mutate: updateProfile, isLoading } = useMutation(
-    services.updateProfile,
+    services.profile.updateProfile,
     {
       onSuccess: () => {
         queryClient.invalidateQueries({
-          queryKey: [services.useSessionKey],
+          queryKey: [services.profile.useSessionKey],
           exact: true,
         });
       },
@@ -41,8 +41,8 @@ const ProfilePage = () => {
 export const getServerSideProps: GetServerSideProps = async (context) => {
   const queryClient = new QueryClient();
   await queryClient.prefetchQuery(
-    [services.useProfileKey],
-    services.getProfile(context.req.headers)
+    [services.profile.useProfileKey],
+    services.profile.getProfile(context.req.headers)
   );
 
   return {

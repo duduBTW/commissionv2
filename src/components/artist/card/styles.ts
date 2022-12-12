@@ -2,7 +2,7 @@ import styled from "@emotion/styled";
 import Typography from "components/typography";
 import UserAvatar from "components/user/avatar";
 
-export const container = styled.div`
+export const container = styled.a`
   border-radius: 0.8rem;
   border: 0.3rem solid var(--color-content);
   background: var(--color-content);

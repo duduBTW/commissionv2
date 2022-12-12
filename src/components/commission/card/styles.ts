@@ -2,7 +2,7 @@ import styled from "@emotion/styled";
 import Typography from "components/typography";
 import { mq } from "styles/theme";
 
-export const container = styled.div`
+export const container = styled.a`
   background: var(--color-content);
   border-radius: 0.8rem;
   padding: 1.2rem;
@@ -25,10 +25,11 @@ export const miniature = styled.img`
   height: 36rem;
   width: calc(100% + 2.4rem);
   object-fit: cover;
+  object-position: center 20%;
   margin: -1.2rem -1.2rem 0;
 
   ${mq.fromDesktopSm} {
-    height: 28rem;
+    height: 40rem;
   }
 `;
 
@@ -36,7 +37,7 @@ export const title = styled(Typography)`
   margin-top: 1.2rem;
 `;
 export const description = styled(Typography)`
-  margin-top: 0.8rem;
+  margin-top: 0.4rem;
   text-overflow: ellipsis;
   overflow: hidden;
   width: 80%;

@@ -1,30 +1,66 @@
-// styles
+import { useEffect } from "react";
+import { User } from "next-auth";
+import { useForm } from "react-hook-form";
+import services from "service";
+import { useOrderStatus } from "..";
+import { ArtistCommissionOrderParams } from "pages/artist/[artistId]/commission/[commissionId]/order";
+
+// components
 import Button from "components/button";
 import InputText from "components/input/text";
 import Typography from "components/typography";
-import { useForm } from "react-hook-form";
+import CommissionCardVertical from "components/commission/card/vertical";
+
+// styles
 import * as s from "./styles";
 
-export const OrderConfirmacao = () => {
+type OnSubmit = (data: Partial<User>) => void;
+
+export const OrderConfirmacao = ({
+  onSubmit,
+  ...params
+}: { onSubmit: OnSubmit } & ArtistCommissionOrderParams) => {
   return (
     <>
-      <s.container>
-        <s.image src="https://pbs.twimg.com/media/Fb4DpfSVUAEDsS9?format=jpg&name=large" />
-        <s.figure_name variant="title-02">Drawing - Full Body</s.figure_name>
-        <s.figure_price variant="price" color="success.main">
-          R$200,00
-        </s.figure_price>
-      </s.container>
-      <OrderConfirmacaoForm />
+      <OrderCommissionItem {...params} />
+      <OrderConfirmacaoForm onSubmit={onSubmit} />
     </>
   );
 };
 
-const OrderConfirmacaoForm = () => {
-  const { control } = useForm();
+const OrderCommissionItem = ({
+  artistId,
+  commissionId,
+}: ArtistCommissionOrderParams) => {
+  const { data: commission, isLoading } = services.artist.useCommission(
+    artistId,
+    commissionId
+  );
+  if (isLoading) return <></>;
+  if (!commission) return <></>;
+  return (
+    <s.container>
+      <CommissionCardVertical {...commission} />
+    </s.container>
+  );
+};
+
+const OrderConfirmacaoForm = ({ onSubmit }: { onSubmit: OnSubmit }) => {
+  const { data: session } = services.profile.useSession();
+  const { control, setValue, handleSubmit } = useForm<Partial<User>>();
+  const { isLoading } = useOrderStatus();
+
+  useEffect(() => {
+    if (session?.user) {
+      setValue("discord", session.user.discord);
+      setValue("twitter", session.user.twitter);
+      //
+    }
+  }, [session?.user, setValue]);
 
   return (
-    <div
+    <form
+      onSubmit={handleSubmit(onSubmit)}
       style={{
         flex: 1,
         display: "flex",
@@ -57,10 +93,11 @@ const OrderConfirmacaoForm = () => {
           marginTop: "auto",
         }}
         fullWidth
+        loading={isLoading}
       >
         Finalizar
       </Button>
-    </div>
+    </form>
   );
 };
 

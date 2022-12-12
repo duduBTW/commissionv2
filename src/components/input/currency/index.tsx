@@ -36,7 +36,7 @@ const InputCurrency = <T extends FieldValues = FieldValues>({
     <div>
       {label ? (
         <>
-          <Typography variant="subtitle-02" color="text.60">
+          <Typography variant="subtitle-02" color="text.40">
             {label}
           </Typography>
         </>

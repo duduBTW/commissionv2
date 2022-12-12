@@ -30,7 +30,7 @@ const CommissionOrder = ({
   onLoginDialogOpenChange?(open: boolean): void;
 }) => {
   const { push, asPath } = useRouter();
-  const { data: session } = services.useSession();
+  const { data: session } = services.profile.useSession();
   const formattedPrice = usePrice(commission.price);
 
   const handleSpeakWithArtistClick = () => {
@@ -52,15 +52,22 @@ const CommissionOrder = ({
         }
       `}
     >
-      <Typography variant="title-01">{commission.name}</Typography>
       <CommissionOrderImages isMobile={isMobile} images={commission.images} />
-      <Typography variant="body-01" color="text.40">
+      <div>
+        <Typography variant="title-01">{commission.name}</Typography>
         <div
-          dangerouslySetInnerHTML={{
-            __html: commission.descriptionHtml,
-          }}
+          className={css`
+            height: 0.4rem;
+          `}
         />
-      </Typography>
+        <Typography variant="body-01" color="text.40">
+          <div
+            dangerouslySetInnerHTML={{
+              __html: commission.descriptionHtml,
+            }}
+          />
+        </Typography>
+      </div>
       <div
         className={css`
           margin-top: auto;

@@ -64,6 +64,7 @@ model User {
   Admin          Admin?       @relation(fields: [adminId], references: [id])
   Commission     Commission[]
   Portfolio      Portfolio[]
+  Order          Order[]
 }
 
 model VerificationToken {
@@ -75,8 +76,9 @@ model VerificationToken {
 }
 
 model Admin {
-  id    String @id @default(cuid())
+  id    String  @id @default(cuid())
   users User[]
+  Order Order[]
 }
 
 model Commission {
@@ -90,8 +92,9 @@ model Commission {
   images    CommissionImage[]
   Portfolio Portfolio[]
 
-  user   User   @relation(fields: [userId], references: [id])
+  user   User    @relation(fields: [userId], references: [id])
   userId String
+  Order  Order[]
 }
 
 model CommissionImage {
@@ -106,12 +109,13 @@ model CommissionImage {
 }
 
 model CommissionCategory {
-  id              String      @id @default(cuid())
+  id              String         @id @default(cuid())
   commissionId    String?
   name            String
   descriptionHtml String?
   descriptionJson String?
-  Commission      Commission? @relation(fields: [commissionId], references: [id])
+  Commission      Commission?    @relation(fields: [commissionId], references: [id])
+  OrderMessage    OrderMessage[]
 }
 
 model Portfolio {
@@ -126,4 +130,28 @@ model Portfolio {
 
   user   User   @relation(fields: [userId], references: [id])
   userId String
+}
+
+model Order {
+  id           String         @id @default(cuid())
+  userId       String
+  commissionId String
+  adminId      String
+  messages     OrderMessage[]
+  artist       Admin          @relation(fields: [adminId], references: [id])
+  user         User?          @relation(fields: [userId], references: [id])
+  commission   Commission     @relation(fields: [commissionId], references: [id])
+  discord      String?
+  twitter      String?
+  type         String         @default("not_approved")
+}
+
+model OrderMessage {
+  id                   String             @id @default(cuid())
+  type                 String
+  content              String
+  orderId              String?
+  commissionCategoryId String
+  category             CommissionCategory @relation(fields: [commissionCategoryId], references: [id])
+  Order                Order?             @relation(fields: [orderId], references: [id])
 }

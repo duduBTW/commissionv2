@@ -44,8 +44,8 @@ export const colors = {
   },
   divider: "rgba(0, 0, 0, 0.08)",
   success: {
-    light: "#F6FFF8",
-    main: "#50A773",
+    light: "#80EBB2",
+    main: "#0FBD61",
     dark: "#169F00",
   },
   error: {

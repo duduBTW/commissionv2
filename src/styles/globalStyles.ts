@@ -68,6 +68,7 @@ export const paper_divider = styled.div`
 
 interface PaperProps {
   loading?: boolean;
+  dense?: boolean;
   size?: "small" | "medium";
 }
 
@@ -94,7 +95,7 @@ export const paper_container = styled.div<PaperProps>`
           return "64rem";
       }
     }};
-    margin: 2rem auto;
+    margin: ${({ dense }) => (dense ? "0" : "2rem")} auto;
   }
 `;
 
@@ -104,10 +105,10 @@ export const paper = styled(paper_container)<PaperProps>`
   padding: 2rem;
   display: flex;
   flex-direction: column;
-  gap: 2rem;
+  gap: 2.4rem;
 
   ${mq.fromTabletSm} {
-    padding: 2rem 2.4rem;
+    padding: 2.4rem;
   }
 
   ${({ loading }) =>
