@@ -1,8 +1,7 @@
-import { useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { useSwipeable } from "react-swipeable";
 
 // components
-import { SideBarContent } from "components/admin/commission/order";
 import Button from "components/button";
 import ButtonIcon from "components/button/icon";
 import Typography from "components/typography";
@@ -16,39 +15,185 @@ import CloseLineIcon from "remixicon-react/CloseLineIcon";
 
 // styles
 import * as s from "./styles";
+import UserAvatar from "components/user/avatar";
 
-const OrderCategotys = () => {
-  const [first, setfirst] = useState();
+export type Message = {
+  id: string;
+  value: string;
+  type: "text" | "image";
+};
+
+export type Category = {
+  id: string;
+  name: string;
+  description?:
+    | {
+        json?: string | null;
+        html?: string | null;
+      }
+    | null
+    | undefined;
+};
+
+const scrollToBottom = () =>
+  window.scrollTo({
+    top: document.body.scrollHeight,
+    behavior: "smooth",
+  });
+
+const OrderCategotys = ({
+  content = {},
+  categorys = [],
+  children,
+  footer,
+  onValueChange,
+  currentPage,
+  hideContent,
+  defaultValue,
+}: {
+  hideContent?: boolean;
+  categorys: Category[];
+  content: Record<string, Message[]>;
+  children?: React.ReactElement;
+  footer?: React.ReactElement;
+  currentPage?: string;
+  onValueChange?: ((value: string) => void) | undefined;
+  defaultValue?: string;
+}) => {
+  const [currentPageInternal, setCurrentPageInternal] = useState(defaultValue);
   const [drawerDialog, setDrawerDialog] = useState(false);
   const swipeHandlers = useSwipeable({
     onSwipedRight: () => setDrawerDialog(true),
   });
 
+  const handleValueChange = useCallback(
+    (value: string) => {
+      setCurrentPageInternal(value);
+      onValueChange?.(value);
+    },
+    [onValueChange]
+  );
+
+  const nextId = useMemo(() => {
+    if (!currentPageInternal) return;
+    const currentPageCategoryIndex = categorys.findIndex(
+      (category) => category.id === currentPageInternal
+    );
+
+    return categorys[currentPageCategoryIndex + 1]?.id;
+  }, [categorys, currentPageInternal]);
+
+  const previusId = useMemo(() => {
+    if (!currentPageInternal) return;
+    const currentPageCategoryIndex = categorys.findIndex(
+      (category) => category.id === currentPageInternal
+    );
+
+    return categorys[currentPageCategoryIndex - 1]?.id;
+  }, [categorys, currentPageInternal]);
+
+  useEffect(() => {
+    scrollToBottom();
+    if (categorys[0]?.id && !currentPageInternal)
+      handleValueChange(categorys[0]?.id);
+  }, [categorys, currentPageInternal, handleValueChange]);
+
+  useEffect(() => {
+    setCurrentPageInternal(currentPage);
+  }, [currentPage]);
+
   return (
-    <tabs.root>
+    <tabs.root
+      defaultValue={defaultValue}
+      orientation="vertical"
+      value={currentPageInternal}
+      onValueChange={handleValueChange}
+    >
       <s.container {...swipeHandlers}>
         <s.sidebar>
-          <SideBarContent />
+          <SideBarContent categorys={categorys} />
         </s.sidebar>
         <s.content>
           <MobileNav openMobileDialog={() => setDrawerDialog(true)} />
-          <s.message_list_container>
-            <div>
-              Lorem ipsum dolor sit amet consectetur adipisicing elit. Officia
-              eligendi necessitatibus reprehenderit expedita explicabo alias
-              voluptatibus ullam repellendus vitae quia? Nemo earum quae
-              explicabo, rem odio minima praesentium nobis reprehenderit
-              doloremque ad eum velit aliquid quisquam ipsum iste deleniti quia
-              nulla maiores non sapiente labore. Consequuntur temporibus qui
-              repellat? Harum quia alias est iure veritatis totam facilis
-            </div>
+          <s.message_list_container hideContent={hideContent}>
+            {hideContent
+              ? children
+              : categorys.map((category) => {
+                  const messages = content[category.id];
+
+                  return (
+                    <tabs.content asChild value={category.id} key={category.id}>
+                      <>
+                        {category &&
+                          category.description?.html &&
+                          category.description?.html !== "<p></p>" && (
+                            <Message
+                              profilePicture="https://pbs.twimg.com/profile_images/1454223867862728704/dY0A-50X_400x400.jpg"
+                              userName="Teste"
+                              html={category.description.html}
+                            />
+                          )}
+                        {messages?.map((message) => (
+                          <Message
+                            key={message.id}
+                            profilePicture="https://pbs.twimg.com/profile_images/1431139911608909828/Qgq6Ixmt_400x400.jpg"
+                            userName="yUikw"
+                            message={message.value}
+                          />
+                        ))}
+                      </>
+                    </tabs.content>
+                  );
+                })}
           </s.message_list_container>
 
-          <Footer />
+          {footer}
+          {!hideContent && (
+            <Footer
+              handleValueChange={handleValueChange}
+              previusId={previusId}
+              nextId={nextId}
+            />
+          )}
         </s.content>
       </s.container>
-      <MobileDrawer onOpenChange={setDrawerDialog} open={drawerDialog} />
+      <MobileDrawer
+        categorys={categorys}
+        onOpenChange={setDrawerDialog}
+        open={drawerDialog}
+      />
     </tabs.root>
+  );
+};
+
+const Message = ({
+  userName,
+  message,
+  html,
+  profilePicture,
+}: {
+  userName: string;
+  html?: string;
+  message?: string;
+  profilePicture: string;
+}) => {
+  return (
+    <s.message_container>
+      <UserAvatar src={profilePicture} />
+      <div>
+        <Typography variant="subtitle-01" color="primary.main">
+          {userName}
+        </Typography>
+        {html && (
+          <s.message_content
+            dangerouslySetInnerHTML={{
+              __html: html,
+            }}
+          />
+        )}
+        {message && <s.message_content>{message}</s.message_content>}
+      </div>
+    </s.message_container>
   );
 };
 
@@ -74,25 +219,61 @@ const MobileNav = ({ openMobileDialog }: { openMobileDialog: () => void }) => {
   );
 };
 
-const Footer = () => (
-  <s.footer>
-    <s.actions>
-      <Button variant="secondary">
-        <ArrowLeftLineIcon />
-      </Button>
-      <Button variant="secondary">
-        <ArrowRightLineIcon />
-      </Button>
-    </s.actions>
-  </s.footer>
-);
+const Footer = ({
+  nextId,
+  previusId,
+  handleValueChange,
+}: {
+  previusId: string | undefined;
+  nextId: string | undefined;
+  handleValueChange: (value: string) => void;
+}) => {
+  if (!previusId && !nextId) return <></>;
+
+  return (
+    <s.footer>
+      <s.actions>
+        <Button
+          onClick={() => previusId && handleValueChange(previusId)}
+          type="button"
+          disabled={!previusId}
+          variant="secondary"
+        >
+          <ArrowLeftLineIcon />
+        </Button>
+        <Button
+          type="button"
+          onClick={() => nextId && handleValueChange(nextId)}
+          disabled={!nextId}
+          variant="secondary"
+        >
+          <ArrowRightLineIcon />
+        </Button>
+      </s.actions>
+    </s.footer>
+  );
+};
+
+export const SideBarContent = ({ categorys }: { categorys: Category[] }) => {
+  return (
+    <s.category_list>
+      {categorys.map(({ id, name }) => (
+        <s.category_item key={id} value={id}>
+          {name}
+        </s.category_item>
+      ))}
+    </s.category_list>
+  );
+};
 
 const MobileDrawer = ({
   open,
   onOpenChange,
+  categorys,
 }: {
   open: boolean;
   onOpenChange: (open: boolean) => void;
+  categorys: Category[];
 }) => (
   <dialog.root open={open} onOpenChange={onOpenChange}>
     <dialog.portal>
@@ -105,12 +286,7 @@ const MobileDrawer = ({
             </ButtonIcon>
           </s.drawer_header>
         </dialog.close>
-        <SideBarContent />
-
-        {/* <s.drawer_footer>
-            <UserNav align="start" />
-            <Logo />
-          </s.drawer_footer> */}
+        <SideBarContent categorys={categorys} />
       </s.drawer_content>
     </dialog.portal>
   </dialog.root>

@@ -1,13 +1,18 @@
 import OrderCategotys from "components/order/category";
+import { AdminOrderItemPageParams } from "pages/admin/order/[orderId]";
+import services from "service";
 
-// styles
-import * as s from "./styles";
+const AdminOrderCategorys = ({ orderId }: AdminOrderItemPageParams) => {
+  const { data: messages, isLoading } =
+    services.admin.useOrderMessages(orderId);
 
-const AdminOrderCategorys = () => {
+  if (isLoading || !messages) return <></>;
   return (
-    <s.container variant="background">
-      <OrderCategotys />
-    </s.container>
+    <OrderCategotys
+      categorys={messages.categorys}
+      defaultValue={messages.categorys[0]?.id}
+      content={messages.content}
+    />
   );
 };
 

@@ -101,7 +101,7 @@ export const paper_container = styled.div<PaperProps>`
 
 export const paper = styled(paper_container)<PaperProps>`
   background: var(--color-content);
-  border-radius: 0.8rem;
+  border-radius: 1.2rem;
   padding: 2rem;
   display: flex;
   flex-direction: column;

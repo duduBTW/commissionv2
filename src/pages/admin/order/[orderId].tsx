@@ -3,8 +3,18 @@ import AdminOrderCategorys from "components/admin/order/category";
 import AdminOrderInformation from "components/admin/order/information";
 import Container from "components/container";
 import * as tabs from "components/tabs";
+import { GetServerSideProps } from "next";
+import { z } from "zod";
 
-const AdminOrderItemPage = () => {
+export interface AdminOrderItemPageParams {
+  orderId: string;
+}
+
+const AdminOrderItemPage = ({
+  params,
+}: {
+  params: AdminOrderItemPageParams;
+}) => {
   return (
     <tabs.root defaultValue="informacoes">
       <Container variant="content">
@@ -15,13 +25,23 @@ const AdminOrderItemPage = () => {
         </tabs.list>
       </Container>
       <tabs.content value="informacoes">
-        <AdminOrderInformation />
+        <AdminOrderInformation {...params} />
       </tabs.content>
       <tabs.content value="categorias">
-        <AdminOrderCategorys />
+        <AdminOrderCategorys {...params} />
       </tabs.content>
     </tabs.root>
   );
+};
+
+export const getServerSideProps: GetServerSideProps = async ({ params }) => {
+  return {
+    props: {
+      params: {
+        orderId: z.string().parse(params?.orderId),
+      },
+    },
+  };
 };
 
 export default AdminOrderItemPage;

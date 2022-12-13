@@ -3,40 +3,54 @@ import CommissionCardVertical from "components/commission/card/vertical";
 import Container from "components/container";
 import Typography from "components/typography";
 import UserAvatar from "components/user/avatar";
+import { AdminOrderItemPageParams } from "pages/admin/order/[orderId]";
+import services from "service";
 
 // styles
 import * as s from "./styles";
 
-const AdminOrderInformation = () => {
+const AdminOrderInformation = ({ orderId }: AdminOrderItemPageParams) => {
   return (
     <Container>
-      <Commission />
-      <User />
+      <Commission orderId={orderId} />
+      <User orderId={orderId} />
     </Container>
   );
 };
 
-const Commission = () => (
-  <s.container noPadding>
-    <CommissionCardVertical
-      name="a"
-      price={200}
-      image="https://pbs.twimg.com/media/FjDXY95UoAARSYC?format=jpg&name=large"
-    />
-  </s.container>
-);
+const Commission = ({ orderId }: AdminOrderItemPageParams) => {
+  const { data: order, isLoading } = services.admin.useOrder(orderId);
 
-const User = () => (
-  <s.container_user>
-    <UserAvatar src="https://pbs.twimg.com/profile_images/1538514775159689216/98aIeJqP_400x400.jpg" />
-    <s.information_grid>
-      <UserInfoItem label="Nome">Carlos Eduardo Alves</UserInfoItem>
-      <UserInfoItem label="Email">carloseduardo108090@gmail.com</UserInfoItem>
-      <UserInfoItem label="Discord">Dudu#3132</UserInfoItem>
-      <UserInfoItem label="Twitter">@dudubtway</UserInfoItem>
-    </s.information_grid>
-  </s.container_user>
-);
+  if (!order || isLoading) return <></>;
+  return (
+    <s.order_commission_container noPadding>
+      <CommissionCardVertical
+        {...order.commission}
+        image={order.commission.images[0]?.url}
+      />
+    </s.order_commission_container>
+  );
+};
+
+const User = ({ orderId }: AdminOrderItemPageParams) => {
+  const { data: order, isLoading } = services.admin.useOrder(orderId);
+
+  if (!order || isLoading) return <></>;
+  return (
+    <s.container_user>
+      <UserAvatar src={order.user.profilePicture} />
+      <s.information_grid>
+        <UserInfoItem label="Nome">{order.user.userName}</UserInfoItem>
+        {order.discord && (
+          <UserInfoItem label="Discord">{order.discord}</UserInfoItem>
+        )}
+        {order.twitter && (
+          <UserInfoItem label="Twitter">{order.twitter}</UserInfoItem>
+        )}
+      </s.information_grid>
+    </s.container_user>
+  );
+};
 
 const UserInfoItem = ({
   children,

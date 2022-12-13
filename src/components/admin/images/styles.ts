@@ -21,7 +21,7 @@ interface ImageInputsItemProps {
   variant: ContainerVariant;
 }
 export const card = styled.div<ImageInputsItemProps>`
-  border-radius: 0.8rem;
+  border-radius: 1.2rem;
   overflow: hidden;
   background: ${({ variant }) =>
     variant === "background"

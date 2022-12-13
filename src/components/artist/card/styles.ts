@@ -3,7 +3,7 @@ import Typography from "components/typography";
 import UserAvatar from "components/user/avatar";
 
 export const container = styled.a`
-  border-radius: 0.8rem;
+  border-radius: 1.2rem;
   border: 0.3rem solid var(--color-content);
   background: var(--color-content);
   display: grid;
@@ -24,14 +24,14 @@ export const cover = styled.img`
   width: 100%;
   object-fit: cover;
   object-position: center;
-  border-radius: 0.8rem;
+  border-radius: 1.2rem;
 `;
 
 export const cover_placeholder = styled.div`
   grid-area: cover;
   height: 8rem;
   width: 100%;
-  border-radius: 0.8rem;
+  border-radius: 1.2rem;
   background-color: var(--color-primary-l);
 `;
 

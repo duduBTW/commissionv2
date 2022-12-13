@@ -18,7 +18,7 @@ export const image_main_container = styled.div`
 export const image_main = styled(LazyLoadImage)`
   width: 100%;
   height: max-content;
-  border-radius: 0.8rem;
+  border-radius: 1.2rem;
 
   object-fit: contain;
   object-position: left top;
@@ -28,7 +28,7 @@ export const image_main = styled(LazyLoadImage)`
 export const image_main_hash = styled(Blurhash)`
   width: 100%;
   object-fit: cover;
-  border-radius: 0.8rem;
+  border-radius: 1.2rem;
   position: absolute !important;
   top: 0 !important;
   left: 0 !important;
@@ -71,7 +71,7 @@ export const image_miniature_container = styled(SwiperSlide)`
     cursor: default;
     img {
       opacity: 1;
-      border: 0.3rem solid var(--color-divider);
+      border: 0.3rem solid var(--color-primary);
     }
 
     &:hover {
@@ -97,7 +97,7 @@ export const image_miniature = styled.img<ImageMiniatureProps>`
 
   object-fit: cover;
   object-position: top;
-  border-radius: 0.4rem;
+  border-radius: 0.8rem;
   opacity: 0.4;
   border: 0.2rem solid transparent;
 `;

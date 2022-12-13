@@ -36,7 +36,7 @@ export const side_nav = styled.aside`
     margin: 2rem 0;
     padding: 1.2rem;
     height: min-content;
-    border-radius: 0.8rem;
+    border-radius: 1.2rem;
     flex-direction: column;
     gap: 0.4rem;
   }
@@ -79,7 +79,7 @@ export const side_nav_item = styled.button`
     line-height: 2.4rem;
     padding: 0.8rem 1.2rem;
     width: 18rem;
-    border-radius: 0.8rem;
+    border-radius: 1.2rem;
   }
 `;
 

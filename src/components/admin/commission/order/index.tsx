@@ -1,42 +1,26 @@
 import React, { useCallback, useEffect, useState } from "react";
 import services from "service";
 import constate from "constate";
-import { useSwipeable } from "react-swipeable";
 import { v4 as uuidv4 } from "uuid";
-import { useForm } from "react-hook-form";
+import { useForm, FormProvider, useFormContext } from "react-hook-form";
 import { useRouter } from "next/router";
 import { ArtistCommissionOrderParams } from "pages/artist/[artistId]/commission/[commissionId]/order";
 import { useMutation } from "@tanstack/react-query";
 import { User } from "next-auth";
 
 // components
-import Button from "components/button";
 import Typography from "components/typography";
 import SendPlane2LineIcon from "remixicon-react/SendPlane2LineIcon";
-import ArrowLeftLineIcon from "remixicon-react/ArrowLeftLineIcon";
-import ArrowRightLineIcon from "remixicon-react/ArrowRightLineIcon";
 import Menu4LineIcon from "remixicon-react/Menu4LineIcon";
-import CloseLineIcon from "remixicon-react/CloseLineIcon";
-import ArrowDropRightLineIcon from "remixicon-react/ArrowDropRightLineIcon";
 import * as dialog from "components/dialog";
-import { Logo, UserNav } from "components/Nav";
-import Link from "next/link";
 import ButtonIcon from "components/button/icon";
-import UserAvatar from "components/user/avatar";
 import * as Tabs from "@radix-ui/react-tabs";
 import InputText from "components/input/text";
-import OrderConfirmacao from "./confirmacao";
+import OrderCategotys, { Message } from "components/order/category";
+import Button from "components/button";
 
 // styles
 import * as s from "./styles";
-import OrderCategotys from "components/order/category";
-import Container from "components/container";
-
-export type Message = {
-  id: string;
-  value: string;
-  type: "text" | "image";
-};
 
 const scrollToBottom = () => window.scrollTo(0, document.body.scrollHeight);
 
@@ -48,6 +32,11 @@ const useArtistCommissionorder = ({
   const { query, push } = useRouter();
   const [currentPage, setCurrentPage] = useState("");
   const [messages, setMessages] = useState<Record<string, Message[]>>({});
+  const [imageDialog, setImageDialog] = useState<ImageDialogProps>({
+    open: false,
+    src: null,
+  });
+  const [tutorialDialog, setTutorialDialog] = useState(false);
   const { mutate: newOrder, ...newOrderStatus } = useMutation(
     services.artist.newOrder(params.artistId, params.commissionId),
     {
@@ -65,6 +54,31 @@ const useArtistCommissionorder = ({
       );
     }
   }, [query]);
+
+  useEffect(() => {
+    // scrollToBottom();
+
+    const handleImageClick = (e: Event) => {
+      setImageDialog({
+        open: true,
+        src: (e.target as HTMLImageElement).getAttribute("src"),
+      });
+    };
+
+    const elements = document.querySelectorAll("#img_item");
+    elements.forEach((image) =>
+      image.addEventListener("click", handleImageClick)
+    );
+
+    // Opens tutorial dialog
+    setTutorialDialog(true);
+
+    return () => {
+      elements.forEach((image) =>
+        image.removeEventListener("click", handleImageClick)
+      );
+    };
+  }, []);
 
   const postMessage = useCallback(
     (message: Omit<Message, "id">) => {
@@ -97,9 +111,7 @@ const useArtistCommissionorder = ({
     [currentPage, messages, query]
   );
 
-  const handleCurrentPageChange = (page: string) => {
-    setCurrentPage(page);
-  };
+  const handleCurrentPageChange = (page: string) => setCurrentPage(page);
 
   const handleFinishSubmit = (user: Partial<User>) =>
     newOrder({
@@ -113,95 +125,77 @@ const useArtistCommissionorder = ({
       handleCurrentPageChange,
       currentPage,
       messages,
-      newOrder,
       handleFinishSubmit,
     },
     params,
     status: newOrderStatus,
+    dialog: {
+      imageDialog,
+      setImageDialog,
+      tutorialDialog,
+      setTutorialDialog,
+    },
   };
 };
 
-export const [OrderProvider, useMessage, useParams, useOrderStatus] = constate(
-  useArtistCommissionorder,
-  (value) => value.message,
-  (value) => value.params,
-  (value) => value.status
-);
+export const [OrderProvider, useMessage, useParams, useOrderStatus, useDialog] =
+  constate(
+    useArtistCommissionorder,
+    (value) => value.message,
+    (value) => value.params,
+    (value) => value.status,
+    (value) => value.dialog
+  );
 
 const ArtistCommissionOrder = ({ ...params }: ArtistCommissionOrderParams) => {
   return (
     <OrderProvider params={params}>
-      <Container>
-        <OrderCategotys />
-      </Container>
+      <ArtistCommissionOrderContent />
     </OrderProvider>
   );
 };
 
 const ArtistCommissionOrderContent = () => {
   const { commissionId } = useParams();
-  const { handleCurrentPageChange, currentPage } = useMessage();
-  const { isLoading } = services.admin.useCommissionCategoryList(commissionId, {
-    onSuccess: (categorys) => {
-      if (!currentPage && categorys?.[0]?.id)
-        handleCurrentPageChange(categorys[0].id);
-    },
-  });
-  const [imageDialog, setImageDialog] = useState<ImageDialogProps>({
-    open: false,
-    src: null,
-  });
-  const [tutorialDialog, setTutorialDialog] = useState(false);
-  const [drawerDialog, setDrawerDialog] = useState(false);
+  const formMethods = useForm<Partial<User>>();
 
-  const swipeHandlers = useSwipeable({
-    onSwipedRight: () => setDrawerDialog(true),
-  });
+  const { messages, handleCurrentPageChange, currentPage, handleFinishSubmit } =
+    useMessage();
+  const { imageDialog, setImageDialog, setTutorialDialog, tutorialDialog } =
+    useDialog();
 
-  useEffect(() => {
-    // scrollToBottom();
+  const { data: categorys } =
+    services.admin.useCommissionCategoryList(commissionId);
 
-    const handleImageClick = (e: Event) => {
-      setImageDialog({
-        open: true,
-        src: (e.target as HTMLImageElement).getAttribute("src"),
-      });
-    };
-
-    const elements = document.querySelectorAll("#img_item");
-    elements.forEach((image) =>
-      image.addEventListener("click", handleImageClick)
-    );
-
-    // Opens tutorial dialog
-    setTutorialDialog(true);
-
-    return () => {
-      elements.forEach((image) =>
-        image.removeEventListener("click", handleImageClick)
-      );
-    };
-  }, []);
-
-  if (isLoading) return <></>;
+  if (!categorys) return <></>;
   return (
-    <Tabs.Root
-      value={currentPage}
-      onValueChange={handleCurrentPageChange}
-      orientation="vertical"
-    >
-      <s.container {...swipeHandlers}>
-        <s.side_nav>
-          <SideBarContent />
-        </s.side_nav>
-
-        <s.content>
-          {/* <MobileNav openMobileDialog={() => setDrawerDialog(true)} /> */}
-          <DesktopNav />
-          <MessageList />
-        </s.content>
-        <Footer />
-      </s.container>
+    <>
+      <FormProvider {...formMethods}>
+        <OrderCategotys
+          currentPage={currentPage}
+          onValueChange={handleCurrentPageChange}
+          categorys={[
+            ...categorys,
+            {
+              name: "Confirmacao",
+              id: "confirmacao",
+            },
+          ]}
+          hideContent={currentPage === "confirmacao"}
+          content={messages}
+          footer={currentPage !== "confirmacao" ? <Footer /> : <></>}
+        >
+          <Tabs.Content
+            style={{
+              height: "100%",
+            }}
+            value="confirmacao"
+            asChild
+          >
+            <OrderConfirmacaoForm onSubmit={handleFinishSubmit} />
+          </Tabs.Content>
+        </OrderCategotys>
+      </FormProvider>
       <ImageDialog
         {...imageDialog}
         onOpenChange={(open) =>
@@ -212,130 +206,7 @@ const ArtistCommissionOrderContent = () => {
         }
       />
       <TutorialDialog open={tutorialDialog} onOpenChange={setTutorialDialog} />
-      <MobileDrawer onOpenChange={setDrawerDialog} open={drawerDialog} />
-    </Tabs.Root>
-  );
-};
-
-export const SideBarContent = () => {
-  const { commissionId } = useParams();
-  const { data: categorys } =
-    services.admin.useCommissionCategoryList(commissionId);
-
-  if (!categorys) return null;
-
-  return (
-    <s.category_list>
-      {/* <s.nav>
-        <Logo size="small" />
-      </s.nav> */}
-      {categorys.map(({ id, name }) => (
-        <s.category_item key={id} value={id}>
-          {name}
-        </s.category_item>
-      ))}
-      <s.category_item value="outro">Outras</s.category_item>
-      <s.divider />
-      <s.category_item value="confirmacao">Confirmacão</s.category_item>
-    </s.category_list>
-  );
-};
-
-const DesktopNav = () => {
-  const { artistId, commissionId } = useParams();
-  const { data: commission, isLoading } = services.artist.useCommission(
-    artistId,
-    commissionId
-  );
-  const { currentPage } = useMessage();
-
-  if (isLoading) return <></>;
-  if (!commission) return <></>;
-  return (
-    <s.nav>
-      {currentPage !== "confirmacao" ? (
-        <Link href={`/artist/${artistId}/commission/${commissionId}`}>
-          <a>
-            <Typography variant="title-04">{commission.name}</Typography>
-          </a>
-        </Link>
-      ) : (
-        <div />
-      )}
-      <UserNav size="default" />
-    </s.nav>
-  );
-};
-
-export const MessageList = () => {
-  const { artistId, commissionId } = useParams();
-  const { data: categorys } =
-    services.admin.useCommissionCategoryList(commissionId);
-  const { messages, handleFinishSubmit } = useMessage();
-
-  return (
-    <>
-      {categorys?.map(({ id, description }) => (
-        <Tabs.Content asChild value={id} key={id}>
-          <>
-            {description?.html && description.html !== "<p></p>" && (
-              <Message
-                profilePicture="https://pbs.twimg.com/profile_images/1454223867862728704/dY0A-50X_400x400.jpg"
-                userName="Teste"
-                html={description?.html}
-              />
-            )}
-            {messages[id]?.map((message) => (
-              <Message
-                key={message.id}
-                profilePicture="https://pbs.twimg.com/profile_images/1431139911608909828/Qgq6Ixmt_400x400.jpg"
-                userName="yUikw"
-                message={message.value}
-              />
-            ))}
-          </>
-        </Tabs.Content>
-      ))}
-      <Tabs.Content asChild value="outro"></Tabs.Content>
-      <Tabs.Content asChild value="confirmacao">
-        <OrderConfirmacao
-          onSubmit={handleFinishSubmit}
-          commissionId={commissionId}
-          artistId={artistId}
-        />
-      </Tabs.Content>
     </>
-  );
-};
-
-const Message = ({
-  userName,
-  message,
-  html,
-  profilePicture,
-}: {
-  userName: string;
-  html?: string;
-  message?: string;
-  profilePicture: string;
-}) => {
-  return (
-    <s.message_container>
-      <UserAvatar src={profilePicture} />
-      <div>
-        <Typography variant="subtitle-01" color="primary.main">
-          {userName}
-        </Typography>
-        {html && (
-          <s.message_content
-            dangerouslySetInnerHTML={{
-              __html: html,
-            }}
-          />
-        )}
-        {message && <s.message_content>{message}</s.message_content>}
-      </div>
-    </s.message_container>
   );
 };
 
@@ -347,39 +218,28 @@ const Footer = () => {
 
   if (currentPage === "confirmacao") return <></>;
   return (
-    <s.footer>
-      <s.actions
-        onSubmit={handleSubmit((data) => {
-          postMessage({
-            type: "text",
-            value: data.message,
-          });
+    <s.actions
+      onSubmit={handleSubmit((data) => {
+        postMessage({
+          type: "text",
+          value: data.message,
+        });
 
-          reset({
-            message: "",
-          });
-        })}
-      >
-        <InputText
-          control={control}
-          name="message"
-          placeholder="Digite o que você quer para o corpo..."
-          variant="outlined"
-        />
-        <ButtonIcon type="submit">
-          <SendPlane2LineIcon size="2rem" />
-        </ButtonIcon>
-      </s.actions>
-      <s.divider />
-      <s.actions>
-        <Button variant="secondary">
-          <ArrowLeftLineIcon />
-        </Button>
-        <s.button_next variant="secondary">
-          <ArrowRightLineIcon />
-        </s.button_next>
-      </s.actions>
-    </s.footer>
+        reset({
+          message: "",
+        });
+      })}
+    >
+      <InputText
+        control={control}
+        name="message"
+        placeholder="Digite o que você quer para o corpo..."
+        variant="outlined"
+      />
+      <ButtonIcon type="submit">
+        <SendPlane2LineIcon size="2rem" />
+      </ButtonIcon>
+    </s.actions>
   );
 };
 
@@ -467,34 +327,76 @@ const TutorialDialog = ({
   );
 };
 
-const MobileDrawer = ({
-  open,
-  onOpenChange,
+const OrderConfirmacaoForm = ({
+  onSubmit,
 }: {
-  open: boolean;
-  onOpenChange: (open: boolean) => void;
+  onSubmit: (data: Partial<User>) => void;
 }) => {
-  return (
-    <dialog.root open={open} onOpenChange={onOpenChange}>
-      <dialog.portal>
-        <dialog.overlay />
-        <s.drawer_content>
-          <dialog.close>
-            <s.drawer_header>
-              <ButtonIcon>
-                <CloseLineIcon size="2rem" />
-              </ButtonIcon>
-            </s.drawer_header>
-          </dialog.close>
-          <SideBarContent />
+  const { control, setValue, handleSubmit, getValues } =
+    useFormContext<Partial<User>>();
+  const { data: session } = services.profile.useSession();
+  const { isLoading } = useOrderStatus();
 
-          <s.drawer_footer>
-            <UserNav align="start" />
-            <Logo />
-          </s.drawer_footer>
-        </s.drawer_content>
-      </dialog.portal>
-    </dialog.root>
+  useEffect(() => {
+    if (session?.user) {
+      const discord = getValues("discord");
+      const twitter = getValues("twitter");
+      const name = getValues("name");
+
+      if (!discord) setValue("discord", session.user.discord);
+      if (!twitter) setValue("twitter", session.user.twitter);
+      if (!name) setValue("name", session.user.name);
+    }
+  }, [getValues, session?.user, setValue]);
+
+  return (
+    <form
+      onSubmit={handleSubmit(onSubmit)}
+      style={{
+        flex: 1,
+        display: "flex",
+        flexDirection: "column",
+        height: "100%",
+      }}
+    >
+      <Typography variant="title-01">Finalizar pedido</Typography>
+      <div style={{ height: "0.8rem" }}></div>
+      <Typography variant="body-01" color="text.40">
+        Informe seu twitter ou discord para entrarmos em contato
+      </Typography>
+      <div style={{ height: "2.4rem" }}></div>
+      <InputText
+        control={control}
+        label="Nome completo"
+        name="name"
+        variant="outlined"
+      />
+      <div style={{ height: "1.6rem" }}></div>
+      <InputText
+        control={control}
+        label="Discord"
+        name="discord"
+        placeholder="username#0000"
+        variant="outlined"
+      />
+      <div style={{ height: "1.6rem" }}></div>
+      <InputText
+        control={control}
+        label="Twitter"
+        name="twitter"
+        placeholder="@username"
+        variant="outlined"
+      />
+      <Button
+        style={{
+          marginTop: "auto",
+        }}
+        fullWidth
+        loading={isLoading}
+      >
+        Finalizar
+      </Button>
+    </form>
   );
 };
 

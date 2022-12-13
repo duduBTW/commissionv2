@@ -51,7 +51,7 @@ const StyledContent = styled(DropdownMenuPrimitive.Content)`
   min-width: 16rem;
   z-index: 5;
   background-color: var(--color-content);
-  border-radius: 0.8rem;
+  border-radius: 1.2rem;
   padding: 0.8rem;
   box-shadow: 0px 0px 38px 12px var(--color-primary-l),
     0px 8px 20px -15px var(--color-primary-d);
@@ -81,7 +81,7 @@ const StyledArrow = styled(DropdownMenuPrimitive.Arrow)({
 
 const StyledItem = styled(DropdownMenuPrimitive.Item)`
   all: unset;
-  border-radius: 0.4rem;
+  border-radius: 0.8rem;
   display: flex;
   align-items: center;
   gap: 0.8rem;

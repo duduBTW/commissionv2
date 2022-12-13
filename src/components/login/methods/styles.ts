@@ -14,7 +14,7 @@ export const card = styled.button`
   gap: 0.8rem;
   padding: 0.8rem 2rem;
   border: 0.2rem solid var(--color-background);
-  border-radius: 0.8rem;
+  border-radius: 1.2rem;
   cursor: pointer;
 
   &:hover,

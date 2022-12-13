@@ -19,7 +19,7 @@ export const art = styled.img`
 
   ${mq.fromTabletSm} {
     margin: 0;
-    border-radius: 0.8rem;
+    border-radius: 1.2rem;
     width: calc(70% - 2rem);
 
     //                       min-w card  padding

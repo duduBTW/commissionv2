@@ -21,15 +21,6 @@ export const container = styled.div`
     grid-template-rows: 1fr auto;
     /* margin-bottom: 0rem; */
     position: relative;
-
-    &::before {
-      content: "";
-      position: absolute;
-      bottom: 0;
-      width: 100%;
-      height: 0.1rem;
-      background-color: var(--color-primary-l);
-    }
   }
 `;
 
@@ -56,5 +47,6 @@ export const image = styled.img`
     min-width: 24rem;
     height: 20rem;
     grid-area: pic;
+    opacity: 1;
   }
 `;

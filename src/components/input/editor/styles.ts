@@ -10,7 +10,7 @@ export const container = styled.div<InputProps>`
   margin: 0;
   border: ${({ variant }) =>
     variant === "outlined" ? "0.1rem solid var(--color-divider)" : "none"};
-  border-radius: 0.8rem;
+  border-radius: 1.2rem;
 `;
 
 export const content = styled(EditorContent)`
@@ -18,7 +18,7 @@ export const content = styled(EditorContent)`
     background-color: var(--color-content);
     outline: none;
     padding: 1rem 1.2em;
-    border-radius: 0.8rem;
+    border-radius: 1.2rem;
     min-height: 8rem;
     cursor: text;
 

@@ -7,7 +7,7 @@ interface ContainerProps {
 export const container = styled.a<ContainerProps>`
   cursor: pointer;
   padding: 1.2rem;
-  border-radius: 0.8rem;
+  border-radius: 1.2rem;
   border: 0.1rem solid var(--color-divider);
   background: var(--color-content);
   overflow: hidden;

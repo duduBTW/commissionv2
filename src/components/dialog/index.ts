@@ -80,7 +80,7 @@ export const content = styled(Dialog.Content)<ContentProps>`
     }};
     max-height: 85vh;
     height: min-content;
-    border-radius: 0.8rem;
+    border-radius: 1.2rem;
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);

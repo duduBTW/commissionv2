@@ -20,7 +20,7 @@ export const banner = styled.img<BannerProps>`
     margin: ${({ noMargin }) => (noMargin ? "0" : "0 0 2rem")};
     width: 100%;
     height: 24rem;
-    border-radius: 0.8rem;
+    border-radius: 1.2rem;
   }
 `;
 
@@ -39,7 +39,7 @@ export const banner_placeholder = styled.div<BannerProps>`
     margin: ${({ noMargin }) => (noMargin ? "0" : "0 0 2rem")};
     width: 100%;
     height: 24rem;
-    border-radius: 0.8rem;
+    border-radius: 1.2rem;
   }
 `;
 

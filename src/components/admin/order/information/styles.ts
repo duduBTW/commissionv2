@@ -5,7 +5,7 @@ import { mq } from "styles/theme";
 interface ContainerProps {
   noPadding?: boolean;
 }
-export const container = styled(g.paper)<ContainerProps>`
+export const order_commission_container = styled(g.paper)<ContainerProps>`
   padding: ${({ noPadding }) => (noPadding ? "0 !important" : "2.4rem")};
   margin: 0rem 0rem 1.6rem !important;
   overflow: hidden;
@@ -13,7 +13,7 @@ export const container = styled(g.paper)<ContainerProps>`
   width: 100%;
 `;
 
-export const container_user = styled(container)`
+export const container_user = styled(order_commission_container)`
   display: flex;
   align-items: flex-start;
   gap: 2.4rem;
@@ -24,6 +24,7 @@ export const container_user = styled(container)`
 `;
 
 export const information_grid = styled.ul`
+  flex: 0.6;
   display: grid;
   gap: 1.6rem;
   padding: 0;

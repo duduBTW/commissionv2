@@ -4,7 +4,7 @@ import { mq } from "styles/theme";
 
 export const container = styled.a`
   background: var(--color-content);
-  border-radius: 0.8rem;
+  border-radius: 1.2rem;
   padding: 1.2rem;
   cursor: pointer;
   min-width: 0;
@@ -21,7 +21,7 @@ export const container = styled.a`
 export const miniature = styled.img`
   object-position: top;
   border: 0.3rem solid var(--color-content);
-  border-radius: 0.8rem;
+  border-radius: 1.2rem;
   height: 36rem;
   width: calc(100% + 2.4rem);
   object-fit: cover;

@@ -125,7 +125,7 @@ export const category_list = styled(Tabs.List)`
 export const category_item = styled(Tabs.Trigger)`
   padding: 0.4rem 1.2rem;
   margin: -0.4rem -1.2rem;
-  border-radius: 0.8rem;
+  border-radius: 1.2rem;
 
   &:hover,
   &:focus {
@@ -169,7 +169,7 @@ export const message_content = styled.div`
   img {
     margin-top: 0.8rem;
     max-width: 20rem;
-    border-radius: 0.8rem;
+    border-radius: 1.2rem;
     cursor: pointer;
   }
 `;
@@ -199,7 +199,7 @@ export const dialog_content = styled(Dialog.Content)``;
 export const image_content = styled.img`
   position: fixed;
   height: min-content;
-  border-radius: 0.8rem;
+  border-radius: 1.2rem;
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);

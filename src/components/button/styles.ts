@@ -15,7 +15,7 @@ export const button = styled.button<ButtonProps>`
   text-align: center;
   padding: 1rem 1.6rem;
   width: ${({ fullWidth }) => (fullWidth ? "100%" : "min-content")};
-  border-radius: 0.8rem;
+  border-radius: 1.2rem;
   border: 0.1rem solid transparent;
   font-family: "Poppins";
   font-style: normal;
@@ -63,6 +63,14 @@ export const button = styled.button<ButtonProps>`
       pointer-events: none;
       z-index: 3;
     `};
+
+  &:disabled,
+  &[disabled] {
+    cursor: default;
+    border: 1px solid transparent;
+    background-color: var(--color-text-20);
+    color: var(--color-text-40);
+  }
 `;
 
 interface ContentProps {

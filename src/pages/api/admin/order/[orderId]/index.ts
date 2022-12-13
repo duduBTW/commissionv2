@@ -28,7 +28,7 @@ const get = async (
   const orderId = z.string().parse(query.orderId);
 
   return res.send(
-    await prisma.order.findMany({
+    await prisma.order.findFirst({
       where: {
         id: orderId,
         artist: {
@@ -45,6 +45,7 @@ const get = async (
           select: {
             id: true,
             name: true,
+            price: true,
             images: {
               select: {
                 url: true,
@@ -60,6 +61,8 @@ const get = async (
           },
         },
         type: true,
+        discord: true,
+        twitter: true,
       },
     })
   );

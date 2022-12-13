@@ -48,6 +48,8 @@ const getUser = (id: string) =>
       profilePicture: true,
       discord: true,
       twitter: true,
+      banner: true,
+      userName: true,
     },
   });
 
