@@ -8,15 +8,15 @@ const ArtistCard = ({
   userName,
 }: {
   id: string;
-  banner?: string;
-  profilePicture: string;
-  userName: string;
+  userName: string | null;
+  profilePicture: string | null;
+  banner: string | null;
 }) => {
   return (
     <Link passHref href={`/artist/${id}/commissions`}>
       <s.container>
         {banner ? <s.cover src={banner} /> : <s.cover_placeholder />}
-        <s.userAvatar src={profilePicture} />
+        <s.userAvatar src={profilePicture ?? ""} />
         <s.userName variant="title-04">{userName}</s.userName>
       </s.container>
     </Link>

@@ -1,8 +1,10 @@
-import Typography from "components/typography";
 import { signIn } from "next-auth/react";
 
 // styles
 import * as s from "./styles";
+
+// components
+import Typography from "components/typography";
 
 interface LoginMethod {
   label: string;
@@ -12,17 +14,17 @@ interface LoginMethod {
 const loginMethods: Record<string, LoginMethod> = {
   google: {
     iconUrl: "https://cdn-icons-png.flaticon.com/512/2991/2991148.png",
-    label: "Continue com Google",
+    label: "Continuar com Google",
   },
   discord: {
     iconUrl:
       "https://cdn3.iconfinder.com/data/icons/popular-services-brands-vol-2/512/discord-512.png",
-    label: "Continue com Discord",
+    label: "Continuar com Discord",
   },
-  // twitter: {
-  //   iconUrl: "https://cdn-icons-png.flaticon.com/512/5968/5968823.png",
-  //   label: "Continue com Twitter",
-  // },
+  twitter: {
+    iconUrl: "https://cdn-icons-png.flaticon.com/512/5968/5968823.png",
+    label: "Continue com Twitter",
+  },
 };
 
 const LoginMethods = ({ redirectUrl = "/" }: { redirectUrl?: string }) => {

@@ -19,6 +19,7 @@ const InputText = <T extends FieldValues = FieldValues>({
 }: InputTextProps<T>) => {
   const {
     field: { onChange, onBlur, value, ref },
+    fieldState: { error },
   } = useController({
     control,
     name,
@@ -32,7 +33,10 @@ const InputText = <T extends FieldValues = FieldValues>({
     >
       {label ? (
         <>
-          <Typography variant="subtitle-02" color="text.40">
+          <Typography
+            variant="subtitle-02"
+            color={error ? "error.main" : "text.40"}
+          >
             {label}
           </Typography>
           <div style={{ height: "0.4rem" }} />
@@ -45,7 +49,13 @@ const InputText = <T extends FieldValues = FieldValues>({
         ref={ref}
         onChange={(e) => onChange(e.target.value)}
         value={value}
+        error={Boolean(error)}
       />
+      {error ? (
+        <Typography variant="caption" color="error.main">
+          {error.message}
+        </Typography>
+      ) : null}
     </div>
   );
 };

@@ -1,6 +1,7 @@
 import NextAuth, { type NextAuthOptions } from "next-auth";
 import DiscordProvider from "next-auth/providers/discord";
 import GoogleProvider from "next-auth/providers/google";
+import TwitterProvider from "next-auth/providers/twitter";
 
 // Prisma adapter for NextAuth, optional and can be removed
 import { PrismaAdapter } from "@next-auth/prisma-adapter";
@@ -13,10 +14,10 @@ export const authOptions: NextAuthOptions = {
     session({ session, user }) {
       if (session.user) {
         session.user.id = user.id;
-        session.user.admin = Boolean(user.adminId);
+        session.user.admin = user.role === "admin";
         session.user.profilePicture = user.profilePicture;
-        session.user.discord = user.discord;
-        session.user.twitter = user.twitter;
+        // session.user.discord = user.discord;
+        // session.user.twitter = user.twitter;
       }
       return session;
     },
@@ -31,6 +32,11 @@ export const authOptions: NextAuthOptions = {
     GoogleProvider({
       clientId: env.GOOGLE_CLIENT_ID,
       clientSecret: env.GOOGLE_CLIENT_SECRET,
+    }),
+    TwitterProvider({
+      clientId: env.TWITTER_CLIENT_ID,
+      clientSecret: env.TWITTER_CLIENT_SECRET,
+      version: "2.0", // opt-in to Twitter OAuth 2.0
     }),
   ],
 };

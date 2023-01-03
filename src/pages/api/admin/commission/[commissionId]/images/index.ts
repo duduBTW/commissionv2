@@ -1,46 +1,39 @@
 import apiMiddleware from "server/apiMiddleware";
 import { prisma } from "server/db/client";
 import { commissionImageSchema } from "service/admin/commission";
+import { z } from "zod";
 
 export default apiMiddleware.admin(async (req, res) => {
-  const commissionId = req.query["commissionId"];
-  if (typeof commissionId !== "string") {
-    return res.status(401).send({});
-  }
+  const commissionId = z.string().parse(req.query["commissionId"]);
 
-  try {
-    switch (req.method) {
-      case "GET":
-        return res.send(
-          await getImageCommission({
-            commissionId,
-          })
-        );
-      case "POST":
-        return res.send(
-          await insetImageCommission({
-            body: req.body,
-            commissionId,
-          })
-        );
+  switch (req.method) {
+    case "GET":
+      return res.send(
+        await get({
+          commissionId,
+        })
+      );
+    case "POST":
+      return res.send(
+        await post({
+          body: req.body,
+          commissionId,
+        })
+      );
 
-      case "PUT":
-        return res.send(
-          await updateImageCommission({
-            body: req.body,
-          })
-        );
+    case "PUT":
+      return res.send(
+        await put({
+          body: req.body,
+        })
+      );
 
-      default:
-        return res.status(404).send({});
-    }
-  } catch (error) {
-    console.error(error);
-    return res.status(500).send(error);
+    default:
+      break;
   }
 });
 
-const insetImageCommission = ({
+const post = ({
   body,
   commissionId,
 }: {
@@ -64,7 +57,7 @@ const insetImageCommission = ({
   });
 };
 
-const getImageCommission = ({ commissionId }: { commissionId: string }) =>
+const get = ({ commissionId }: { commissionId: string }) =>
   prisma.commissionImage.findMany({
     where: {
       Commission: {
@@ -73,7 +66,7 @@ const getImageCommission = ({ commissionId }: { commissionId: string }) =>
     },
   });
 
-const updateImageCommission = ({ body }: { body: unknown }) => {
+const put = ({ body }: { body: unknown }) => {
   const { id, ...data } = commissionImageSchema.parse(body);
   if (!id) return null;
 

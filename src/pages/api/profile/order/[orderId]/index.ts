@@ -11,14 +11,15 @@ const orderApi = async (req: NextApiRequest, res: NextApiResponse) => {
   }
 
   const session = await getServerAuthSession({ req, res });
+  if (!session?.user) return res.status(404).send({});
 
   try {
     switch (req.method) {
       case "GET":
         return res.send(
-          await getOrderCommission({
+          await get({
             orderId,
-            user: session?.user,
+            user: session.user,
           })
         );
 
@@ -31,15 +32,20 @@ const orderApi = async (req: NextApiRequest, res: NextApiResponse) => {
   }
 };
 
-const getOrderCommission = async ({
+export type ProfileOrder = Awaited<ReturnType<typeof get>>;
+const get = async ({
   orderId,
+  user,
 }: {
-  user?: UserSession;
+  user: UserSession;
   orderId: string;
 }) => {
-  const order = await prisma.order.findUnique({
+  const order = await prisma.order.findFirst({
     where: {
       id: orderId,
+      user: {
+        id: user.id,
+      },
     },
     select: {
       id: true,
@@ -49,11 +55,25 @@ const getOrderCommission = async ({
           images: true,
           name: true,
           price: true,
+          steps: true,
         },
       },
-      artist: true,
+      artist: {
+        include: {
+          users: {
+            select: {
+              id: true,
+              userName: true,
+              profilePicture: true,
+            },
+          },
+        },
+      },
+      type: true,
       messages: true,
       discord: true,
+      progress: true,
+      currentTypeId: true,
     },
   });
 

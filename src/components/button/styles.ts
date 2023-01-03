@@ -13,7 +13,7 @@ export const button = styled.button<ButtonProps>`
   cursor: pointer;
   box-sizing: border-box;
   text-align: center;
-  padding: 1rem 1.6rem;
+  padding: 1rem 2.4rem;
   width: ${({ fullWidth }) => (fullWidth ? "100%" : "min-content")};
   border-radius: 1.2rem;
   border: 0.1rem solid transparent;

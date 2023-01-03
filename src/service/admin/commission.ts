@@ -1,6 +1,8 @@
 import { useQuery } from "@tanstack/react-query";
-import axios from "axios";
 import { IncomingHttpHeaders } from "http";
+import { AdminUpdateCommissionMiniature } from "pages/api/admin/commission/[commissionId]/images/[imageId]/miniature";
+import { AdminCommissionList } from "pages/api/artist/[artistId]/commissions";
+import { AdminCommission } from "pages/api/artist/[artistId]/commissions/[commissionId]";
 import api from "service/api";
 import * as z from "zod";
 
@@ -8,19 +10,15 @@ import * as z from "zod";
 export const commissionSchema = z.object({
   id: z.string().optional(),
   name: z.string().min(1, { message: "Required" }),
+  active: z.boolean(),
+  steps: z.string().min(1, { message: "Required" }),
   description: z.object({
     json: z.string(),
     html: z.string(),
   }),
   price: z.number().min(1, { message: "Required" }),
 });
-export const adminCommissionListSchema = z.object({
-  id: z.string().optional(),
-  name: z.string(),
-  descriptionHtml: z.string(),
-  price: z.number(),
-  miniature: z.string().optional(),
-});
+
 export const commissionImageSchema = z.object({
   id: z.string().optional(),
   url: z.string().min(1, { message: "Required" }),
@@ -47,9 +45,6 @@ export const commissionCategorySchema = z
 
 // -- Types
 export type CommissionSchema = z.infer<typeof commissionSchema>;
-export type AdminCommissionListSchema = z.infer<
-  typeof adminCommissionListSchema
->;
 export type CommissionImageSchema = z.infer<typeof commissionImageSchema>;
 export type CommissionCategoryCreateSchema = z.infer<
   typeof commissionCategoryCreateSchema
@@ -66,12 +61,9 @@ export const insertCommission = async (data: CommissionSchema) =>
 // Get commission by id
 export const getCommission =
   (id: string, headers?: IncomingHttpHeaders) => async () => {
-    const data = await api.get<CommissionSchema>(
-      `/api/admin/commission/${id}`,
-      {
-        headers: { Cookie: headers?.cookie },
-      }
-    );
+    const data = await api.get<AdminCommission>(`/api/admin/commission/${id}`, {
+      headers: { Cookie: headers?.cookie },
+    });
 
     return data.data;
   };
@@ -79,7 +71,7 @@ export const getCommission =
 // Get list of commissions
 export const getCommissionList =
   (headers?: IncomingHttpHeaders) => async () => {
-    const { data } = await api.get<AdminCommissionListSchema[]>(
+    const { data } = await api.get<AdminCommissionList>(
       `/api/admin/commission`,
       {
         headers: { Cookie: headers?.cookie },
@@ -92,7 +84,7 @@ export const getCommissionList =
 // Update commissions
 export const updateCommission =
   (commissionId: string) => async (body: CommissionSchema) => {
-    const { data } = await api.put<AdminCommissionListSchema[]>(
+    const { data } = await api.put(
       `/api/admin/commission/${commissionId}`,
       body
     );
@@ -127,6 +119,16 @@ export const deleteImageCommission =
   (commissionId: string) => async (id: string) => {
     const { data } = await api.delete<CommissionImageSchema>(
       `/api/admin/commission/${commissionId}/images/${id}`
+    );
+
+    return data;
+  };
+
+// Make commission image a miniature
+export const setImageCommissionMiniature =
+  (commissionId: string) => async (id: string) => {
+    const { data } = await api.put<AdminUpdateCommissionMiniature>(
+      `/api/admin/commission/${commissionId}/images/${id}/miniature`
     );
 
     return data;

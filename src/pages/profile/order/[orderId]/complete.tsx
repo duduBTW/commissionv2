@@ -3,7 +3,7 @@ import ProfileOrderComplete from "components/profile/order/complete";
 import { GetServerSideProps } from "next";
 import services from "service";
 
-const OrderPage = ({
+const OrderCompletePage = ({
   params,
 }: {
   params: {
@@ -29,4 +29,4 @@ export const getServerSideProps: GetServerSideProps = async ({ params }) => {
   };
 };
 
-export default OrderPage;
+export default OrderCompletePage;

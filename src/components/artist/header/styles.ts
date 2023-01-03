@@ -1,5 +1,6 @@
 import styled from "@emotion/styled";
 import Typography from "components/typography";
+import UserAvatar from "components/user/avatar";
 import { mq } from "styles/theme";
 
 interface BannerProps {
@@ -9,7 +10,7 @@ interface BannerProps {
 export const banner = styled.img<BannerProps>`
   height: 16rem;
   width: calc(100% + 4rem);
-  margin: ${({ noMargin }) => (noMargin ? "0 -2rem" : "-2rem -2rem 2rem")};
+  margin: ${({ noMargin }) => (noMargin ? "0" : "0 0 2rem")};
   object-fit: cover;
 
   ${mq.fromTabletSm} {
@@ -29,7 +30,7 @@ export const banner_placeholder = styled.div<BannerProps>`
 
   height: 16rem;
   width: calc(100% + 4rem);
-  margin: ${({ noMargin }) => (noMargin ? "0 -2rem" : "-2rem -2rem 2rem")};
+  margin: ${({ noMargin }) => (noMargin ? "0" : "0 0 2rem")};
 
   ${mq.fromTabletSm} {
     height: 20rem;
@@ -45,6 +46,12 @@ export const banner_placeholder = styled.div<BannerProps>`
 
 export const user_name = styled(Typography)`
   margin-top: 1.2rem;
+  padding-bottom: 2rem;
+  margin-left: 1.6rem;
+
+  ${mq.fromDesktopSm} {
+    margin-left: 0;
+  }
 `;
 
 export const arist_header_dense_container = styled.a`
@@ -61,3 +68,11 @@ export const arist_header_dense_container = styled.a`
 `;
 
 export const dense_user_name = styled(Typography)``;
+
+export const user_avatar = styled(UserAvatar)`
+  margin-left: 1.6rem;
+
+  ${mq.fromDesktopSm} {
+    margin-left: 0;
+  }
+`;

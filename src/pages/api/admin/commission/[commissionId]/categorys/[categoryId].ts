@@ -9,30 +9,25 @@ export default apiMiddleware.admin(async (req, res) => {
     return res.status(401).send({});
   }
 
-  try {
-    switch (req.method) {
-      case "PUT":
-        return res.send(
-          await updateCommissionCategory({
-            body: req.body,
-            categoryId,
-            commissionId,
-          })
-        );
-      case "DELETE":
-        return res.send(
-          await deteleCommissionCategory({
-            categoryId,
-            commissionId,
-          })
-        );
+  switch (req.method) {
+    case "PUT":
+      return res.send(
+        await updateCommissionCategory({
+          body: req.body,
+          categoryId,
+          commissionId,
+        })
+      );
+    case "DELETE":
+      return res.send(
+        await deteleCommissionCategory({
+          categoryId,
+          commissionId,
+        })
+      );
 
-      default:
-        return res.status(404).send({});
-    }
-  } catch (error) {
-    console.error(error);
-    return res.status(500).send(error);
+    default:
+      break;
   }
 });
 

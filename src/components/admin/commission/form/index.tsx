@@ -12,6 +12,7 @@ import * as s from "./styles";
 import InputText from "components/input/text";
 import InputCurrency from "components/input/currency";
 import InputEditor from "components/input/editor";
+import InputSwitch from "components/input/switch";
 
 interface Props extends UseFormProps<CommissionSchema> {
   onSubmit: SubmitHandler<CommissionSchema>;
@@ -34,6 +35,7 @@ const AdminCommissionForm = ({
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
       <g.paper loading={loading}>
+        <InputSwitch control={control} name="active" label="Ativo" />
         <InputText
           control={control}
           name="name"
@@ -41,9 +43,15 @@ const AdminCommissionForm = ({
           label="Nome *"
         />
         <InputCurrency control={control} name="price" label="Preco *" />
+        <InputText
+          control={control}
+          name="steps"
+          variant="outlined"
+          label="Passos (separado por virgula) *"
+          placeholder="rascuho, lineart, cor"
+        />
         <InputEditor control={control} name="description" label="Descricao *" />
-        <g.paper_divider />
-        <s.submit_button loading={loading} type="submit">
+        <s.submit_button fullWidth loading={loading} type="submit">
           {submitLabel}
         </s.submit_button>
       </g.paper>

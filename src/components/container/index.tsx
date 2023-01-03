@@ -6,14 +6,17 @@ export type ContainerVariant = "content" | "background" | "transparent";
 const Container = ({
   children,
   variant = "background",
-  className,
+  ...rest
 }: {
   children: React.ReactNode;
   variant?: ContainerVariant;
+  dense?: boolean;
   className?: string;
+  padding?: string;
+  mdPadding?: string;
 }) => {
   return (
-    <s.container className={className} variant={variant}>
+    <s.container {...rest} variant={variant}>
       <s.content className="content">{children}</s.content>
     </s.container>
   );

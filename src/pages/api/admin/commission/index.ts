@@ -1,33 +1,26 @@
-import {
-  AdminCommissionListSchema,
-  commissionSchema,
-} from "service/admin/commission";
+import { commissionSchema } from "service/admin/commission";
 import { prisma } from "server/db/client";
 import apiMiddleware from "server/apiMiddleware";
+import { AdminCommissionList } from "pages/api/artist/[artistId]/commissions";
 
 export default apiMiddleware.admin(async (req, res, user) => {
-  try {
-    switch (req.method) {
-      case "GET":
-        return res.send(
-          await getCommissionList({
-            userId: user.id,
-          })
-        );
-      case "POST":
-        return res.send(
-          await insetCommission({
-            body: req.body,
-            userId: user.id,
-          })
-        );
+  switch (req.method) {
+    case "GET":
+      return res.send(
+        await getCommissionList({
+          userId: user.id,
+        })
+      );
+    case "POST":
+      return res.send(
+        await insetCommission({
+          body: req.body,
+          userId: user.id,
+        })
+      );
 
-      default:
-        return res.status(404).send({});
-    }
-  } catch (error) {
-    console.error(error);
-    return res.status(500).send(error);
+    default:
+      break;
   }
 });
 
@@ -42,6 +35,8 @@ export const insetCommission = async ({
     description: { html, json },
     name,
     price,
+    steps,
+    active,
   } = commissionSchema.parse(body);
 
   return await prisma.commission.create({
@@ -50,6 +45,8 @@ export const insetCommission = async ({
       descriptionJson: json,
       name,
       price,
+      steps,
+      active,
       user: {
         connect: {
           id: userId,
@@ -63,7 +60,7 @@ export const getCommissionList = async ({
   userId,
 }: {
   userId: string;
-}): Promise<AdminCommissionListSchema[] | null> => {
+}): Promise<AdminCommissionList | null> => {
   const commissions = await prisma.commission.findMany({
     where: {
       user: {
@@ -84,7 +81,7 @@ export const getCommissionList = async ({
       name,
       price,
       id,
-      miniature: images[0]?.url,
+      miniature: images.find((image) => image.isMiniature)?.url,
     };
   });
 };

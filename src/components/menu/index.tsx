@@ -1,4 +1,4 @@
-import { keyframes } from "@emotion/react";
+import { keyframes, css } from "@emotion/react";
 import styled from "@emotion/styled";
 import * as DropdownMenuPrimitive from "@radix-ui/react-dropdown-menu";
 import { PropsWithChildren } from "react";
@@ -55,6 +55,7 @@ const StyledContent = styled(DropdownMenuPrimitive.Content)`
   padding: 0.8rem;
   box-shadow: 0px 0px 38px 12px var(--color-primary-l),
     0px 8px 20px -15px var(--color-primary-d);
+
   animation-duration: 400ms;
   animation-timing-function: cubic-bezier(0.16, 1, 0.3, 1);
 
@@ -76,7 +77,7 @@ const StyledContent = styled(DropdownMenuPrimitive.Content)`
 `;
 
 const StyledArrow = styled(DropdownMenuPrimitive.Arrow)({
-  fill: "white",
+  fill: "var(--color-content)",
 });
 
 const StyledItem = styled(DropdownMenuPrimitive.Item)`
@@ -84,7 +85,7 @@ const StyledItem = styled(DropdownMenuPrimitive.Item)`
   border-radius: 0.8rem;
   display: flex;
   align-items: center;
-  gap: 0.8rem;
+  gap: 1.2rem;
   padding: 0.4rem 0.8rem;
   position: relative;
   user-select: none;
@@ -105,19 +106,31 @@ const StyledItem = styled(DropdownMenuPrimitive.Item)`
   }
 `;
 
-const Trigger = styled(DropdownMenuPrimitive.Trigger)`
+interface TriggerProps {
+  border?: boolean;
+}
+const Trigger = styled(DropdownMenuPrimitive.Trigger)<TriggerProps>`
   cursor: pointer;
-  & > * {
-    border: 0.1rem solid var(--color-divider);
-  }
 
-  &:active,
-  &:focus,
-  &:hover {
-    & > * {
-      border-color: var(--color-primary);
+  ${({ border }) => {
+    if (!border) {
+      return "";
     }
-  }
+
+    return css`
+      & > * {
+        border: 0.1rem solid var(--color-divider);
+      }
+
+      &:active,
+      &:focus,
+      &:hover {
+        & > * {
+          border-color: var(--color-primary);
+        }
+      }
+    `;
+  }}
 `;
 
 function Content({

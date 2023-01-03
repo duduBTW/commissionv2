@@ -11,28 +11,23 @@ export default apiMiddleware.admin(async (req, res) => {
     return res.status(401).send({});
   }
 
-  try {
-    switch (req.method) {
-      case "GET":
-        return res.send(
-          await getCategoryCommission({
-            commissionId,
-          })
-        );
-      case "POST":
-        return res.send(
-          await insetCategoryCommission({
-            body: req.body,
-            commissionId,
-          })
-        );
+  switch (req.method) {
+    case "GET":
+      return res.send(
+        await getCategoryCommission({
+          commissionId,
+        })
+      );
+    case "POST":
+      return res.send(
+        await insetCategoryCommission({
+          body: req.body,
+          commissionId,
+        })
+      );
 
-      default:
-        return res.status(404).send({});
-    }
-  } catch (error) {
-    console.error(error);
-    return res.status(500).send(error);
+    default:
+      break;
   }
 });
 

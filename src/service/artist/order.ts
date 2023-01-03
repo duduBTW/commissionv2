@@ -1,4 +1,7 @@
+import { useQuery } from "@tanstack/react-query";
 import { Message } from "components/admin/commission/order";
+import { IncomingHttpHeaders } from "http";
+import { Contract } from "pages/api/artist/[artistId]/contract";
 import api from "service/api";
 import { z } from "zod";
 
@@ -49,3 +52,19 @@ export const newOrder =
 
     return data;
   };
+
+export const getContract = async (
+  artistId: string,
+  headers?: IncomingHttpHeaders
+) => {
+  const { data } = await api.get<Contract>(`/api/artist/${artistId}/contract`, {
+    headers: { Cookie: headers?.cookie },
+  });
+
+  return data;
+};
+
+// -- Hooks
+export const useContractKey = "contract-item";
+export const useContract = (artistId: string) =>
+  useQuery([useContractKey, artistId], () => getContract(artistId));

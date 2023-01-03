@@ -1,10 +1,12 @@
+import { GetServerSideProps } from "next";
+import { z } from "zod";
+
 // components
 import AdminOrderCategorys from "components/admin/order/category";
 import AdminOrderInformation from "components/admin/order/information";
+import AdminOrderProgress from "components/admin/order/progress";
 import Container from "components/container";
 import * as tabs from "components/tabs";
-import { GetServerSideProps } from "next";
-import { z } from "zod";
 
 export interface AdminOrderItemPageParams {
   orderId: string;
@@ -17,7 +19,7 @@ const AdminOrderItemPage = ({
 }) => {
   return (
     <tabs.root defaultValue="informacoes">
-      <Container variant="content">
+      <Container dense variant="content">
         <tabs.list>
           <tabs.trigger value="informacoes">Informações</tabs.trigger>
           <tabs.trigger value="categorias">Categorias</tabs.trigger>
@@ -27,8 +29,11 @@ const AdminOrderItemPage = ({
       <tabs.content value="informacoes">
         <AdminOrderInformation {...params} />
       </tabs.content>
-      <tabs.content value="categorias">
+      <tabs.content asChild value="categorias">
         <AdminOrderCategorys {...params} />
+      </tabs.content>
+      <tabs.content value="progresso">
+        <AdminOrderProgress {...params} />
       </tabs.content>
     </tabs.root>
   );

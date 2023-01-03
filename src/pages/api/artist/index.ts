@@ -5,7 +5,7 @@ const artistApi = async (req: NextApiRequest, res: NextApiResponse) => {
   try {
     switch (req.method) {
       case "GET":
-        return res.send(await getArtistList());
+        return res.send(await get());
 
       default:
         return res.status(404).send({});
@@ -16,22 +16,23 @@ const artistApi = async (req: NextApiRequest, res: NextApiResponse) => {
   }
 };
 
-const getArtistList = () =>
-  prisma.user.findMany({
-    where: {
-      adminId: {
-        not: null,
+export type ArtistList = Awaited<ReturnType<typeof get>>;
+
+const get = async () => {
+  const admins = await prisma.admin.findMany({
+    include: {
+      user: {
+        select: {
+          id: true,
+          userName: true,
+          profilePicture: true,
+          banner: true,
+        },
       },
-      userName: {
-        not: null,
-      },
-    },
-    select: {
-      id: true,
-      userName: true,
-      profilePicture: true,
-      banner: true,
     },
   });
+
+  return admins.map((admin) => admin.user);
+};
 
 export default artistApi;

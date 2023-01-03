@@ -8,7 +8,7 @@ import MobileDetect from "mobile-detect";
 
 // components
 import { AristHeaderDense } from "components/artist/header";
-import CommissionOrder from "components/commission/order";
+import CommissionItem from "components/commission/order";
 import LoginCommissionDialog from "components/login/commissionDialog";
 
 // styles
@@ -49,7 +49,7 @@ const ArtistCommissionPage = ({
           hrefBack={`/artist/${artistId}/commissions`}
         />
       </g.paper_container>
-      <CommissionOrder
+      <CommissionItem
         isMobile={isMobile}
         commission={commission}
         onLoginDialogOpenChange={setLoginDialogOpen}

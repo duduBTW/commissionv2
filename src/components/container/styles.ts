@@ -17,16 +17,21 @@ const getBackgroundContainer = (variant: ContainerVariant | undefined) => {
 
 interface ContainerProps {
   variant?: ContainerVariant;
+  dense?: boolean;
+  padding?: string;
+  mdPadding?: string;
 }
 
 export const container = styled.div<ContainerProps>`
   width: 100vw;
-  padding: 2.4rem 2rem;
+  padding: ${({ padding, mdPadding }) => mdPadding ?? padding};
+  /* padding: ${({ dense }) => (dense ? "0" : "2.4rem 2rem")}; */
   background: ${({ variant }) => getBackgroundContainer(variant)};
   position: relative;
 
   ${mq.fromDesktopSm} {
-    padding: 2.4rem;
+    padding: ${({ padding }) => padding};
+    /* padding: ${({ dense }) => (dense ? "0" : "2.4rem")}; */
   }
 `;
 

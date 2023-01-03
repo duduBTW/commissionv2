@@ -3,11 +3,13 @@ import { mq } from "styles/theme";
 import { LogoSize } from ".";
 
 export const nav = styled.nav`
-  padding: 0.8rem 2rem;
+  height: 6rem;
+  padding: 0.4rem 2rem;
   align-items: center;
   background: var(--color-content);
   display: flex;
   justify-content: space-between;
+  align-items: center;
 
   ${mq.fromTabletSm} {
     padding: 1.2rem 2rem;

@@ -21,6 +21,10 @@ import Button from "components/button";
 
 // styles
 import * as s from "./styles";
+import CommissionCardVertical from "components/commission/card/vertical";
+import Container from "components/container";
+import { AristHeaderDense } from "components/artist/header";
+import Divider from "components/divider";
 
 const scrollToBottom = () => window.scrollTo(0, document.body.scrollHeight);
 
@@ -170,6 +174,15 @@ const ArtistCommissionOrderContent = () => {
   if (!categorys) return <></>;
   return (
     <>
+      <Divider />
+      <Container variant="content">
+        <CommissionCardVertical
+          name="teste"
+          price={10}
+          image="https://pbs.twimg.com/media/FldKPg2acAIWr3h?format=jpg&name=4096x4096"
+        />
+      </Container>
+      <Divider />
       <FormProvider {...formMethods}>
         <OrderCategotys
           currentPage={currentPage}

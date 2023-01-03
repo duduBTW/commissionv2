@@ -1,11 +1,15 @@
 import styled from "@emotion/styled";
 import CurrencyFormat from "react-currency-format";
 
-export const input = styled(CurrencyFormat)`
+interface InputProps {
+  error?: boolean;
+}
+export const input = styled(CurrencyFormat)<InputProps>`
   outline: none;
   padding: 0;
   border: none;
-  color: var(--color-text-40);
+  color: ${({ error }) =>
+    error ? "var(--color-error)" : "var(--color-text-80)"};
   font-family: "Poppins";
   font-style: normal;
   font-weight: 275;

@@ -12,14 +12,18 @@ const AristHeader = ({
   userName,
 }: {
   id: string;
-  banner: string;
-  profilePicture: string;
-  userName: string;
+  userName: string | null;
+  profilePicture: string | null;
+  banner: string | null;
 }) => {
   return (
     <Container variant="content">
-      <Banner noMargin={false} src={banner} alt={`${userName} banner`} />
-      <UserAvatar src={profilePicture} alt="Avatar misuo" size="large" />
+      {banner && (
+        <Banner noMargin={false} src={banner} alt={`${userName} banner`} />
+      )}
+      {profilePicture && (
+        <s.user_avatar src={profilePicture} alt="Avatar misuo" size="large" />
+      )}
       <s.user_name variant="title-03">{userName}</s.user_name>
     </Container>
   );
@@ -40,13 +44,15 @@ export const AristHeaderDense = ({
   profilePicture,
 }: {
   hrefBack: string;
-  userName: string;
-  profilePicture: string;
+  userName: string | null;
+  profilePicture: string | null;
 }) => {
   return (
     <Link href={hrefBack} passHref>
       <s.arist_header_dense_container>
-        <UserAvatar src={profilePicture} alt="Avatar misuo" size="medium" />
+        {profilePicture && (
+          <UserAvatar src={profilePicture} alt="Avatar misuo" size="medium" />
+        )}
         <s.dense_user_name variant="title-04">{userName}</s.dense_user_name>
       </s.arist_header_dense_container>
     </Link>

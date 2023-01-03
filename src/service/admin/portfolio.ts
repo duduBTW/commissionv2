@@ -1,6 +1,6 @@
 import { useQuery } from "@tanstack/react-query";
-import axios from "axios";
 import { IncomingHttpHeaders } from "http";
+import { PortfolioList } from "pages/api/admin/portfolio";
 import api from "service/api";
 import * as z from "zod";
 
@@ -11,6 +11,7 @@ export const portfolioSchema = z.object({
   hash: z.string().min(1, { message: "Required" }),
   width: z.number(),
   height: z.number(),
+  commissionId: z.string().optional(),
 });
 
 // -- Types
@@ -26,7 +27,7 @@ export const insertPortfolio = async (body: PortfolioSchema) => {
 
 // Get portfolio list
 export const getPortfolioList = (headers?: IncomingHttpHeaders) => async () => {
-  const { data } = await api.get<PortfolioSchema[]>(`/api/admin/portfolio`, {
+  const { data } = await api.get<PortfolioList>(`/api/admin/portfolio`, {
     headers: { Cookie: headers?.cookie },
   });
 
@@ -58,6 +59,24 @@ export const deletePortfolio = async (portfolioId: string) => {
 export const copyCommToPort = async () => {
   const { data } = await api.post<PortfolioSchema[]>(
     `/api/admin/portfolio/copy_comm_to_port`
+  );
+
+  return data;
+};
+
+// Link commission portfolio
+export const linkCommToPort = async ({
+  commissionId,
+  portfolioId,
+}: {
+  portfolioId: string;
+  commissionId: string;
+}) => {
+  const { data } = await api.post(
+    `/api/admin/portfolio/${portfolioId}/link_commission`,
+    {
+      commissionId,
+    }
   );
 
   return data;

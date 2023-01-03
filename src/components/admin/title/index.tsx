@@ -17,12 +17,14 @@ const AdminHeader = ({
     <s.container>
       {backHref && (
         <Link href={backHref}>
-          <ButtonIcon>
-            <ArrowLeftLineIcon />
+          <ButtonIcon size="small">
+            <ArrowLeftLineIcon color="var(--color-text-60)" />
           </ButtonIcon>
         </Link>
       )}
-      <s.title variant="title-04">{children}</s.title>
+      <s.title variant="title-04" color="text.60">
+        {children}
+      </s.title>
     </s.container>
   );
 };

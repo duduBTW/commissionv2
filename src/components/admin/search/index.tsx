@@ -10,12 +10,14 @@ import * as s from "./styles";
 const AdminSearch = ({
   createHref,
   createButtonProps,
+  ...rest
 }: {
   createHref?: string;
   createButtonProps?: Partial<ButtonProps>;
+  className?: string;
 }) => {
   return (
-    <s.container>
+    <s.container {...rest}>
       <InputBase
         variant="outlined"
         placeholder="Search..."

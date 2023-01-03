@@ -26,6 +26,29 @@ export const button = styled.button<ButtonProps>`
   cursor: pointer;
   transition: background-color 0.2s ease;
   user-select: none;
+  aspect-ratio: 1 / 1;
+  line-height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  ${({ variant }) => {
+    switch (variant) {
+      case "primary":
+        return css`
+          color: var(--color-primary);
+        `;
+      case "error":
+        return css`
+          color: var(--color-error);
+        `;
+
+      default:
+        return css`
+          color: var(--color-text-80);
+        `;
+    }
+  }}
 
   &:hover,
   &:focus {

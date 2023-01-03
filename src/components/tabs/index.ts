@@ -52,7 +52,7 @@ export const trigger = styled(Tabs.Trigger)`
   font-size: 1.4rem;
   line-height: 2.2rem;
   color: var(--color-text-40);
-  border-radius: 0.4rem;
+  border-radius: 1.2rem;
 
   &:hover,
   &:focus {

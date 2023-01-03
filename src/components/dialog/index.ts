@@ -1,4 +1,5 @@
 import { keyframes } from "@emotion/css";
+import { css } from "@emotion/react";
 import styled from "@emotion/styled";
 import * as Dialog from "@radix-ui/react-dialog";
 import { mq } from "styles/theme";
@@ -36,7 +37,7 @@ export const overlay = styled(Dialog.Overlay)`
   background-color: var(--color-text-40);
   position: fixed;
   inset: 0;
-  z-index: 2;
+  z-index: 6;
   backdrop-filter: blur(0.4rem);
 
   animation: ${overlayShow} 150ms cubic-bezier(0.16, 1, 0.3, 1);
@@ -44,6 +45,7 @@ export const overlay = styled(Dialog.Overlay)`
 
 interface ContentProps {
   size?: "small" | "medium";
+  loading?: boolean;
 }
 
 export const content = styled(Dialog.Content)<ContentProps>`
@@ -56,8 +58,8 @@ export const content = styled(Dialog.Content)<ContentProps>`
   left: 0;
   width: 100%;
   height: calc(100% - 2rem);
-  padding: 2rem;
-  z-index: 2;
+  padding: 2.4rem;
+  z-index: 7;
   border-top-right-radius: 0.8rem;
   border-top-left-radius: 0.8rem;
   animation: ${contentShowMobile} 600ms cubic-bezier(0.16, 1, 0.3, 1);
@@ -86,6 +88,26 @@ export const content = styled(Dialog.Content)<ContentProps>`
     transform: translate(-50%, -50%);
     animation: ${contentShow} 150ms cubic-bezier(0.16, 1, 0.3, 1);
   }
+
+  ${({ loading }) =>
+    loading &&
+    css`
+      pointer-events: none;
+      user-select: none;
+
+      &::before {
+        content: "";
+        z-index: 2;
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-color: var(--color-content);
+        opacity: 0.6;
+        border-radius: 1.2rem;
+      }
+    `};
 `;
 
 export const close = styled(Dialog.Close)``;

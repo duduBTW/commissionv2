@@ -10,7 +10,7 @@ const profileApi = async (req: NextApiRequest, res: NextApiResponse) => {
   try {
     switch (req.method) {
       case "GET":
-        return res.send(await getUser(session.user.id));
+        return res.send(await get(session.user.id));
 
       case "PUT":
         return res.send(
@@ -37,14 +37,18 @@ const updateUser = ({ body, id }: { id: string; body: unknown }) => {
   });
 };
 
-const getUser = (id: string) =>
+const get = (id: string) =>
   prisma.user.findUnique({
     where: {
       id,
     },
     select: {
       id: true,
-      adminId: true,
+      Admin: {
+        select: {
+          id: true,
+        },
+      },
       profilePicture: true,
       discord: true,
       twitter: true,

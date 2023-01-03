@@ -3,10 +3,11 @@ import { useState } from "react";
 import { CommissionCategoryCreateSchema } from "service/admin/commission";
 import { useMutation } from "@tanstack/react-query";
 import services from "service";
+import { toast } from "react-hot-toast";
 
 // components
-import AdminSearch from "components/admin/search";
 import CloseLineIcon from "remixicon-react/CloseLineIcon";
+import DeleteBin4LineIcon from "remixicon-react/DeleteBin4LineIcon";
 import InputText from "components/input/text";
 import InputEditor from "components/input/editor";
 import Button from "components/button";
@@ -24,10 +25,12 @@ export const AdminCommissionsCategorys = ({
   commissionId: string;
 }) => {
   const [createDialogOpen, setCreateDialogOpen] = useState(false);
+  let content = <></>;
   const {
     data: categorys,
     refetch,
     isRefetching,
+    isLoading,
   } = services.admin.useCommissionCategoryList(commissionId, {
     refetchOnMount: true,
     refetchOnReconnect: false,
@@ -36,30 +39,39 @@ export const AdminCommissionsCategorys = ({
   const { mutate: insertCategoryCommission, isLoading: isInserting } =
     useMutation(services.admin.insertCategoryCommission(commissionId), {
       onSuccess: () => {
+        toast.success("Categoria adicionada com sucesso!");
+
         refetch();
         setCreateDialogOpen(false);
       },
     });
 
   const { mutate: updateCommissionCategory, isLoading: isUpdating } =
-    useMutation(services.admin.updateCommissionCategory(commissionId));
+    useMutation(services.admin.updateCommissionCategory(commissionId), {
+      onSuccess: () => {
+        toast.success("Categoria editada com sucesso!");
+      },
+    });
   const { mutate: deleteCommissionCategory, isLoading: isDeleting } =
     useMutation(services.admin.deleteCommissionCategory(commissionId), {
-      onSuccess: () => refetch(),
+      onSuccess: () => {
+        toast.success("Categoria deletada com sucesso!");
+
+        refetch();
+      },
     });
 
-  if (!categorys) return <></>;
-  return (
-    <>
-      <g.paper
-        loading={isInserting || isUpdating || isDeleting || isRefetching}
-      >
-        <AdminSearch
-          createButtonProps={{
-            onClick: () => setCreateDialogOpen(true),
-          }}
-          createHref="#"
-        />
+  if (isLoading) return <></>;
+  if (categorys && categorys.length > 0) {
+    content = (
+      <>
+        <Button
+          variant="secondary"
+          onClick={() => setCreateDialogOpen(true)}
+          fullWidth
+        >
+          Criar categoria
+        </Button>
 
         {categorys.map((category) => (
           <AdminCommissionsCategoryForm
@@ -73,16 +85,40 @@ export const AdminCommissionsCategorys = ({
               });
             }}
             footer={
-              <Button
+              <ButtonIcon
                 onClick={() => deleteCommissionCategory(category.id)}
                 type="button"
-                variant="secondary"
+                variant="error"
               >
-                Excluir
-              </Button>
+                <DeleteBin4LineIcon />
+              </ButtonIcon>
             }
           />
         ))}
+      </>
+    );
+  } else {
+    content = (
+      <div>
+        <s.empty_title variant="title-02">Nenhuma categoria</s.empty_title>
+        <s.empty_description variant="body-01" color="text.40">
+          Cadastre categorias com as informacoes que voce precisa para realizar
+          a commission (ex. cabelo, roupa, acessrios etc)
+        </s.empty_description>
+
+        <Button onClick={() => setCreateDialogOpen(true)} fullWidth>
+          Criar categoria
+        </Button>
+      </div>
+    );
+  }
+
+  return (
+    <>
+      <g.paper
+        loading={isInserting || isUpdating || isDeleting || isRefetching}
+      >
+        {content}
       </g.paper>
 
       <dialog.root open={createDialogOpen} onOpenChange={setCreateDialogOpen}>
@@ -104,6 +140,7 @@ export const AdminCommissionsCategorys = ({
               loading={isInserting}
               submitLabel="Adicionar"
               autoFocus
+              variant="background"
               onSubmit={(d) => insertCategoryCommission(d)}
             />
           </dialog.content>
@@ -120,6 +157,7 @@ export const AdminCommissionsCategoryForm = ({
   submitLabel,
   loading,
   footer,
+  variant = "content",
 }: {
   onSubmit: SubmitHandler<CommissionCategoryCreateSchema>;
   defaultValues?: CommissionCategoryCreateSchema;
@@ -127,30 +165,36 @@ export const AdminCommissionsCategoryForm = ({
   submitLabel: string;
   loading?: boolean;
   footer?: React.ReactNode;
+  variant?: "content" | "background";
 }) => {
   const { control, handleSubmit } = useForm<CommissionCategoryCreateSchema>({
     defaultValues,
   });
 
   return (
-    <s.form_container onSubmit={handleSubmit(onSubmit)}>
+    <s.form_container variant={variant} onSubmit={handleSubmit(onSubmit)}>
       <InputText
         autoFocus={autoFocus}
         control={control}
         label="Nome *"
         name="name"
+        variant={"outlined"}
       />
       <InputEditor
-        variant="contained"
         control={control}
         label="Descricao *"
         name="description"
+        variant={"outlined"}
       />
       <s.form_footer>
-        <Button loading={loading} type="submit">
+        {footer}
+        <Button
+          fullWidth={variant === "background"}
+          loading={loading}
+          type="submit"
+        >
           {submitLabel}
         </Button>
-        {footer}
       </s.form_footer>
     </s.form_container>
   );

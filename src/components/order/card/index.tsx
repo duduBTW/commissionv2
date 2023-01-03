@@ -1,5 +1,3 @@
-import { ProfileOrderListItemSchema } from "service/profile/order";
-
 // components
 import Typography from "components/typography";
 import UserAvatar from "components/user/avatar";
@@ -8,13 +6,15 @@ import UserAvatar from "components/user/avatar";
 import * as s from "./styles";
 import Link from "next/link";
 
-const getTypeLabel = (type: string) => {
+export const getTypeLabel = (type: string) => {
   switch (type) {
     case "not_approved":
       return "Aguardando aprovação";
+    case "approved":
+      return "Aprovado";
 
     default:
-      return "?";
+      return type;
   }
 };
 

@@ -33,6 +33,13 @@ const copyImageFromCommissionToPort = async ({
         },
       },
     },
+    include: {
+      Commission: {
+        select: {
+          id: true,
+        },
+      },
+    },
   });
 
   const portfolioImages = await prisma.portfolio.findMany({
@@ -42,8 +49,7 @@ const copyImageFromCommissionToPort = async ({
       },
     },
   });
-  console.log("commissionImages", commissionImages);
-  console.log("portfolioImages", portfolioImages);
+
   let delay = 0;
   const delayIncrement = 200;
 

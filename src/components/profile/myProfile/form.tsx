@@ -78,7 +78,7 @@ const MyProfileForm = ({ onSubmit, loading, ...formProps }: Props) => {
             />
           )}
         </InputImage>
-        <Button loading={loading} type="submit" fullWidth={false}>
+        <Button loading={loading} type="submit" fullWidth>
           Salvar
         </Button>
       </g.paper>

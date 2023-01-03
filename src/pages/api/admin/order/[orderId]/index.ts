@@ -8,7 +8,9 @@ export default adminApiRoute(async (req, res, session) => {
   try {
     switch (req.method) {
       case "GET":
-        return await get(req, res, session);
+        return res.send(await get(req, res, session));
+      case "PUT":
+        return res.send(await put(req, res, session));
 
       default:
         return res.status(404).send({});
@@ -19,6 +21,44 @@ export default adminApiRoute(async (req, res, session) => {
   }
 });
 
+const put = async (
+  req: NextApiRequest,
+  res: NextApiResponse,
+  user: UserSession
+) => {
+  const { query, body } = req;
+  const orderId = z.string().parse(query.orderId);
+  const type = z.string().parse(body.type);
+
+  const order = prisma.order.findFirst({
+    where: {
+      id: orderId,
+      artist: {
+        users: {
+          some: {
+            id: user.id,
+          },
+        },
+      },
+    },
+  });
+
+  if (!order) throw new Error("");
+
+  return res.send(
+    await prisma.order.update({
+      where: {
+        id: orderId,
+      },
+      data: {
+        type,
+      },
+    })
+  );
+};
+
+export type AdminOrder = Awaited<ReturnType<typeof get>>;
+
 const get = async (
   req: NextApiRequest,
   res: NextApiResponse,
@@ -27,43 +67,43 @@ const get = async (
   const { query } = req;
   const orderId = z.string().parse(query.orderId);
 
-  return res.send(
-    await prisma.order.findFirst({
-      where: {
-        id: orderId,
-        artist: {
-          users: {
-            some: {
-              id: user.id,
+  return await prisma.order.findFirst({
+    where: {
+      id: orderId,
+      artist: {
+        users: {
+          some: {
+            id: user.id,
+          },
+        },
+      },
+    },
+    select: {
+      id: true,
+      commission: {
+        select: {
+          id: true,
+          name: true,
+          price: true,
+          images: {
+            select: {
+              url: true,
             },
           },
         },
       },
-      select: {
-        id: true,
-        commission: {
-          select: {
-            id: true,
-            name: true,
-            price: true,
-            images: {
-              select: {
-                url: true,
-              },
-            },
-          },
+      user: {
+        select: {
+          id: true,
+          userName: true,
+          profilePicture: true,
         },
-        user: {
-          select: {
-            id: true,
-            userName: true,
-            profilePicture: true,
-          },
-        },
-        type: true,
-        discord: true,
-        twitter: true,
       },
-    })
-  );
+      type: true,
+      discord: true,
+      twitter: true,
+      progress: true,
+      currentTypeId: true,
+    },
+  });
 };

@@ -18,9 +18,9 @@ const Nav = () => {
     <s.nav>
       <Logo />
       <s.user>
-        <ButtonIcon variant="primary">
+        {/* <ButtonIcon variant="primary">
           <Search2LineIcon />
-        </ButtonIcon>
+        </ButtonIcon> */}
         <UserNav />
       </s.user>
     </s.nav>
@@ -44,9 +44,11 @@ export const UserNav = ({
   align?: "start" | "center" | "end" | undefined;
 }) => {
   const [open, setOpen] = useState(false);
-  const { data: session } = services.profile.useSession();
+  const { data: session, isLoading } = services.profile.useSession();
 
-  if (!session?.user?.image) {
+  if (isLoading) return <></>;
+
+  if (!session?.user) {
     return (
       <Link href="/login">
         <Button variant="secondary">Entrar</Button>
@@ -56,7 +58,7 @@ export const UserNav = ({
 
   return (
     <menu.root open={open} onOpenChange={setOpen}>
-      <menu.trigger>
+      <menu.trigger border>
         <UserAvatar
           size={size}
           src={
@@ -68,7 +70,7 @@ export const UserNav = ({
       </menu.trigger>
       <menu.content onClick={() => setOpen(false)} sideOffset={8} align={align}>
         {session.user.admin ? (
-          <Link href="/admin/dashboard/home">
+          <Link href="/admin/dashboard/orders">
             <menu.item>Dashboard</menu.item>
           </Link>
         ) : null}

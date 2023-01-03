@@ -22,7 +22,7 @@ const ArtistPortfolioPage = ({
 
   if (!artist || !portfolio) return <div>:(</div>;
   return (
-    <Container>
+    <Container padding="2rem">
       <AristHeaderDense
         {...artist}
         hrefBack={`/artist/${artistId}/portfolio`}

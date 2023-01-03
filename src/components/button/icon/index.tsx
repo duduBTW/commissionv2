@@ -7,6 +7,7 @@ interface Props extends React.ButtonHTMLAttributes<HTMLButtonElement> {
   children: React.ReactNode;
   variant?: ButtonIconVariant;
   size?: ButtonIconSize;
+  as?: React.ElementType;
 }
 
 const ButtonIcon = ({ children, size = "default", ...buttonProps }: Props) => {

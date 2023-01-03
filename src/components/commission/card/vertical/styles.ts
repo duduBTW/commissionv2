@@ -4,6 +4,7 @@ import { mq } from "styles/theme";
 
 export const container = styled.div`
   /* margin: -1.2rem -2rem -2rem; */
+  overflow: hidden;
   display: grid;
   grid-template-areas:
     "name"
@@ -13,7 +14,7 @@ export const container = styled.div`
   grid-template-rows: 1fr auto;
 
   ${mq.fromDesktopSm} {
-    height: 18rem;
+    height: 20rem;
     grid-template-areas:
       "name  pic"
       "price pic";
@@ -25,11 +26,11 @@ export const container = styled.div`
 `;
 
 export const figure_name = styled(Typography)`
-  padding: 2.4rem;
+  padding: 2.4rem 0;
   grid-area: name;
 `;
 export const figure_price = styled(Typography)`
-  padding: 1.2rem 2.4rem;
+  padding: 1.2rem 0;
   grid-area: price;
 `;
 

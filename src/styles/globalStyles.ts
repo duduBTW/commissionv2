@@ -70,6 +70,7 @@ interface PaperProps {
   loading?: boolean;
   dense?: boolean;
   size?: "small" | "medium";
+  align?: "center" | "left";
 }
 
 export const paper_container = styled.div<PaperProps>`
@@ -95,19 +96,21 @@ export const paper_container = styled.div<PaperProps>`
           return "64rem";
       }
     }};
-    margin: ${({ dense }) => (dense ? "0" : "2rem")} auto;
+    margin: ${({ dense }) => (dense ? "0" : "2rem")}
+      ${({ align }) => (align !== "left" ? "auto" : 0)};
   }
 `;
 
 export const paper = styled(paper_container)<PaperProps>`
   background: var(--color-content);
-  border-radius: 1.2rem;
+  border-radius: 0rem;
   padding: 2rem;
   display: flex;
   flex-direction: column;
   gap: 2.4rem;
 
   ${mq.fromTabletSm} {
+    border-radius: 1.2rem;
     padding: 2.4rem;
   }
 
@@ -128,8 +131,69 @@ export const paper = styled(paper_container)<PaperProps>`
         height: 100%;
         background-color: var(--color-content);
         opacity: 0.6;
+        border-radius: 1.2rem;
       }
     `};
+`;
+
+export const html = css`
+  p {
+    font-family: "Nunito";
+    font-style: normal;
+    font-weight: 400;
+    font-size: 1.4rem;
+    line-height: 2.2rem;
+    letter-spacing: 0.02em;
+    padding: 0.4rem 0;
+    color: var(--color-text-80);
+  }
+
+  img {
+    height: auto;
+    border-radius: 1.2rem;
+    max-width: 100%;
+    margin: 1.6rem 0;
+
+    &.ProseMirror-selectednode {
+      outline: 3px solid #68cef8;
+    }
+  }
+
+  ul,
+  ol {
+    padding: 0;
+    margin: 1.2rem 2.4rem;
+  }
+
+  ul ul,
+  ol ol {
+    margin-top: 0.4rem;
+    margin-bottom: 0.4rem;
+  }
+
+  li::marker {
+    color: var(--color-primary);
+  }
+
+  h1 {
+    font-size: 2.6rem;
+    margin-top: 2.4rem;
+    margin-bottom: 1.2rem;
+  }
+
+  h2 {
+    font-size: 2rem;
+    margin-top: 2.4rem;
+    margin-bottom: 0.8rem;
+    font-weight: 500;
+  }
+
+  h3 {
+    font-size: 1.8rem;
+    margin-top: 2.4rem;
+    margin-bottom: 0.4rem;
+    font-weight: 500;
+  }
 `;
 
 export default globalStyles;

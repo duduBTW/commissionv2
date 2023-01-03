@@ -14,27 +14,23 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-model Example {
-  id        String   @id @default(cuid())
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-}
-
 // Necessary for Next auth
 model Account {
-  id                String  @id @default(cuid())
-  userId            String
-  type              String
-  provider          String
-  providerAccountId String
-  refresh_token     String? // @db.Text
-  access_token      String? // @db.Text
-  expires_at        Int?
-  token_type        String?
-  scope             String?
-  id_token          String? // @db.Text
-  session_state     String?
-  user              User    @relation(fields: [userId], references: [id], onDelete: Cascade)
+  id                 String  @id @default(cuid())
+  userId             String
+  type               String
+  provider           String
+  providerAccountId  String
+  refresh_token      String? // @db.Text
+  access_token       String? // @db.Text
+  oauth_token        String? // @db.Text
+  oauth_token_secret String? // @db.Text
+  expires_at         Int?
+  token_type         String?
+  scope              String?
+  id_token           String? // @db.Text
+  session_state      String?
+  user               User    @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@unique([provider, providerAccountId])
 }
@@ -49,7 +45,6 @@ model Session {
 
 model User {
   id             String       @id @default(cuid())
-  adminId        String?
   name           String?
   userName       String?
   banner         String?
@@ -61,10 +56,12 @@ model User {
   image          String?
   accounts       Account[]
   sessions       Session[]
-  Admin          Admin?       @relation(fields: [adminId], references: [id])
   Commission     Commission[]
   Portfolio      Portfolio[]
   Order          Order[]
+  Admin          Admin?
+  role           String       @default("user")
+  Contract       Contract[]
 }
 
 model VerificationToken {
@@ -76,17 +73,20 @@ model VerificationToken {
 }
 
 model Admin {
-  id    String  @id @default(cuid())
-  users User[]
-  Order Order[]
+  id     String  @id @default(cuid())
+  user   User    @relation(fields: [userId], references: [id])
+  userId String  @unique
+  Order  Order[]
 }
 
 model Commission {
-  id              String @id @default(cuid())
+  id              String  @id @default(cuid())
+  active          Boolean @default(true)
   name            String
   price           Float
   descriptionHtml String
   descriptionJson String
+  steps           String?
 
   Categorys CommissionCategory[]
   images    CommissionImage[]
@@ -98,11 +98,12 @@ model Commission {
 }
 
 model CommissionImage {
-  id     String  @id @default(cuid())
-  url    String
-  hash   String?
-  width  Int?
-  height Int?
+  id          String  @id @default(cuid())
+  url         String
+  hash        String?
+  width       Int?
+  height      Int?
+  isMiniature Boolean @default(false)
 
   Commission   Commission? @relation(fields: [commissionId], references: [id])
   commissionId String?
@@ -119,11 +120,11 @@ model CommissionCategory {
 }
 
 model Portfolio {
-  id     String  @id @default(cuid())
+  id     String @id @default(cuid())
   url    String
-  hash   String?
-  width  Int?
-  height Int?
+  hash   String
+  width  Int
+  height Int
 
   commission   Commission? @relation(fields: [commissionId], references: [id])
   commissionId String?
@@ -133,17 +134,20 @@ model Portfolio {
 }
 
 model Order {
-  id           String         @id @default(cuid())
-  userId       String
-  commissionId String
-  adminId      String
-  messages     OrderMessage[]
-  artist       Admin          @relation(fields: [adminId], references: [id])
-  user         User?          @relation(fields: [userId], references: [id])
-  commission   Commission     @relation(fields: [commissionId], references: [id])
-  discord      String?
-  twitter      String?
-  type         String         @default("not_approved")
+  id            String          @id @default(cuid())
+  userId        String
+  commissionId  String
+  adminId       String
+  messages      OrderMessage[]
+  progress      OrderProgress[]
+  artist        Admin           @relation(fields: [adminId], references: [id])
+  user          User?           @relation(fields: [userId], references: [id])
+  commission    Commission      @relation(fields: [commissionId], references: [id])
+  discord       String?
+  twitter       String?
+  type          String          @default("not_approved")
+  currentTypeId String?
+  lastUpdated   String?
 }
 
 model OrderMessage {
@@ -154,4 +158,23 @@ model OrderMessage {
   commissionCategoryId String
   category             CommissionCategory @relation(fields: [commissionCategoryId], references: [id])
   Order                Order?             @relation(fields: [orderId], references: [id])
+}
+
+model OrderProgress {
+  id      String  @id @default(cuid())
+  orderId String?
+  active  Boolean
+  type    String
+  html    String  @default("<p></p>")
+  Order   Order?  @relation(fields: [orderId], references: [id])
+}
+
+model Contract {
+  id        String  @id @default(cuid())
+  userId    String
+  html      String
+  json      String
+  active    Boolean @default(false)
+  createdAt String
+  user      User    @relation(fields: [userId], references: [id])
 }

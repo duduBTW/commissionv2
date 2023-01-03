@@ -1,16 +1,14 @@
-import { NextApiRequest, NextApiResponse } from "next";
+import apiMiddleware from "server/apiMiddleware";
 import { prisma } from "server/db/client";
+import { z } from "zod";
 
-const artistItemApi = async (req: NextApiRequest, res: NextApiResponse) => {
-  const artistId = req.query["artistId"];
-  if (typeof artistId !== "string") {
-    return res.status(401).send({});
-  }
-
+export default apiMiddleware.public(async (req, res) => {
   try {
+    const artistId = z.string().parse(req.query["artistId"]);
+
     switch (req.method) {
       case "GET":
-        return res.send(await getArtistCommissionList(artistId));
+        return res.send(await get(artistId));
 
       default:
         return res.status(404).send({});
@@ -19,13 +17,18 @@ const artistItemApi = async (req: NextApiRequest, res: NextApiResponse) => {
     console.error(error);
     return res.status(500).send(error);
   }
-};
+});
 
-const getArtistCommissionList = async (id: string) => {
+export type AdminCommissionList = Awaited<ReturnType<typeof get>>;
+
+const get = async (id: string) => {
   const commissions = await prisma.commission.findMany({
     where: {
       user: {
         id,
+      },
+      active: {
+        not: false,
       },
     },
     include: {
@@ -41,9 +44,7 @@ const getArtistCommissionList = async (id: string) => {
       name,
       price,
       id,
-      miniature: images[0]?.url,
+      miniature: images.find((image) => image.isMiniature)?.url,
     };
   });
 };
-
-export default artistItemApi;

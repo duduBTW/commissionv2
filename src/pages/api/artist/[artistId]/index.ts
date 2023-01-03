@@ -1,16 +1,14 @@
 import { NextApiRequest, NextApiResponse } from "next";
 import { prisma } from "server/db/client";
+import { z } from "zod";
 
 const artistItemApi = async (req: NextApiRequest, res: NextApiResponse) => {
-  const artistId = req.query["artistId"];
-  if (typeof artistId !== "string") {
-    return res.status(401).send({});
-  }
-
   try {
+    const artistId = z.string().parse(req.query["artistId"]);
+
     switch (req.method) {
       case "GET":
-        return res.send(await getArtist(artistId));
+        return res.send(await get(artistId));
 
       default:
         return res.status(404).send({});
@@ -21,11 +19,12 @@ const artistItemApi = async (req: NextApiRequest, res: NextApiResponse) => {
   }
 };
 
-const getArtist = (id: string) =>
+export type Artist = Awaited<ReturnType<typeof get>>;
+const get = (id: string) =>
   prisma.user.findFirst({
     where: {
-      adminId: {
-        not: null,
+      Admin: {
+        userId: id,
       },
       userName: {
         not: null,

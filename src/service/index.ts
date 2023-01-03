@@ -4,6 +4,7 @@ import * as adminOrder from "./admin/order";
 import * as order from "./artist/order";
 import * as commission from "./admin/commission";
 import * as portfolio from "./admin/portfolio";
+import * as adminContract from "./admin/contract";
 import * as profile from "./profile";
 import * as profileOrder from "./profile/order";
 import * as artist from "./artist";
@@ -13,6 +14,7 @@ const services = {
     ...commission,
     ...portfolio,
     ...adminOrder,
+    ...adminContract,
   },
   artist: {
     ...artistCommission,

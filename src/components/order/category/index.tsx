@@ -166,7 +166,7 @@ const OrderCategotys = ({
   );
 };
 
-const Message = ({
+export const Message = ({
   userName,
   message,
   html,

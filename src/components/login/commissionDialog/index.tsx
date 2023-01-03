@@ -7,7 +7,6 @@ import CloseLineIcon from "remixicon-react/CloseLineIcon";
 // styles
 import * as dialog from "components/dialog";
 import * as s from "./styles";
-import Button from "components/button";
 import { useRouter } from "next/router";
 
 const LoginCommissionDialog = ({
@@ -25,7 +24,7 @@ const LoginCommissionDialog = ({
         <dialog.overlay />
         <s.content>
           <s.header>
-            <Typography variant="title-03">Continue purchase</Typography>
+            <Typography variant="title-03">Continuar compra</Typography>
             <ButtonIcon
               onClick={() => onOpenChange?.(false)}
               variant="error"
@@ -37,10 +36,6 @@ const LoginCommissionDialog = ({
           <s.login_methods_container>
             <LoginMethods redirectUrl={`${asPath}/order`} />
           </s.login_methods_container>
-          <s.divider>ou</s.divider>
-          <Button variant="secondary" fullWidth>
-            Continuar como visitante
-          </Button>
         </s.content>
       </dialog.portal>
     </dialog.root>

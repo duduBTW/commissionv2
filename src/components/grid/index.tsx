@@ -1,7 +1,7 @@
 // styles
 import * as s from "./styles";
 
-const OrderGrid = <T,>({
+const Grid = <T,>({
   label,
   header,
   orders,
@@ -15,10 +15,10 @@ const OrderGrid = <T,>({
   return (
     <>
       {header ? <s.header>{header}</s.header> : null}
-      {label ? <s.title variant="subtitle-01">{label}</s.title> : null}
+      {label ? <s.title variant="title-04">{label}</s.title> : null}
       <s.grid>{orders.map(children)}</s.grid>
     </>
   );
 };
 
-export default OrderGrid;
+export default Grid;

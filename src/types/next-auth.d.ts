@@ -17,7 +17,7 @@ declare module "next-auth" {
   }
 
   interface User {
-    adminId: string | null;
+    role: string;
     discord: string | null;
     twitter: string | null;
     profilePicture?: string;

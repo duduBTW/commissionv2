@@ -110,6 +110,8 @@ const getColor = (color?: TextColorVariant): string => {
       return "var(--color-success)";
     case "content":
       return "var(--color-content)";
+    case "error.main":
+      return "var(--color-error)";
 
     default:
       return "";

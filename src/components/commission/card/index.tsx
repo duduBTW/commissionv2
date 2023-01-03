@@ -7,8 +7,13 @@ import Link from "next/link";
 import * as s from "./styles";
 import usePrice from "utils/usePrice";
 
-interface Props extends AdminCommissionListSchema {
+interface Props {
   href: string;
+  id: string;
+  descriptionHtml: string;
+  price: number;
+  name: string;
+  miniature?: string | null;
 }
 
 const CommissionCard = ({
@@ -24,7 +29,7 @@ const CommissionCard = ({
   return (
     <Link href={`${href}/${id}`} passHref>
       <s.container>
-        <s.miniature src={miniature} />
+        <s.miniature src={miniature ?? "/waifu-placeholder.png"} />
         <s.title variant="title-03" color="primary.main">
           {name}
         </s.title>

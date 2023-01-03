@@ -12,22 +12,33 @@ const adminApiRoute = (
 ): NextApiHandler => {
   return async (req, res) => {
     const session = await getServerAuthSession({ req, res });
-    if (!session?.user) return res.status(401).send({});
+    if (!session?.user)
+      return res.status(401).send({
+        messaage: "Login invalid :(",
+      });
 
-    const admin = await prisma.user.findFirst({
+    const admin = await prisma.admin.findFirst({
       where: {
-        adminId: {
-          not: null,
+        user: {
+          id: session.user.id,
         },
-        id: session.user.id,
       },
       select: {
-        id: true,
+        user: {
+          select: {
+            id: true,
+          },
+        },
       },
     });
     if (!admin) return res.status(401).send({});
 
-    return handler(req, res, session.user);
+    try {
+      return await handler(req, res, session.user);
+    } catch (error) {
+      console.error(error);
+      return res.status(500).send(error);
+    }
   };
 };
 

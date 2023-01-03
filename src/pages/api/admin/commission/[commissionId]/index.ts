@@ -45,6 +45,8 @@ export const updateCommission = async ({
     description: { html, json },
     name,
     price,
+    steps,
+    active,
   } = commissionSchema.parse(body);
 
   return await prisma.commission.update({
@@ -56,6 +58,8 @@ export const updateCommission = async ({
       descriptionJson: json,
       name,
       price,
+      steps,
+      active,
     },
   });
 };
@@ -73,7 +77,8 @@ export const getCommission = async ({
 
   if (!commission) return null;
 
-  const { descriptionHtml, descriptionJson, name, price, id } = commission;
+  const { descriptionHtml, descriptionJson, name, price, id, steps, active } =
+    commission;
   return {
     description: {
       html: descriptionHtml,
@@ -82,5 +87,7 @@ export const getCommission = async ({
     name,
     price,
     id,
+    steps,
+    active,
   };
 };

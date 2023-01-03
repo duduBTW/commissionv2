@@ -1,18 +1,16 @@
-import { NextApiRequest, NextApiResponse } from "next";
+import apiMiddleware from "server/apiMiddleware";
 import { prisma } from "server/db/client";
+import { z } from "zod";
 
-const artistItemApi = async (req: NextApiRequest, res: NextApiResponse) => {
-  const artistId = req.query["artistId"];
-  const commissionId = req.query["commissionId"];
-  if (typeof artistId !== "string" || typeof commissionId !== "string") {
-    return res.status(401).send({});
-  }
-
+export default apiMiddleware.public(async (req, res) => {
   try {
+    const artistId = z.string().parse(req.query["artistId"]);
+    const commissionId = z.string().parse(req.query["commissionId"]);
+
     switch (req.method) {
       case "GET":
-        await new Promise((r) => setTimeout(r, 2000));
-        return res.send(await getArtistCommission(artistId, commissionId));
+        // await new Promise((r) => setTimeout(r, 2000));
+        return res.send(await get(artistId, commissionId));
 
       default:
         return res.status(404).send({});
@@ -21,9 +19,11 @@ const artistItemApi = async (req: NextApiRequest, res: NextApiResponse) => {
     console.error(error);
     return res.status(500).send(error);
   }
-};
+});
 
-const getArtistCommission = async (artistId: string, commissionId: string) => {
+export type AdminCommission = Awaited<ReturnType<typeof get>>;
+
+const get = async (artistId: string, commissionId: string) => {
   return await prisma.commission.findFirst({
     where: {
       id: commissionId,
@@ -48,5 +48,3 @@ const getArtistCommission = async (artistId: string, commissionId: string) => {
     },
   });
 };
-
-export default artistItemApi;

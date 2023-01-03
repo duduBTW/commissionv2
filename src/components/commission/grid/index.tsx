@@ -1,6 +1,7 @@
+import { AdminCommissionListSchema } from "service/admin/commission";
+
 // components
 import CommissionCard from "components/commission/card";
-import { AdminCommissionListSchema } from "service/admin/commission";
 
 // styles
 import * as s from "./styles";

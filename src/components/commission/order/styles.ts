@@ -3,6 +3,17 @@ import { Blurhash } from "react-blurhash";
 import { mq } from "styles/theme";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { LazyLoadImage } from "react-lazy-load-image-component";
+import { html } from "styles/globalStyles";
+import * as g from "styles/globalStyles";
+import Button from "components/button";
+
+export const container = styled(g.paper)`
+  min-height: calc(100vh - 6rem);
+
+  ${mq.fromTabletSm} {
+    min-height: auto;
+  }
+`;
 
 export const images_container = styled.div`
   --swiper-navigation-color: var(--color-primary);
@@ -100,4 +111,23 @@ export const image_miniature = styled.img<ImageMiniatureProps>`
   border-radius: 0.8rem;
   opacity: 0.4;
   border: 0.2rem solid transparent;
+`;
+
+export const description = styled.div`
+  ${html}
+
+  margin-top: 0.4rem;
+  p {
+    color: var(--color-text-60);
+    font-size: 1.6rem;
+    line-height: 2.4rem;
+  }
+`;
+
+export const action = styled(Button)`
+  margin-top: auto;
+
+  ${mq.fromMobileLg} {
+    margin-top: 0;
+  }
 `;

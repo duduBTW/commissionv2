@@ -7,21 +7,16 @@ export default apiMiddleware.admin(async (req, res) => {
     return res.status(401).send({});
   }
 
-  try {
-    switch (req.method) {
-      case "DELETE":
-        res.send(
-          await deleteImageCommission({
-            id: imageId,
-          })
-        );
+  switch (req.method) {
+    case "DELETE":
+      return res.send(
+        await deleteImageCommission({
+          id: imageId,
+        })
+      );
 
-      default:
-        return res.status(404).send({});
-    }
-  } catch (error) {
-    console.error(error);
-    return res.status(500).send(error);
+    default:
+      break;
   }
 });
 

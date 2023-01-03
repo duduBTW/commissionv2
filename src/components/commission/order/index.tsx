@@ -1,15 +1,13 @@
 import { useRouter } from "next/router";
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import usePrice from "utils/usePrice";
 import services from "service";
-import { mq } from "styles/theme";
 import { CommissionItemSchema } from "service/artist/commission";
 import { Thumbs, Lazy, Mousewheel, Keyboard, Navigation } from "swiper";
 import { Swiper as SwiperClass } from "swiper/types";
-import { css } from "@emotion/css";
+import DOMPurify from "isomorphic-dompurify";
 
 // components
-import Button from "components/button";
 import Typography from "components/typography";
 import ArrowDownSLineIcon from "remixicon-react/ArrowDownSLineIcon";
 import ArrowUpSLineIcon from "remixicon-react/ArrowUpSLineIcon";
@@ -17,10 +15,9 @@ import { Swiper, SwiperSlide } from "swiper/react";
 import ButtonIcon from "components/button/icon";
 
 // styles
-import * as g from "styles/globalStyles";
 import * as s from "./styles";
 
-const CommissionOrder = ({
+const CommissionItem = ({
   commission,
   isMobile = false,
   onLoginDialogOpenChange,
@@ -32,6 +29,10 @@ const CommissionOrder = ({
   const { push, asPath } = useRouter();
   const { data: session } = services.profile.useSession();
   const formattedPrice = usePrice(commission.price);
+  const purifiedDescriptionHtml = useMemo(
+    () => DOMPurify.sanitize(commission.descriptionHtml),
+    [commission.descriptionHtml]
+  );
 
   const handleSpeakWithArtistClick = () => {
     if (!session?.user) {
@@ -43,47 +44,26 @@ const CommissionOrder = ({
   };
 
   return (
-    <g.paper
-      className={css`
-        min-height: calc(100vh - 6rem);
-
-        ${mq.fromTabletSm} {
-          min-height: auto;
-        }
-      `}
-    >
-      <CommissionOrderImages isMobile={isMobile} images={commission.images} />
+    <s.container>
+      {Boolean(commission.images.length > 0) && (
+        <CommissionOrderImages isMobile={isMobile} images={commission.images} />
+      )}
       <div>
         <Typography variant="title-01">{commission.name}</Typography>
-        <div
-          className={css`
-            height: 0.4rem;
-          `}
-        />
-        <Typography variant="body-01" color="text.40">
-          <div
-            dangerouslySetInnerHTML={{
-              __html: commission.descriptionHtml,
-            }}
-          />
-        </Typography>
-      </div>
-      <div
-        className={css`
-          margin-top: auto;
 
-          ${mq.fromTabletSm} {
-            margin-bottom: 0rem;
-          }
-        `}
-      />
+        <s.description
+          dangerouslySetInnerHTML={{
+            __html: purifiedDescriptionHtml,
+          }}
+        />
+      </div>
       <Typography variant="price" color="success.main">
         {formattedPrice}
       </Typography>
-      <Button onClick={handleSpeakWithArtistClick} fullWidth>
+      <s.action onClick={handleSpeakWithArtistClick} fullWidth>
         Falar com o artista
-      </Button>
-    </g.paper>
+      </s.action>
+    </s.container>
   );
 };
 
@@ -144,7 +124,7 @@ const CommissionOrderImages = ({
             </s.image_miniature_container>
           ))}
         </s.image_swiper>
-        <Controls swiper={mainSwiper} />
+        <ImageControls swiper={mainSwiper} />
       </s.image_selector>
     </s.images_container>
   );
@@ -189,7 +169,7 @@ const ImageMain = ({
   );
 };
 
-const Controls = ({ swiper }: { swiper?: SwiperClass }) => {
+const ImageControls = ({ swiper }: { swiper?: SwiperClass }) => {
   return (
     <s.image_controls>
       <ButtonIcon
@@ -212,4 +192,4 @@ const Controls = ({ swiper }: { swiper?: SwiperClass }) => {
   );
 };
 
-export default CommissionOrder;
+export default CommissionItem;

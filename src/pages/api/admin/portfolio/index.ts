@@ -28,6 +28,8 @@ export default apiMiddleware.admin(async (req, res, user) => {
   }
 });
 
+export type PortfolioList = Awaited<ReturnType<typeof getPortfolioList>>;
+
 const getPortfolioList = ({ userId }: { userId: string }) =>
   prisma.portfolio.findMany({
     where: {
@@ -35,7 +37,21 @@ const getPortfolioList = ({ userId }: { userId: string }) =>
         id: userId,
       },
     },
+    select: {
+      commission: {
+        select: {
+          id: true,
+          name: true,
+        },
+      },
+      hash: true,
+      height: true,
+      id: true,
+      url: true,
+      width: true,
+    },
   });
+
 export const insetPortfolio = ({
   body,
   userId,
@@ -43,7 +59,8 @@ export const insetPortfolio = ({
   body: unknown;
   userId: string;
 }) => {
-  const { hash, height, url, width } = portfolioSchema.parse(body);
+  const { hash, height, url, width, commissionId } =
+    portfolioSchema.parse(body);
 
   return prisma.portfolio.create({
     data: {
@@ -55,6 +72,13 @@ export const insetPortfolio = ({
         connect: {
           id: userId,
         },
+      },
+      commission: {
+        connect: commissionId
+          ? {
+              id: commissionId,
+            }
+          : undefined,
       },
     },
   });

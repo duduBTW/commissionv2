@@ -2,6 +2,8 @@ import styled from "@emotion/styled";
 import { ContainerVariant } from "styles/globalStyles";
 import { Blurhash } from "react-blurhash";
 import { LazyLoadImage } from "react-lazy-load-image-component";
+import Typography from "components/typography";
+import { mq } from "styles/theme";
 
 export const header = styled.form`
   display: flex;
@@ -21,6 +23,7 @@ interface ImageInputsItemProps {
   variant: ContainerVariant;
 }
 export const card = styled.div<ImageInputsItemProps>`
+  position: relative;
   border-radius: 1.2rem;
   overflow: hidden;
   background: ${({ variant }) =>
@@ -100,9 +103,51 @@ export const hash = styled(Blurhash)<ImageInputsImgProps>`
 `;
 
 export const info = styled.form`
-  padding: 0.8rem 1.6rem;
+  padding: 0.8rem 1.2rem;
   display: flex;
   align-items: center;
-  gap: 1.6rem;
+  gap: 1.2rem;
   z-index: 2;
+`;
+
+export const empty_title = styled(Typography)`
+  margin-bottom: 1.2rem;
+`;
+
+export const empty_description = styled(Typography)``;
+
+export const chip = styled.div`
+  position: absolute;
+  z-index: 3;
+  top: 0.8rem;
+  left: 1.2rem;
+  font-size: 1.4rem;
+  font-weight: 500;
+  color: var(--color-primary);
+  background-color: var(--color-primary-l);
+  padding: 0.4rem 1.2rem;
+  border-radius: 222rem;
+`;
+
+export const delete_actions = styled.div`
+  display: flex;
+  flex-direction: column-reverse;
+  margin-top: auto;
+  height: calc(100% - 6rem);
+  gap: 0.8rem;
+
+  button {
+    width: 100%;
+  }
+
+  ${mq.fromMobileLg} {
+    flex-direction: row;
+    gap: 1.2rem;
+    margin-top: 2.4rem;
+    justify-content: flex-end;
+
+    button {
+      width: auto;
+    }
+  }
 `;
