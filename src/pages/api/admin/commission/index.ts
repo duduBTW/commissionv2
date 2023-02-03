@@ -1,7 +1,7 @@
 import { commissionSchema } from "service/admin/commission";
 import { prisma } from "server/db/client";
 import apiMiddleware from "server/apiMiddleware";
-import { AdminCommissionList } from "pages/api/artist/[artistId]/commissions";
+import { ArtistCommissionList } from "pages/api/artist/[artistId]/commissions";
 
 export default apiMiddleware.admin(async (req, res, user) => {
   switch (req.method) {
@@ -60,7 +60,7 @@ export const getCommissionList = async ({
   userId,
 }: {
   userId: string;
-}): Promise<AdminCommissionList | null> => {
+}): Promise<ArtistCommissionList | null> => {
   const commissions = await prisma.commission.findMany({
     where: {
       user: {

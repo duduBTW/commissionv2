@@ -1,3 +1,4 @@
+import Divider from "components/divider";
 import Typography from "components/typography";
 import { useMemo } from "react";
 
@@ -8,25 +9,7 @@ const capitalizeFirstLetter = (value = "") => {
   return value.charAt(0).toUpperCase() + value.slice(1);
 };
 
-const OrderProgress = ({
-  steps,
-  currentStep,
-}: {
-  steps: string;
-  currentStep: string;
-}) => {
-  const stepsList = useMemo(
-    () =>
-      `not_approved,approved,${steps},finished`
-        .split(",")
-        .map((step) => step.trim()),
-    [steps]
-  );
-  const indexCurrentStep = useMemo(
-    () => stepsList.indexOf(currentStep),
-    [stepsList, currentStep]
-  );
-
+const OrderProgress = ({ currentStep }: { currentStep: string }) => {
   return (
     <s.container>
       <s.current_step>
@@ -37,11 +20,6 @@ const OrderProgress = ({
           - Atualizado dia 12/12/2022
         </Typography>
       </s.current_step>
-      <s.steps>
-        {stepsList.map((step, index) => (
-          <s.step active={index <= indexCurrentStep} key={step} />
-        ))}
-      </s.steps>
     </s.container>
   );
 };

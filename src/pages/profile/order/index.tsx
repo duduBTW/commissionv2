@@ -24,7 +24,7 @@ const ProfileOrdersPage = () => {
             type={type}
             name={commission.name}
             key={id}
-            user={artist.users[0]}
+            user={artist.user}
           />
         ))}
       </g.paper>

@@ -13,6 +13,7 @@ import LoginCommissionDialog from "components/login/commissionDialog";
 
 // styles
 import * as g from "styles/globalStyles";
+import styled from "@emotion/styled";
 
 const ArtistCommissionPage = ({
   artistId,
@@ -33,22 +34,12 @@ const ArtistCommissionPage = ({
   if (!artist || !commission) return <div>:(</div>;
   return (
     <>
-      <g.paper_container
-        className={css`
-          background-color: var(--color-content);
-          margin-bottom: -2rem;
-
-          ${mq.fromTabletSm} {
-            margin-bottom: 0;
-            background-color: var(--color-background);
-          }
-        `}
-      >
+      <s.paper_container>
         <AristHeaderDense
           {...artist}
           hrefBack={`/artist/${artistId}/commissions`}
         />
-      </g.paper_container>
+      </s.paper_container>
       <CommissionItem
         isMobile={isMobile}
         commission={commission}
@@ -60,6 +51,18 @@ const ArtistCommissionPage = ({
       />
     </>
   );
+};
+
+const s = {
+  paper_container: styled(g.paper_container)`
+    background-color: var(--color-content);
+    margin-bottom: -2rem;
+
+    ${mq.fromTabletSm} {
+      margin-bottom: 0;
+      background-color: var(--color-background);
+    }
+  `,
 };
 
 export const getServerSideProps: GetServerSideProps = async ({

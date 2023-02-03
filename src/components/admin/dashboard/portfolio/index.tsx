@@ -119,7 +119,7 @@ const DashBoardPortfolio = () => {
 
 const PortfolioContainer = ({ children }: { children: React.ReactNode }) => {
   return (
-    <t.content value="portfolio" asChild>
+    <t.content mobileMargin="2.4rem 2rem" value="portfolio" asChild>
       <s.portfolio_container>{children}</s.portfolio_container>
     </t.content>
   );

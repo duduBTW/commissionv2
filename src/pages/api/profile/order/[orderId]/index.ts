@@ -40,7 +40,7 @@ const get = async ({
   user: UserSession;
   orderId: string;
 }) => {
-  const order = await prisma.order.findFirst({
+  return await prisma.order.findFirst({
     where: {
       id: orderId,
       user: {
@@ -60,7 +60,7 @@ const get = async ({
       },
       artist: {
         include: {
-          users: {
+          user: {
             select: {
               id: true,
               userName: true,
@@ -71,16 +71,11 @@ const get = async ({
       },
       type: true,
       messages: true,
-      discord: true,
+      contact: true,
       progress: true,
       currentTypeId: true,
     },
   });
-
-  return {
-    ...order,
-    discord: order?.discord?.split("#")[0],
-  };
 };
 
 export default orderApi;

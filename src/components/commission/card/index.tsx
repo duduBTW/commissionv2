@@ -1,5 +1,3 @@
-import { AdminCommissionListSchema } from "service/admin/commission";
-
 // components
 import Link from "next/link";
 
@@ -10,7 +8,7 @@ import usePrice from "utils/usePrice";
 interface Props {
   href: string;
   id: string;
-  descriptionHtml: string;
+  descriptionHtml: string | null;
   price: number;
   name: string;
   miniature?: string | null;

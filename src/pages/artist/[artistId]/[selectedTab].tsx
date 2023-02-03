@@ -5,6 +5,7 @@ import { dehydrate, QueryClient } from "@tanstack/react-query";
 // components
 import AristHeader from "components/artist/header";
 import ArtistProfile from "components/artist/profile";
+import styled from "@emotion/styled";
 
 export const getStaticPaths = async () => {
   const getArtistList = services.getArtistList();
@@ -73,10 +74,15 @@ const AristPage = ({
     <>
       <AristHeader {...artist} />
       <ArtistProfile artistId={artistId} selectedTab={selectedTab} />
-
-      <div style={{ height: "6rem" }} />
+      <s.footer />
     </>
   );
+};
+
+const s = {
+  footer: styled.div`
+    height: 6rem;
+  `,
 };
 
 export default AristPage;

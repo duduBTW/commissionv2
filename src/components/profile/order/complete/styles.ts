@@ -1,6 +1,7 @@
 import styled from "@emotion/styled";
 
 import * as g from "styles/globalStyles";
+import { mq } from "styles/theme";
 
 export const container = styled.div`
   position: relative;

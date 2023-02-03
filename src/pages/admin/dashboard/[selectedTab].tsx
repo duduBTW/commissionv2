@@ -77,10 +77,10 @@ const AdminDashboardPage: NextPage<{ defaultValue: string }> = ({
 
 const s = {
   tabs_container: styled(Container)`
-    margin: 0 2rem 2.4rem;
+    margin: 0 2rem 0;
 
     ${mq.fromDesktopSm} {
-      margin: 0 0 3.2rem;
+      margin: 0;
     }
   `,
 };

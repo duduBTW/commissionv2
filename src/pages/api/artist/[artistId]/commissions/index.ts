@@ -19,7 +19,7 @@ export default apiMiddleware.public(async (req, res) => {
   }
 });
 
-export type AdminCommissionList = Awaited<ReturnType<typeof get>>;
+export type ArtistCommissionList = Awaited<ReturnType<typeof get>>;
 
 const get = async (id: string) => {
   const commissions = await prisma.commission.findMany({
@@ -35,6 +35,7 @@ const get = async (id: string) => {
       images: true,
     },
   });
+
   return commissions.map((commission) => {
     const { descriptionJson, name, price, id, images } = commission;
 

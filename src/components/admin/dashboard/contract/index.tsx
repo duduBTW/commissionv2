@@ -17,11 +17,13 @@ const DashboardContract = () => {
   if (isLoading) return <></>;
   return (
     <tabs.content value="contract" asChild>
-      <Container padding="0 2rem">
+      <Container padding="3.2rem 2rem">
         {hasContracts ? (
           <div>
             <Link href={`/admin/contract/create`}>
-              <s.create_button>Novo contrato vazio</s.create_button>
+              <s.create_button variant="secondary">
+                Novo contrato vazio
+              </s.create_button>
             </Link>
             <s.contract_grid>
               {contracts.map((contract) => (

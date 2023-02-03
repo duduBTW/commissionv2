@@ -26,13 +26,13 @@ const AdminOrderItemPage = ({
           <tabs.trigger value="progresso">Progresso</tabs.trigger>
         </tabs.list>
       </Container>
-      <tabs.content value="informacoes">
+      <tabs.content value="informacoes" asChild>
         <AdminOrderInformation {...params} />
       </tabs.content>
       <tabs.content asChild value="categorias">
         <AdminOrderCategorys {...params} />
       </tabs.content>
-      <tabs.content value="progresso">
+      <tabs.content desktopMargin="2.4rem 0" value="progresso">
         <AdminOrderProgress {...params} />
       </tabs.content>
     </tabs.root>

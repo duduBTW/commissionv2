@@ -28,11 +28,10 @@ const orderApi = async (req: NextApiRequest, res: NextApiResponse) => {
   }
 };
 
+export type ProfileOrderMessages = Awaited<ReturnType<typeof get>>;
 const get = async (req: NextApiRequest, user: UserSession) => {
   const { query } = req;
   const orderId = z.string().parse(query.orderId);
-  const content: Record<string, Message[]> = {};
-  const categorys: Record<string, Category> = {};
 
   const order = await prisma.order.findFirst({
     where: {
@@ -52,29 +51,7 @@ const get = async (req: NextApiRequest, user: UserSession) => {
 
   if (!order) throw new Error("No order found");
 
-  order.messages.forEach((message) => {
-    content[message.category.id] = [
-      {
-        id: message.id,
-        type: message.type as "text" | "image",
-        value: message.content,
-      },
-      ...(content[message.category.id] ?? []),
-    ];
-
-    categorys[message.category.id] = {
-      id: message.category.id,
-      name: message.category.name,
-      description: {
-        html: message.category.descriptionHtml,
-      },
-    };
-  });
-
-  return {
-    content,
-    categorys: Object.values(categorys),
-  };
+  return order.messages;
 };
 
 export default orderApi;

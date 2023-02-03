@@ -3,7 +3,6 @@ import { NextApiRequest, NextApiResponse } from "next";
 import { z } from "zod";
 import { UserSession } from "types/next-auth";
 import { prisma } from "server/db/client";
-import { Message, Category } from "components/order/category";
 
 export default adminApiRoute(async (req, res, session) => {
   try {
@@ -20,6 +19,7 @@ export default adminApiRoute(async (req, res, session) => {
   }
 });
 
+export type AdminOrderMessages = Awaited<ReturnType<typeof get>>;
 const get = async (
   req: NextApiRequest,
   res: NextApiResponse,
@@ -27,17 +27,13 @@ const get = async (
 ) => {
   const { query } = req;
   const orderId = z.string().parse(query.orderId);
-  const content: Record<string, Message[]> = {};
-  const categorys: Record<string, Category> = {};
 
   const order = await prisma.order.findFirst({
     where: {
       id: orderId,
       artist: {
-        users: {
-          some: {
-            id: user.id,
-          },
+        user: {
+          id: user.id,
         },
       },
     },
@@ -50,27 +46,5 @@ const get = async (
     },
   });
 
-  order?.messages.forEach((message) => {
-    content[message.category.id] = [
-      {
-        id: message.id,
-        type: message.type as "text" | "image",
-        value: message.content,
-      },
-      ...(content[message.category.id] ?? []),
-    ];
-
-    categorys[message.category.id] = {
-      id: message.category.id,
-      name: message.category.name,
-      description: {
-        html: message.category.descriptionHtml,
-      },
-    };
-  });
-
-  return {
-    content,
-    categorys: Object.values(categorys),
-  };
+  return order?.messages;
 };

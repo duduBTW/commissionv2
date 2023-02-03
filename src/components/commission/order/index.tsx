@@ -2,10 +2,10 @@ import { useRouter } from "next/router";
 import { useMemo, useState } from "react";
 import usePrice from "utils/usePrice";
 import services from "service";
-import { CommissionItemSchema } from "service/artist/commission";
 import { Thumbs, Lazy, Mousewheel, Keyboard, Navigation } from "swiper";
 import { Swiper as SwiperClass } from "swiper/types";
 import DOMPurify from "isomorphic-dompurify";
+import { ArtistCommissionItem } from "pages/api/artist/[artistId]/commissions/[commissionId]";
 
 // components
 import Typography from "components/typography";
@@ -22,16 +22,16 @@ const CommissionItem = ({
   isMobile = false,
   onLoginDialogOpenChange,
 }: {
-  commission: CommissionItemSchema;
+  commission: ArtistCommissionItem;
   isMobile?: boolean;
   onLoginDialogOpenChange?(open: boolean): void;
 }) => {
   const { push, asPath } = useRouter();
   const { data: session } = services.profile.useSession();
-  const formattedPrice = usePrice(commission.price);
+  const formattedPrice = usePrice(commission?.price);
   const purifiedDescriptionHtml = useMemo(
-    () => DOMPurify.sanitize(commission.descriptionHtml),
-    [commission.descriptionHtml]
+    () => DOMPurify.sanitize(commission?.descriptionHtml ?? ""),
+    [commission?.descriptionHtml]
   );
 
   const handleSpeakWithArtistClick = () => {
@@ -43,6 +43,7 @@ const CommissionItem = ({
     push(`${asPath}/order`);
   };
 
+  if (!commission) return <></>;
   return (
     <s.container>
       {Boolean(commission.images.length > 0) && (
@@ -60,9 +61,11 @@ const CommissionItem = ({
       <Typography variant="price" color="success.main">
         {formattedPrice}
       </Typography>
-      <s.action onClick={handleSpeakWithArtistClick} fullWidth>
-        Falar com o artista
-      </s.action>
+      {commission.Categorys.length > 0 && (
+        <s.action onClick={handleSpeakWithArtistClick} fullWidth>
+          Falar com o artista
+        </s.action>
+      )}
     </s.container>
   );
 };
@@ -71,7 +74,13 @@ const CommissionOrderImages = ({
   images,
   isMobile,
 }: {
-  images: CommissionItemSchema["images"];
+  images: {
+    id: string;
+    hash: string | null;
+    height: number | null;
+    width: number | null;
+    url: string;
+  }[];
   isMobile: boolean;
 }) => {
   const [thumbsSwiper, setThumbsSwiper] = useState<SwiperClass | null>(null);
@@ -81,6 +90,7 @@ const CommissionOrderImages = ({
     <s.images_container>
       <Swiper
         loop
+        enabled={images.length > 1}
         thumbs={{ swiper: thumbsSwiper }}
         modules={[Thumbs, Lazy, Keyboard, Navigation]}
         autoHeight
@@ -106,26 +116,28 @@ const CommissionOrderImages = ({
         ))}
       </Swiper>
 
-      <s.image_selector>
-        <s.image_swiper
-          onSwiper={(s) => {
-            setThumbsSwiper(s);
-          }}
-          direction={"vertical"}
-          spaceBetween={12}
-          slidesPerView={4}
-          modules={[Thumbs, Mousewheel]}
-          mousewheel
-          watchSlidesProgress
-        >
-          {images.map(({ id, url }) => (
-            <s.image_miniature_container key={id}>
-              <s.image_miniature active src={url} />
-            </s.image_miniature_container>
-          ))}
-        </s.image_swiper>
-        <ImageControls swiper={mainSwiper} />
-      </s.image_selector>
+      {images.length > 1 && (
+        <s.image_selector>
+          <s.image_swiper
+            onSwiper={(s) => {
+              setThumbsSwiper(s);
+            }}
+            direction={"vertical"}
+            spaceBetween={12}
+            slidesPerView={4}
+            modules={[Thumbs, Mousewheel]}
+            mousewheel
+            watchSlidesProgress
+          >
+            {images.map(({ id, url }) => (
+              <s.image_miniature_container key={id}>
+                <s.image_miniature active src={url} />
+              </s.image_miniature_container>
+            ))}
+          </s.image_swiper>
+          <ImageControls swiper={mainSwiper} />
+        </s.image_selector>
+      )}
     </s.images_container>
   );
 };
@@ -136,7 +148,13 @@ const ImageMain = ({
   height,
   width,
   hash,
-}: CommissionItemSchema["images"][0]) => {
+}: {
+  id: string;
+  hash: string | null;
+  height: number | null;
+  width: number | null;
+  url: string;
+}) => {
   const [isLoaded, setLoaded] = useState(false);
   const [isLoadStarted, setLoadStarted] = useState(false);
 
@@ -146,7 +164,7 @@ const ImageMain = ({
   return (
     <s.image_main_container
       style={{
-        aspectRatio: width / height,
+        aspectRatio: width && height ? width / height : "unset",
       }}
     >
       <s.image_main
@@ -157,7 +175,7 @@ const ImageMain = ({
         beforeLoad={handleLoadStarted}
       />
 
-      {!isLoaded && isLoadStarted && (
+      {hash && !isLoaded && isLoadStarted && (
         <s.image_main_hash
           width={"100%"}
           resolutionY={32}

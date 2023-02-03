@@ -34,10 +34,8 @@ const put = async (
     where: {
       id: orderId,
       artist: {
-        users: {
-          some: {
-            id: user.id,
-          },
+        user: {
+          id: user.id,
         },
       },
     },
@@ -71,10 +69,8 @@ const get = async (
     where: {
       id: orderId,
       artist: {
-        users: {
-          some: {
-            id: user.id,
-          },
+        user: {
+          id: user.id,
         },
       },
     },
@@ -100,8 +96,7 @@ const get = async (
         },
       },
       type: true,
-      discord: true,
-      twitter: true,
+      contact: true,
       progress: true,
       currentTypeId: true,
     },

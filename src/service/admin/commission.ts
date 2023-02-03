@@ -1,8 +1,8 @@
 import { useQuery } from "@tanstack/react-query";
 import { IncomingHttpHeaders } from "http";
 import { AdminUpdateCommissionMiniature } from "pages/api/admin/commission/[commissionId]/images/[imageId]/miniature";
-import { AdminCommissionList } from "pages/api/artist/[artistId]/commissions";
-import { AdminCommission } from "pages/api/artist/[artistId]/commissions/[commissionId]";
+import { ArtistCommissionList } from "pages/api/artist/[artistId]/commissions";
+import { ArtistCommissionItem } from "pages/api/artist/[artistId]/commissions/[commissionId]";
 import api from "service/api";
 import * as z from "zod";
 
@@ -61,9 +61,12 @@ export const insertCommission = async (data: CommissionSchema) =>
 // Get commission by id
 export const getCommission =
   (id: string, headers?: IncomingHttpHeaders) => async () => {
-    const data = await api.get<AdminCommission>(`/api/admin/commission/${id}`, {
-      headers: { Cookie: headers?.cookie },
-    });
+    const data = await api.get<ArtistCommissionItem>(
+      `/api/admin/commission/${id}`,
+      {
+        headers: { Cookie: headers?.cookie },
+      }
+    );
 
     return data.data;
   };
@@ -71,7 +74,7 @@ export const getCommission =
 // Get list of commissions
 export const getCommissionList =
   (headers?: IncomingHttpHeaders) => async () => {
-    const { data } = await api.get<AdminCommissionList>(
+    const { data } = await api.get<ArtistCommissionList>(
       `/api/admin/commission`,
       {
         headers: { Cookie: headers?.cookie },

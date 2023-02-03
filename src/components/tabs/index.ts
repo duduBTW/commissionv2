@@ -1,4 +1,3 @@
-import { css } from "@emotion/react";
 import styled from "@emotion/styled";
 import * as Tabs from "@radix-ui/react-tabs";
 import { ContainerVariant } from "styles/globalStyles";
@@ -75,8 +74,17 @@ export const trigger = styled(Tabs.Trigger)`
   }
 `;
 
-export const content = styled(Tabs.Content)`
+interface ContentProps {
+  desktopMargin?: string;
+  mobileMargin?: string;
+}
+export const content = styled(Tabs.Content)<ContentProps>`
   height: 100%;
+  margin: ${({ mobileMargin }) => mobileMargin ?? "0rem"};
+
+  ${mq.fromTabletMd} {
+    margin: ${({ desktopMargin }) => desktopMargin};
+  }
 `;
 export const root = styled(Tabs.Root)`
   height: 100%;

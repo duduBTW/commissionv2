@@ -12,6 +12,7 @@ export const container = styled.div`
   // border-bottom: 0.1rem solid var(--color-primary-l);
   height: 16rem;
   grid-template-rows: 1fr auto;
+  padding-left: 2rem;
 
   ${mq.fromDesktopSm} {
     height: 20rem;
@@ -22,6 +23,7 @@ export const container = styled.div`
     grid-template-rows: 1fr auto;
     /* margin-bottom: 0rem; */
     position: relative;
+    padding-left: 2.4rem;
   }
 `;
 
@@ -35,6 +37,7 @@ export const figure_price = styled(Typography)`
 `;
 
 export const image = styled.img`
+  display: none;
   grid-row: 1 / 3;
   grid-column: 1 / 2;
   width: 100%;
@@ -45,9 +48,30 @@ export const image = styled.img`
   opacity: 0.2;
 
   ${mq.fromDesktopSm} {
+    display: block;
     min-width: 24rem;
     height: 20rem;
     grid-area: pic;
     opacity: 1;
   }
+`;
+
+export const container_dense = styled.div`
+  display: flex;
+  align-items: center;
+  background-color: var(--color-content);
+  overflow: hidden;
+  height: 4.8rem;
+  border-radius: 1.2rem;
+  padding-left: 2.4rem;
+  gap: 1.6rem;
+`;
+
+export const image_dense = styled.img`
+  width: 9.8rem;
+  object-fit: cover;
+`;
+
+export const dense_spacer = styled.div`
+  flex: 1;
 `;

@@ -1,30 +1,22 @@
-import { NextApiRequest, NextApiResponse } from "next";
-import { getServerAuthSession } from "server/common/get-server-auth-session";
+import apiMiddleware from "server/apiMiddleware";
 import { prisma } from "server/db/client";
-import {
-  messageCreateSchema,
-  orderUserCreateSchema,
-} from "service/artist/order";
+import { confirmationSchema } from "service/artist/order";
 import { UserSession } from "types/next-auth";
+import { z } from "zod";
 
-const orderApi = async (req: NextApiRequest, res: NextApiResponse) => {
-  const artistId = req.query["artistId"];
-  const commissionId = req.query["commissionId"];
-  if (typeof artistId !== "string" || typeof commissionId !== "string") {
-    return res.status(401).send({});
-  }
-
-  const session = await getServerAuthSession({ req, res });
+export default apiMiddleware.user(async (req, res, user) => {
+  const artistId = z.string().parse(req.query["artistId"]);
+  const commissionId = z.string().parse(req.query["commissionId"]);
 
   try {
     switch (req.method) {
       case "POST":
         return res.send(
-          await orderCommission({
+          await post({
             artistId,
             commissionId,
             body: req.body,
-            user: session?.user,
+            user: user,
           })
         );
 
@@ -35,9 +27,9 @@ const orderApi = async (req: NextApiRequest, res: NextApiResponse) => {
     console.error(error);
     return res.status(500).send(error);
   }
-};
+});
 
-const orderCommission = async ({
+const post = async ({
   artistId,
   commissionId,
   body = {},
@@ -48,14 +40,12 @@ const orderCommission = async ({
   body: Record<string, unknown>;
   user?: UserSession;
 }) => {
-  const messages = messageCreateSchema.array().parse(body?.messages);
-  const buyer = orderUserCreateSchema.parse(body?.user);
+  const messages = z.record(z.string(), z.string()).parse(body?.messages);
+  const buyer = confirmationSchema.parse(body?.user);
   const artist = await prisma.admin.findFirst({
     where: {
-      users: {
-        some: {
-          id: artistId,
-        },
+      user: {
+        id: artistId,
       },
     },
     select: {
@@ -82,15 +72,13 @@ const orderCommission = async ({
           id: commissionId,
         },
       },
-      discord: buyer.discord,
-      twitter: buyer.twitter,
+      contact: buyer.contact,
       messages: {
-        create: messages.map((message) => ({
-          content: message.value,
-          type: message.type,
+        create: Object.entries(messages).map(([id, content]) => ({
+          content: content,
           category: {
             connect: {
-              id: message.categoryId,
+              id: id,
             },
           },
         })),
@@ -101,5 +89,3 @@ const orderCommission = async ({
     },
   });
 };
-
-export default orderApi;

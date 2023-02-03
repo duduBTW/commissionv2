@@ -37,10 +37,8 @@ const get = async (
     await prisma.order.findMany({
       where: {
         artist: {
-          users: {
-            some: {
-              id: user.id,
-            },
+          user: {
+            id: user.id,
           },
         },
         type: {

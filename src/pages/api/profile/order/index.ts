@@ -26,6 +26,7 @@ const orderApi = async (req: NextApiRequest, res: NextApiResponse) => {
   }
 };
 
+export type ProfileOrderList = Awaited<ReturnType<typeof getOrderList>>;
 const getOrderList = async ({ user }: { user: UserSession }) => {
   return await prisma.order.findMany({
     where: {
@@ -40,6 +41,9 @@ const getOrderList = async ({ user }: { user: UserSession }) => {
           id: true,
           name: true,
           images: {
+            where: {
+              isMiniature: true,
+            },
             select: {
               url: true,
             },
@@ -48,7 +52,7 @@ const getOrderList = async ({ user }: { user: UserSession }) => {
       },
       artist: {
         include: {
-          users: {
+          user: {
             select: {
               id: true,
               userName: true,

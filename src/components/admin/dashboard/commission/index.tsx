@@ -15,8 +15,8 @@ const DashboardCommission = () => {
   const hasCommissions = commissions && Boolean(commissions.length > 0);
 
   return (
-    <Container padding="0 2rem">
-      <tabs.content value="commissions" asChild>
+    <tabs.content value="commissions" asChild>
+      <Container padding="3.2rem 2rem">
         {hasCommissions ? (
           <>
             <s.admin_search createHref={"/admin/commissions/create"} />
@@ -28,8 +28,8 @@ const DashboardCommission = () => {
         ) : (
           <DashboardCommissionEmpty />
         )}
-      </tabs.content>
-    </Container>
+      </Container>
+    </tabs.content>
   );
 };
 

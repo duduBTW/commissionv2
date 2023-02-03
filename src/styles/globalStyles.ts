@@ -101,6 +101,25 @@ export const paper_container = styled.div<PaperProps>`
   }
 `;
 
+export const loadingStyles = css`
+  pointer-events: none;
+  user-select: none;
+  position: relative;
+
+  &::before {
+    content: "";
+    z-index: 2;
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: var(--color-content);
+    opacity: 0.6;
+    border-radius: 1.2rem;
+  }
+`;
+
 export const paper = styled(paper_container)<PaperProps>`
   background: var(--color-content);
   border-radius: 0rem;
@@ -114,26 +133,7 @@ export const paper = styled(paper_container)<PaperProps>`
     padding: 2.4rem;
   }
 
-  ${({ loading }) =>
-    loading &&
-    css`
-      pointer-events: none;
-      user-select: none;
-      position: relative;
-
-      &::before {
-        content: "";
-        z-index: 2;
-        position: absolute;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
-        background-color: var(--color-content);
-        opacity: 0.6;
-        border-radius: 1.2rem;
-      }
-    `};
+  ${({ loading }) => loading && loadingStyles};
 `;
 
 export const html = css`

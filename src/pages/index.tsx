@@ -9,6 +9,7 @@ import Container from "components/container";
 import OrderCard from "components/order/card";
 import ArtistCard from "components/artist/card";
 import Typography from "components/typography";
+import { useRouter } from "next/router";
 
 export const getStaticProps: GetStaticProps = async () => {
   const queryClient = new QueryClient();
@@ -34,6 +35,13 @@ const Home: NextPage = () => {
   const { data: orders } = services.profile.useOrderList();
   const hasOrders = orders && Boolean(orders.length > 0);
   const hasArtists = artists && Boolean(artists.length > 0);
+  const { data: session, isLoading: isLoadingProfile } =
+    services.profile.useSession();
+  const { push } = useRouter();
+
+  if (!isLoadingProfile && session?.user?.admin) {
+    push("/admin/dashboard/orders");
+  }
 
   if (!hasArtists && !hasOrders)
     return (
@@ -55,7 +63,7 @@ const Home: NextPage = () => {
                 type={type}
                 name={commission.name}
                 key={id}
-                user={artist.users[0]}
+                user={artist.user}
               />
             )}
           </Grid>

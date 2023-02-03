@@ -29,8 +29,8 @@ const OrderCard = ({
   name: string;
   backgroundImage?: string;
   user?: {
-    userName: string;
-    profilePicture: string;
+    userName: string | null;
+    profilePicture: string | null;
   };
   href: string;
 }) => {
@@ -43,7 +43,9 @@ const OrderCard = ({
         <s.title variant="title-04">{name}</s.title>
         {user && (
           <s.user>
-            <UserAvatar size="small" src={user.profilePicture} />
+            {user.profilePicture && (
+              <UserAvatar size="small" src={user.profilePicture} />
+            )}
             <Typography variant="caption" color="text.60">
               {user.userName}
             </Typography>

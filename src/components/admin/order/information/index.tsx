@@ -12,7 +12,7 @@ import * as s from "./styles";
 
 const AdminOrderInformation = ({ orderId }: AdminOrderItemPageParams) => {
   return (
-    <Container>
+    <Container padding="2.4rem 0">
       <Commission orderId={orderId} />
       <User orderId={orderId} />
     </Container>
@@ -24,7 +24,7 @@ const Commission = ({ orderId }: AdminOrderItemPageParams) => {
 
   if (!order || isLoading) return <></>;
   return (
-    <s.order_commission_container noPadding>
+    <s.order_commission_container align="left" noPadding>
       <CommissionCardVertical
         {...order.commission}
         image={order.commission.images[0]?.url}
@@ -39,14 +39,15 @@ const User = ({ orderId }: AdminOrderItemPageParams) => {
   if (!order || isLoading) return <></>;
   return (
     <s.container_user>
-      <UserAvatar src={order.user.profilePicture} />
+      {order.user?.profilePicture && (
+        <UserAvatar src={order.user.profilePicture} />
+      )}
       <s.information_grid>
-        <UserInfoItem label="Nome">{order.user.userName}</UserInfoItem>
-        {order.discord && (
-          <UserInfoItem label="Discord">{order.discord}</UserInfoItem>
+        {order.user?.userName && (
+          <UserInfoItem label="Nome">{order.user.userName}</UserInfoItem>
         )}
-        {order.twitter && (
-          <UserInfoItem label="Twitter">{order.twitter}</UserInfoItem>
+        {order.contact && (
+          <UserInfoItem label="Contact">{order.contact}</UserInfoItem>
         )}
       </s.information_grid>
     </s.container_user>

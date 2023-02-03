@@ -1,5 +1,7 @@
 import { useQuery } from "@tanstack/react-query";
+import { ProfileOrderList } from "pages/api/profile/order";
 import { ProfileOrder } from "pages/api/profile/order/[orderId]";
+import { ProfileOrderMessages } from "pages/api/profile/order/[orderId]/messages";
 import api from "service/api";
 import { z } from "zod";
 
@@ -63,15 +65,13 @@ export const getOrder = (orderId: string) => async () => {
 };
 
 export const getOrderList = async () => {
-  const { data } = await api.get<ProfileOrderListItemSchema[]>(
-    `/api/profile/order`
-  );
+  const { data } = await api.get<ProfileOrderList>(`/api/profile/order`);
 
   return data;
 };
 
 export const getOrderMessages = (orderId: string) => async () => {
-  const { data } = await api.get<ProfileOrderMessagesSchema>(
+  const { data } = await api.get<ProfileOrderMessages>(
     `/api/profile/order/${orderId}/messages`
   );
 

@@ -21,7 +21,7 @@ export default apiMiddleware.public(async (req, res) => {
   }
 });
 
-export type AdminCommission = Awaited<ReturnType<typeof get>>;
+export type ArtistCommissionItem = Awaited<ReturnType<typeof get>>;
 
 const get = async (artistId: string, commissionId: string) => {
   return await prisma.commission.findFirst({
@@ -44,6 +44,9 @@ const get = async (artistId: string, commissionId: string) => {
           width: true,
           url: true,
         },
+      },
+      Categorys: {
+        take: 1,
       },
     },
   });

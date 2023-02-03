@@ -17,8 +17,16 @@ export const empty_description = styled(Typography)`
 
 export const contract_grid = styled.div`
   display: grid;
-  grid-template-columns: repeat(4, 1fr);
   gap: 1.6rem;
+  grid-template-columns: repeat(1, 1fr);
+
+  ${mq.fromMobileLg} {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  ${mq.fromDesktopSm} {
+    grid-template-columns: repeat(4, 1fr);
+  }
 `;
 
 export const contract_card = styled.div`
@@ -37,5 +45,5 @@ export const contract_card = styled.div`
 
 export const create_button = styled(Button)`
   margin-bottom: 2.4rem;
-  width: auto;
+  width: 100%;
 `;

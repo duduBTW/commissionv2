@@ -6,7 +6,7 @@ generator client {
 }
 
 datasource db {
-  provider = "sqlite"
+  provider = "postgresql"
   // NOTE: When using postgresql, mysql or sqlserver, uncomment the @db.Text annotations in model Account below
   // Further reading:
   // https://next-auth.js.org/adapters/prisma#create-the-prisma-schema
@@ -143,8 +143,7 @@ model Order {
   artist        Admin           @relation(fields: [adminId], references: [id])
   user          User?           @relation(fields: [userId], references: [id])
   commission    Commission      @relation(fields: [commissionId], references: [id])
-  discord       String?
-  twitter       String?
+  contact       String?
   type          String          @default("not_approved")
   currentTypeId String?
   lastUpdated   String?
@@ -152,7 +151,6 @@ model Order {
 
 model OrderMessage {
   id                   String             @id @default(cuid())
-  type                 String
   content              String
   orderId              String?
   commissionCategoryId String

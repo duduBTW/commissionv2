@@ -32,19 +32,40 @@ const AdminOrderProgress = ({ orderId }: AdminOrderItemPageParams) => {
   );
 
   if (!order) return <></>;
+  if (order.type === "recuse") {
+    return (
+      <Container>
+        <Typography variant="title-02">Pedido recusado.</Typography>
+      </Container>
+    );
+  }
+
   if (order.type === "not_approved") {
     return (
       <Container>
         <g.paper loading={isUpdating} align="left" dense>
-          <Typography variant="title-02">Aguardando aprovação...</Typography>
-          <div />
-          <Button
-            loading={isUpdating}
-            onClick={() => updateOrderType("approved")}
-            fullWidth
-          >
-            Aprovar
-          </Button>
+          <s.approve_message>
+            <Typography variant="title-02">Aguardando aprovação...</Typography>
+            <Typography variant="body-01" color="text.40">
+              Aprove para aceitar essa commission.
+            </Typography>
+          </s.approve_message>
+          <s.approve_actions>
+            <Button
+              loading={isUpdating}
+              onClick={() => updateOrderType("recuse")}
+              variant="secondary"
+            >
+              Recusar
+            </Button>
+            <Button
+              loading={isUpdating}
+              onClick={() => updateOrderType("approved")}
+              fullWidth
+            >
+              Aprovar
+            </Button>
+          </s.approve_actions>
         </g.paper>
       </Container>
     );

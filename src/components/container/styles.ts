@@ -23,7 +23,6 @@ interface ContainerProps {
 }
 
 export const container = styled.div<ContainerProps>`
-  width: 100vw;
   padding: ${({ padding, mdPadding }) => mdPadding ?? padding};
   /* padding: ${({ dense }) => (dense ? "0" : "2.4rem 2rem")}; */
   background: ${({ variant }) => getBackgroundContainer(variant)};

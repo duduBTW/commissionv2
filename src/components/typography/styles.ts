@@ -9,6 +9,22 @@ interface StyledTextProps {
   center?: boolean;
 }
 
+export const body01 = css`
+  font-family: "Nunito";
+  font-style: normal;
+  font-weight: 400;
+  font-size: 1.6rem;
+  line-height: 2.4rem;
+`;
+
+export const subtitle2 = css`
+  font-family: "Nunito";
+  font-style: normal;
+  font-weight: 600;
+  font-size: 1.4rem;
+  line-height: 2.2rem;
+`;
+
 export const styledText = styled.div<StyledTextProps>`
   ${({ variant }) => {
     switch (variant) {
@@ -21,13 +37,7 @@ export const styledText = styled.div<StyledTextProps>`
           line-height: 3.2rem;
         `;
       case "body-01":
-        return css`
-          font-family: "Nunito";
-          font-style: normal;
-          font-weight: 400;
-          font-size: 1.6rem;
-          line-height: 2.4rem;
-        `;
+        return body01;
       case "title-01":
         return css`
           font-family: "Poppins";
@@ -48,7 +58,7 @@ export const styledText = styled.div<StyledTextProps>`
         return css`
           font-family: "Poppins";
           font-style: normal;
-          font-weight: 600;
+          font-weight: 500;
           letter-spacing: 0.02rem;
           font-size: 2rem;
           line-height: 3.2rem;
@@ -70,13 +80,7 @@ export const styledText = styled.div<StyledTextProps>`
           line-height: 2.4rem;
         `;
       case "subtitle-02":
-        return css`
-          font-family: "Nunito";
-          font-style: normal;
-          font-weight: 600;
-          font-size: 1.4rem;
-          line-height: 2.2rem;
-        `;
+        return subtitle2;
       case "caption":
         return css`
           font-family: "Nunito";

@@ -13,6 +13,8 @@ import { AristHeaderDense } from "components/artist/header";
 // styles
 import * as g from "styles/globalStyles";
 import styled from "@emotion/styled";
+import { Editor } from "components/commission/categorys";
+import Button from "components/button";
 
 export const getServerSideProps: GetServerSideProps = async ({ params }) => {
   const orderId = String(params?.orderId);
@@ -42,14 +44,18 @@ const OrderPage = ({
   let content = <></>;
   if (!order || !order.commission || !order.artist) return <></>;
 
+  console.log(order?.type);
+
   switch (order?.type) {
     case "not_approved":
       content = (
         <Typography>
-          {order.artist?.users[0]?.userName} entrará em contato com você no
-          discord <strong>{order?.discord}####</strong> para aprovar o pedido.
+          {order.artist?.user?.userName} entrará em contato com você no{" "}
+          <strong>{order?.contact}</strong> para aprovar o pedido.
         </Typography>
       );
+      break;
+
     case "approved":
       content = (
         <>
@@ -57,6 +63,7 @@ const OrderPage = ({
           <Typography>Utilize essa pagina para checar atualizações.</Typography>
         </>
       );
+      break;
 
     default:
       content = (
@@ -73,23 +80,20 @@ const OrderPage = ({
 
   return (
     <tabs.root defaultValue="progresso">
-      <Container variant="content">
-        <Typography>{order.commission.name}</Typography>
+      <Container mdPadding="0 2rem" variant="content">
+        {/* <Typography>{order.commission.name}</Typography> */}
         <tabs.list>
           <tabs.trigger value="progresso">Progresso</tabs.trigger>
-          {messages?.categorys && messages?.categorys.length > 0 ? (
+          {messages && messages.length > 0 ? (
             <tabs.trigger value="informacoes">Informações</tabs.trigger>
           ) : null}
         </tabs.list>
       </Container>
-      <tabs.content asChild value="progresso">
+      <tabs.content desktopMargin="3.2rem 0" asChild value="progresso">
         <Container>
           <g.paper align="left" dense>
             {order.type && order.commission?.steps && (
-              <OrderProgress
-                currentStep={order.type}
-                steps={order.commission.steps}
-              />
+              <OrderProgress currentStep={order.type} />
             )}
             <div
               style={{
@@ -98,24 +102,37 @@ const OrderPage = ({
             >
               {content}
             </div>
-            {order.artist?.users[0] && (
+            {order.artist?.user && (
               <AristHeaderDense
-                userName={order.artist.users[0].userName ?? "Artist"}
-                profilePicture={order.artist.users[0].profilePicture ?? ""}
-                hrefBack={`/artist/${order.artist.users[0].id}/commissions`}
+                userName={order.artist.user.userName ?? "Artist"}
+                profilePicture={order.artist.user.profilePicture ?? ""}
+                hrefBack={`/artist/${order.artist.user.id}/commissions`}
               />
             )}
           </g.paper>
         </Container>
       </tabs.content>
-      <tabs.content value="informacoes">
-        {messages && (
-          <OrderCategotys
-            categorys={messages.categorys}
-            content={messages.content}
-            defaultValue={messages.categorys[0]?.id}
-          />
-        )}
+      <tabs.content desktopMargin="1.2rem 0" asChild value="informacoes">
+        <Container>
+          {messages?.map((message) => (
+            <g.paper key={message.id} align="left">
+              <div>
+                <Typography variant="subtitle-01" color="primary.main">
+                  {message.category.name}
+                </Typography>
+                <div
+                  style={{
+                    height: "1.2rem",
+                  }}
+                />
+                <Editor
+                  content={JSON.parse(message.content)}
+                  editable={false}
+                />
+              </div>
+            </g.paper>
+          ))}
+        </Container>
       </tabs.content>
     </tabs.root>
   );

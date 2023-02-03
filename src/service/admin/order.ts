@@ -1,5 +1,6 @@
 import { useQuery } from "@tanstack/react-query";
 import { AdminOrder } from "pages/api/admin/order/[orderId]";
+import { AdminOrderMessages } from "pages/api/admin/order/[orderId]/messages";
 import {
   OrderProgressCreateReturn,
   OrderProgressCreateSchema,
@@ -92,7 +93,7 @@ export const getOrder = (orderId: string) => async () => {
 };
 
 export const getOrderMessages = (orderId: string) => async () => {
-  const { data } = await api.get<AdminOrderMessagesSchema>(
+  const { data } = await api.get<AdminOrderMessages>(
     `/api/admin/order/${orderId}/messages`
   );
 

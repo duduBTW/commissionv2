@@ -8,9 +8,10 @@ import styled from "@emotion/styled";
 import * as g from "styles/globalStyles";
 
 // components
-import ArtistCommissionOrder from "components/admin/commission/order";
+import ArtistCommissionCategory from "components/commission/categorys";
 import Button from "components/button";
 import CheckBoxBase from "components/input/checkbox/base";
+import Nav from "components/Nav";
 
 interface ArtistCommissionOrderPageProps {
   params: ArtistCommissionOrderParams;
@@ -41,8 +42,10 @@ const ArtistCommissionOrderPage = ({
     );
   }
 
-  return <ArtistCommissionOrder {...params} />;
+  return <ArtistCommissionCategory {...params} />;
 };
+
+ArtistCommissionOrderPage.layout = false;
 
 const Contract = ({
   onReadContract,
@@ -60,32 +63,35 @@ const Contract = ({
   >(false);
 
   return (
-    <g.paper>
-      <s.contract_content
-        dangerouslySetInnerHTML={{
-          __html: purifiedContractHtml,
-        }}
-      />
+    <>
+      <Nav />
+      <g.paper>
+        <s.contract_content
+          dangerouslySetInnerHTML={{
+            __html: purifiedContractHtml,
+          }}
+        />
 
-      <form
-        onSubmit={(e) => {
-          e.preventDefault();
-          if (acceptContract) onReadContract();
-        }}
-      >
-        <s.accept_container>
-          <CheckBoxBase
-            checked={acceptContract}
-            onCheckedChange={setAcceptContract}
-            id="accept"
-          />
-          <label htmlFor="accept">Li e aceito os termos e condições.</label>
-        </s.accept_container>
-        <Button type="submit" disabled={!acceptContract} fullWidth>
-          Continuar
-        </Button>
-      </form>
-    </g.paper>
+        <form
+          onSubmit={(e) => {
+            e.preventDefault();
+            if (acceptContract) onReadContract();
+          }}
+        >
+          <s.accept_container>
+            <CheckBoxBase
+              checked={acceptContract}
+              onCheckedChange={setAcceptContract}
+              id="accept"
+            />
+            <label htmlFor="accept">Li e aceito os termos e condições.</label>
+          </s.accept_container>
+          <Button type="submit" disabled={!acceptContract} fullWidth>
+            Continuar
+          </Button>
+        </form>
+      </g.paper>
+    </>
   );
 };
 

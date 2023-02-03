@@ -25,8 +25,8 @@ const ProfileOrderComplete = ({ orderId }: { orderId: string }) => {
       </g.paper_container>
       <g.paper dense>
         <Typography>
-          Taka entrara em contato com você no discord{" "}
-          <strong>{order?.discord}</strong> para finalizar o pedido.
+          Taka entrara em contato com você no <strong>{order?.contact}</strong>{" "}
+          para finalizar o pedido.
         </Typography>
       </g.paper>
       {order && (

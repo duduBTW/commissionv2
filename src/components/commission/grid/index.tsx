@@ -1,4 +1,4 @@
-import { AdminCommissionListSchema } from "service/admin/commission";
+import { ArtistCommissionList } from "pages/api/artist/[artistId]/commissions";
 
 // components
 import CommissionCard from "components/commission/card";
@@ -10,7 +10,7 @@ const CommissionsGrid = ({
   commissions,
   href,
 }: {
-  commissions: AdminCommissionListSchema[];
+  commissions: ArtistCommissionList;
   href: string;
 }) => {
   return (

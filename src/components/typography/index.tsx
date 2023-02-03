@@ -32,6 +32,7 @@ export interface Props {
   variant?: TextVariant;
   color?: TextColorVariant;
   children: React.ReactNode;
+  as?: "label" | "h1" | "h2" | "h3" | "p";
   ml?: number;
   className?: string;
   center?: boolean;
@@ -40,12 +41,13 @@ export interface Props {
 const Typography = ({
   variant = "body-01",
   children,
+  as,
   color = "text.80",
   ml = 0,
   ...rest
 }: Props) => {
   return (
-    <s.styledText {...rest} color={color} variant={variant} ml={ml}>
+    <s.styledText {...rest} as={as} color={color} variant={variant} ml={ml}>
       {children}
     </s.styledText>
   );
