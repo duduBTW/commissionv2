@@ -87,7 +87,7 @@ export const getCommission = async ({
     name,
     price,
     id,
-    steps,
+    steps: steps ?? "",
     active,
   };
 };
