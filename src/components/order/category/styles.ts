@@ -10,6 +10,7 @@ export const container = styled.div`
   width: 100%;
   display: flex;
   min-height: 100vh;
+  min-height: 100dvh;
   max-width: 103.2rem;
 
   ${mq.fromTabletSm} {

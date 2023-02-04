@@ -9,6 +9,7 @@ import Button from "components/button";
 
 export const container = styled(g.paper)`
   min-height: calc(100vh - 6rem);
+  min-height: 100dvh;
 
   ${mq.fromTabletSm} {
     min-height: auto;

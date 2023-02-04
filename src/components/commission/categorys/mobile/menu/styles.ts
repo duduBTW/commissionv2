@@ -8,6 +8,8 @@ export const mobile_nav = styled.div`
   align-items: center;
   gap: 1.6rem;
   padding: 1.2rem 2rem;
+  max-width: 100%;
+  overflow-x: scroll;
 
   ${mq.fromDesktopSm} {
     display: none;
@@ -21,6 +23,7 @@ export const mobile_nav_conent = styled(Tabs.List)`
 `;
 
 export const mobile_nav_tab = styled(Tabs.Trigger)`
+  white-space: nowrap;
   &:focus {
     text-decoration: underline;
   }

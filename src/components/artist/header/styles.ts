@@ -9,7 +9,7 @@ interface BannerProps {
 
 export const banner = styled.img<BannerProps>`
   height: 16rem;
-  width: calc(100% + 4rem);
+  width: 100%;
   margin: ${({ noMargin }) => (noMargin ? "0" : "0 0 2rem")};
   object-fit: cover;
 
@@ -19,7 +19,6 @@ export const banner = styled.img<BannerProps>`
 
   ${mq.fromDesktopSm} {
     margin: ${({ noMargin }) => (noMargin ? "0" : "0 0 2rem")};
-    width: 100%;
     height: 24rem;
     border-radius: 1.2rem;
   }
