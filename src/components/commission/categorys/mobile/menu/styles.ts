@@ -9,7 +9,7 @@ export const mobile_nav = styled.div`
   gap: 1.6rem;
   padding: 1.2rem 2rem;
   max-width: 100%;
-  overflow-x: scroll;
+  overflow-x: auto;
 
   ${mq.fromDesktopSm} {
     display: none;

@@ -6,6 +6,7 @@ import { mq } from "styles/theme";
 export const container = styled(Container)`
   .content {
     margin-left: 2rem;
+    margin-right: 2rem;
     display: flex;
     flex-direction: column;
     gap: 2rem;
@@ -16,6 +17,7 @@ export const container = styled(Container)`
 
     .content {
       margin-left: auto;
+      margin-right: auto;
     }
   }
 `;

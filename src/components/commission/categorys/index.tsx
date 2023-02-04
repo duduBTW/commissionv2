@@ -283,22 +283,23 @@ const CategoryTab = ({
       <Typography variant="title-03">{name}</Typography>
       <div style={{ height: "0.8rem" }} />
       {purifiedHtml && (
-        <Typography variant="subtitle-02" color="text.40">
-          <div
-            dangerouslySetInnerHTML={{
-              __html: purifiedHtml,
-            }}
-          />
-        </Typography>
+        <>
+          <Typography variant="subtitle-02" color="text.40">
+            <div
+              dangerouslySetInnerHTML={{
+                __html: purifiedHtml,
+              }}
+            />
+          </Typography>
+          <div style={{ height: "2.4rem" }} />
+        </>
       )}
-      <div style={{ height: "2.4rem" }} />
 
       <Editor
         content={contentMap[id]}
         onUpdate={({ editor }) => {
           setContent((c) => ({ ...c, [id]: editor.getJSON() }));
         }}
-        autofocus="end"
       />
     </s.tab_content>
   );
