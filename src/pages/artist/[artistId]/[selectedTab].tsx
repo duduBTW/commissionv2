@@ -31,14 +31,12 @@ export const getServerSideProps: GetServerSideProps = async ({ params }) => {
     );
   }
 
-  const revalidateTime = 5 * 60; // min, sec
   return {
     props: {
       artistId,
       selectedTab: selectedTab,
       dehydratedState: dehydrate(queryClient),
     },
-    revalidate: revalidateTime,
   };
 };
 // export const getStaticPaths = async () => {
