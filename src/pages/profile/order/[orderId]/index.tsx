@@ -92,9 +92,7 @@ const OrderPage = ({
       <tabs.content desktopMargin="3.2rem 0" asChild value="progresso">
         <Container>
           <g.paper align="left" dense>
-            {order.type && order.commission?.steps && (
-              <OrderProgress currentStep={order.type} />
-            )}
+            {order.type && <OrderProgress currentStep={order.type} />}
             <div
               style={{
                 padding: "0.8rem 0",

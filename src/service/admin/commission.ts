@@ -11,7 +11,6 @@ export const commissionSchema = z.object({
   id: z.string().optional(),
   name: z.string().min(1, { message: "Required" }),
   active: z.boolean(),
-  steps: z.string().min(1, { message: "Required" }),
   description: z.object({
     json: z.string(),
     html: z.string(),

@@ -43,13 +43,6 @@ const AdminCommissionForm = ({
           label="Nome *"
         />
         <InputCurrency control={control} name="price" label="Preco *" />
-        <InputText
-          control={control}
-          name="steps"
-          variant="outlined"
-          label="Passos (separado por virgula) *"
-          placeholder="rascuho, lineart, cor"
-        />
         <InputEditor control={control} name="description" label="Descricao *" />
         <s.submit_button fullWidth loading={loading} type="submit">
           {submitLabel}

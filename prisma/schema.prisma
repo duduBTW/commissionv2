@@ -86,7 +86,6 @@ model Commission {
   price           Float
   descriptionHtml String
   descriptionJson String
-  steps           String?
 
   Categorys CommissionCategory[]
   images    CommissionImage[]

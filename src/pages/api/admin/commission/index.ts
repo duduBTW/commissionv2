@@ -35,7 +35,6 @@ export const insetCommission = async ({
     description: { html, json },
     name,
     price,
-    steps,
     active,
   } = commissionSchema.parse(body);
 
@@ -45,7 +44,6 @@ export const insetCommission = async ({
       descriptionJson: json,
       name,
       price,
-      steps,
       active,
       user: {
         connect: {

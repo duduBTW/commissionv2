@@ -55,7 +55,6 @@ const get = async ({
           images: true,
           name: true,
           price: true,
-          steps: true,
         },
       },
       artist: {
