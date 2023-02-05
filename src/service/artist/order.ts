@@ -1,5 +1,4 @@
 import { useQuery } from "@tanstack/react-query";
-import { JSONContent } from "@tiptap/react";
 import { IncomingHttpHeaders } from "http";
 import { CommissionCategorys } from "pages/api/artist/[artistId]/commissions/[commissionId]/categorys";
 import { Contract } from "pages/api/artist/[artistId]/contract";
@@ -8,10 +7,10 @@ import { z } from "zod";
 
 // -- Schema
 export const confirmationSchema = z.object({
-  name: z.string().min(1, { message: "Required" }),
-  brith: z.string().min(1, { message: "Required" }),
+  fullName: z.string().min(1, { message: "Required" }),
+  birthDate: z.string().min(1, { message: "Required" }),
   contact: z.string().min(1, { message: "Required" }),
-  paying: z.string().min(1, { message: "Required" }),
+  payingType: z.string().min(1, { message: "Required" }),
 });
 
 // -- Types

@@ -325,19 +325,19 @@ const ConfirmationTab = () => {
             variant="outlined"
             control={control}
             label="Nome completo"
-            name="name"
+            name="fullName"
           />
           <InputText
             variant="outlined"
             control={control}
             label="Data de nascimento"
-            name="brith"
+            name="birthDate"
             placeholder="dia/mes/ano"
           />
           <InputRadio
             label="Quem realizara o pagamento"
             control={control}
-            name="paying"
+            name="payingType"
             defaultValue="me"
           >
             <radio.item_container>

@@ -5,16 +5,14 @@ import { GetServerSideProps } from "next";
 // components
 import Container from "components/container";
 import * as tabs from "components/tabs";
-import OrderCategotys from "components/order/category";
 import OrderProgress from "components/order/progress";
 import Typography from "components/typography";
 import { AristHeaderDense } from "components/artist/header";
+import { Editor } from "components/commission/categorys";
 
 // styles
 import * as g from "styles/globalStyles";
 import styled from "@emotion/styled";
-import { Editor } from "components/commission/categorys";
-import Button from "components/button";
 
 export const getServerSideProps: GetServerSideProps = async ({ params }) => {
   const orderId = String(params?.orderId);

@@ -13,12 +13,12 @@ import CloseLineIcon from "remixicon-react/CloseLineIcon";
 import ButtonIcon from "components/button/icon";
 import InputText from "components/input/text";
 import InputEditor from "components/input/editor";
+import { OrderProgressCreateSchema } from "pages/api/admin/order/[orderId]/progress";
+import UserAvatar from "components/user/avatar";
 
 // styles
 import * as g from "styles/globalStyles";
 import * as s from "./styles";
-import { OrderProgressCreateSchema } from "pages/api/admin/order/[orderId]/progress";
-import { Message } from "components/order/category";
 
 const AdminOrderProgress = ({ orderId }: AdminOrderItemPageParams) => {
   const [open, setOpen] = useState(false);
@@ -168,6 +168,37 @@ const UpdateClientModal = ({
         </dialog.content>
       </dialog.portal>
     </dialog.root>
+  );
+};
+
+export const Message = ({
+  userName,
+  message,
+  html,
+  profilePicture,
+}: {
+  userName: string;
+  html?: string;
+  message?: string;
+  profilePicture: string;
+}) => {
+  return (
+    <s.message_container>
+      <UserAvatar src={profilePicture} />
+      <div>
+        <Typography variant="subtitle-01" color="primary.main">
+          {userName}
+        </Typography>
+        {html && (
+          <s.message_content
+            dangerouslySetInnerHTML={{
+              __html: html,
+            }}
+          />
+        )}
+        {message && <s.message_content>{message}</s.message_content>}
+      </div>
+    </s.message_container>
   );
 };
 

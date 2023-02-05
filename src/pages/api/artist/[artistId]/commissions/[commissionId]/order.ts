@@ -72,7 +72,7 @@ const post = async ({
           id: commissionId,
         },
       },
-      contact: buyer.contact,
+      ...buyer,
       messages: {
         create: Object.entries(messages).map(([id, content]) => ({
           content: content,

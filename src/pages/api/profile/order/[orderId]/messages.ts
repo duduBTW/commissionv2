@@ -2,7 +2,6 @@ import { NextApiRequest, NextApiResponse } from "next";
 import { z } from "zod";
 import { UserSession } from "types/next-auth";
 import { prisma } from "server/db/client";
-import { Message, Category } from "components/order/category";
 import { getServerAuthSession } from "server/common/get-server-auth-session";
 
 const orderApi = async (req: NextApiRequest, res: NextApiResponse) => {

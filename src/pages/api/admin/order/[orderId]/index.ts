@@ -99,6 +99,9 @@ const get = async (
       contact: true,
       progress: true,
       currentTypeId: true,
+      birthDate: true,
+      payingType: true,
+      fullName: true,
     },
   });
 };

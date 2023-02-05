@@ -143,6 +143,9 @@ model Order {
   user          User?           @relation(fields: [userId], references: [id])
   commission    Commission      @relation(fields: [commissionId], references: [id])
   contact       String?
+  birthDate     String
+  fullName      String
+  payingType    String
   type          String          @default("not_approved")
   currentTypeId String?
   lastUpdated   String?

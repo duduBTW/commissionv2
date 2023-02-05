@@ -44,10 +44,20 @@ const User = ({ orderId }: AdminOrderItemPageParams) => {
       )}
       <s.information_grid>
         {order.user?.userName && (
-          <UserInfoItem label="Nome">{order.user.userName}</UserInfoItem>
+          <UserInfoItem label="Nome completo">{order.fullName}</UserInfoItem>
         )}
         {order.contact && (
-          <UserInfoItem label="Contact">{order.contact}</UserInfoItem>
+          <UserInfoItem label="Contato">{order.contact}</UserInfoItem>
+        )}
+        {order.birthDate && (
+          <UserInfoItem label="Data de nascimento">
+            {order.birthDate}
+          </UserInfoItem>
+        )}
+        {order.payingType && (
+          <UserInfoItem label="Quem realizara o pagamento">
+            {order.payingType}
+          </UserInfoItem>
         )}
       </s.information_grid>
     </s.container_user>
