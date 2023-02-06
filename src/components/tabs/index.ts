@@ -43,7 +43,7 @@ export const list = styled(Tabs.List)<ListProps>`
 
 export const trigger = styled(Tabs.Trigger)`
   all: unset;
-  padding: 1.2rem 2rem;
+  padding: 0.8rem 2rem;
   position: relative;
   font-family: "Poppins";
   font-style: normal;
@@ -66,7 +66,8 @@ export const trigger = styled(Tabs.Trigger)`
       position: absolute;
       width: 4rem;
       bottom: -0.2rem;
-      height: 0.4rem;
+      height: 0.2rem;
+      left: 1.2rem;
       border-radius: 222rem;
       background-color: var(--color-primary);
       z-index: 2;

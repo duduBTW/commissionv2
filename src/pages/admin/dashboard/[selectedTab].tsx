@@ -15,6 +15,7 @@ import Container from "components/container";
 import DashBoardPortfolio from "components/admin/dashboard/portfolio";
 import DashboardCommission from "components/admin/dashboard/commission";
 import DashboardContract from "components/admin/dashboard/contract";
+import DashboardStore from "components/admin/dashboard/store";
 
 export const getServerSideProps: GetServerSideProps = async ({
   params,
@@ -65,12 +66,14 @@ const AdminDashboardPage: NextPage<{ defaultValue: string }> = ({
           <t.trigger value="commissions">Commissions</t.trigger>
           <t.trigger value="portfolio">Portfolio</t.trigger>
           <t.trigger value="contract">Contrato</t.trigger>
+          <t.trigger value="store">Loja</t.trigger>
         </t.list>
       </s.tabs_container>
       <DashBoardOrders />
       <DashboardCommission />
       <DashBoardPortfolio />
       <DashboardContract />
+      <DashboardStore />
     </t.root>
   );
 };

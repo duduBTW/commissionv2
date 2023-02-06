@@ -1,5 +1,4 @@
 import { useQuery } from "@tanstack/react-query";
-import axios from "axios";
 import { IncomingHttpHeaders } from "http";
 import { ArtistCommissionList } from "pages/api/artist/[artistId]/commissions";
 import { ArtistCommissionItem } from "pages/api/artist/[artistId]/commissions/[commissionId]";

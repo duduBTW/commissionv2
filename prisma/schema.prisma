@@ -62,6 +62,7 @@ model User {
   Admin          Admin?
   role           String       @default("user")
   Contract       Contract[]
+  Merch          Merch[]
 }
 
 model VerificationToken {
@@ -94,6 +95,18 @@ model Commission {
   user   User    @relation(fields: [userId], references: [id])
   userId String
   Order  Order[]
+}
+
+model Merch {
+  id        String  @id @default(cuid())
+  active    Boolean @default(true)
+  name      String
+  miniature String
+  url       String
+  price     Int
+
+  user   User   @relation(fields: [userId], references: [id])
+  userId String
 }
 
 model CommissionImage {
