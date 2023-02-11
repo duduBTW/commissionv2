@@ -33,3 +33,7 @@ export const tab_content = styled.div`
 export const not_found = styled(Typography)`
   margin-top: 2.4rem;
 `;
+
+export const footer = styled.div`
+  height: 6rem;
+`;

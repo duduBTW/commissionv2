@@ -17,10 +17,12 @@ import Button from "components/button";
 const AdminStoreForm = ({
   onSubmit,
   loading,
+  submitLabel,
   ...formProps
 }: {
   onSubmit: SubmitHandler<CreateAdminMerchSchema>;
   loading?: boolean;
+  submitLabel: string;
 } & UseFormProps<CreateAdminMerchSchema>) => {
   const formMethods = useForm<CreateAdminMerchSchema>({
     resolver: zodResolver(services.admin.createAdminMerchSchema),
@@ -55,7 +57,7 @@ const AdminStoreForm = ({
           {(src) => src && <s.miniature src={src} alt="miniatura" />}
         </InputImage>
         <Button loading={loading} fullWidth>
-          Criar
+          {submitLabel}
         </Button>
       </g.paper>
     </form>

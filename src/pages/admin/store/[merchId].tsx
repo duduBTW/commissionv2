@@ -1,21 +1,21 @@
-import { useMutation } from "@tanstack/react-query";
 import services from "service";
-import { useRouter } from "next/router";
+import { GetServerSideProps } from "next";
+import { useMutation } from "@tanstack/react-query";
+import { z } from "zod";
 
 // components
 import AdminStoreForm from "components/admin/store/form";
 import AdminHeader from "components/admin/title";
-import { z } from "zod";
-import { GetServerSideProps } from "next";
+import { toast } from "react-hot-toast";
 
 const AdminStoreUpdatePage = ({ merchId }: { merchId: string }) => {
-  const router = useRouter();
-  const { data: merch } = services.admin.useMerch(merchId);
-  const { mutate: insertMerch, isLoading } = useMutation(
-    services.admin.insertMerch,
+  const { data: merch, refetch } = services.admin.useMerch(merchId);
+  const { mutate: updateMerch, isLoading } = useMutation(
+    services.admin.updateMerch(merchId),
     {
-      onSuccess: ({ id }) => {
-        router.push(`/admin/store/${id}`);
+      onSuccess: () => {
+        refetch();
+        toast.success(`Merch atualizada com sucesso!`);
       },
     }
   );
@@ -29,17 +29,15 @@ const AdminStoreUpdatePage = ({ merchId }: { merchId: string }) => {
         <AdminStoreForm
           defaultValues={merch}
           loading={isLoading}
-          onSubmit={(d) => insertMerch(d)}
+          onSubmit={(d) => updateMerch(d)}
+          submitLabel="Salvar"
         />
       )}
     </>
   );
 };
 
-export const getServerSideProps: GetServerSideProps = async ({
-  params,
-  req,
-}) => {
+export const getServerSideProps: GetServerSideProps = async ({ params }) => {
   const merchId = z.string().parse(params?.["merchId"]);
 
   return {

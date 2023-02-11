@@ -63,7 +63,8 @@ const ArtistProfile = ({
           </tabs.content>
         )}
       </s.container>
-    </tabs.root>
+      <s.footer />
+      </tabs.root>
   );
 };
 

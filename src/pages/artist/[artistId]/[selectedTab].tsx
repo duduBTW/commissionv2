@@ -99,22 +99,12 @@ const AristPage = ({
   selectedTab: string;
   artistId: string;
 }) => {
-  const { data: artist } = services.useArtist(artistId);
-
-  if (!artist) return <></>;
   return (
     <>
-      <AristHeader {...artist} />
+      <AristHeader artistId={artistId} />
       <ArtistProfile artistId={artistId} selectedTab={selectedTab} />
-      <s.footer />
     </>
   );
-};
-
-const s = {
-  footer: styled.div`
-    height: 6rem;
-  `,
 };
 
 export default AristPage;

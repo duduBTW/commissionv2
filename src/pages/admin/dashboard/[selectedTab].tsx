@@ -16,6 +16,8 @@ import DashBoardPortfolio from "components/admin/dashboard/portfolio";
 import DashboardCommission from "components/admin/dashboard/commission";
 import DashboardContract from "components/admin/dashboard/contract";
 import DashboardStore from "components/admin/dashboard/store";
+import ArtistProfile from "components/artist/profile";
+import AristHeader from "components/artist/header";
 
 export const getServerSideProps: GetServerSideProps = async ({
   params,
@@ -56,6 +58,7 @@ export const getServerSideProps: GetServerSideProps = async ({
 const AdminDashboardPage: NextPage<{ defaultValue: string }> = ({
   defaultValue,
 }) => {
+  const { data: session } = services.profile.useSession();
   const handleValueChange = useSyncTabUrl("/admin/dashboard/");
 
   return (
@@ -67,6 +70,7 @@ const AdminDashboardPage: NextPage<{ defaultValue: string }> = ({
           <t.trigger value="portfolio">Portfolio</t.trigger>
           <t.trigger value="contract">Contrato</t.trigger>
           <t.trigger value="store">Loja</t.trigger>
+          {session?.user && <t.trigger value="profile">Meu perfil</t.trigger>}
         </t.list>
       </s.tabs_container>
       <DashBoardOrders />
@@ -74,6 +78,12 @@ const AdminDashboardPage: NextPage<{ defaultValue: string }> = ({
       <DashBoardPortfolio />
       <DashboardContract />
       <DashboardStore />
+      {session?.user && (
+        <t.content value="profile">
+          <AristHeader artistId={session.user.id} />
+          <ArtistProfile artistId={session.user.id} selectedTab="commissions" />
+        </t.content>
+      )}
     </t.root>
   );
 };

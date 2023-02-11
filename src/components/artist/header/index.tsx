@@ -2,20 +2,17 @@
 import Container from "components/container";
 import UserAvatar from "components/user/avatar";
 import Link from "next/link";
+import services from "service";
 
 // styles
 import * as s from "./styles";
 
-const AristHeader = ({
-  banner,
-  profilePicture,
-  userName,
-}: {
-  id: string;
-  userName: string | null;
-  profilePicture: string | null;
-  banner: string | null;
-}) => {
+const AristHeader = ({ artistId }: { artistId: string }) => {
+  const { data: artist } = services.useArtist(artistId);
+
+  if (!artist) return <></>;
+
+  const { banner, profilePicture, userName } = artist;
   return (
     <Container variant="content">
       {banner && (

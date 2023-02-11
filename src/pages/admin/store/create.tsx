@@ -1,11 +1,11 @@
-import { useMutation } from "@tanstack/react-query";
 import services from "service";
+import { useMutation } from "@tanstack/react-query";
 import { useRouter } from "next/router";
+import { toast } from "react-hot-toast";
 
 // components
 import AdminStoreForm from "components/admin/store/form";
 import AdminHeader from "components/admin/title";
-import { toast } from "react-hot-toast";
 
 const AdminStoreCreatePage = () => {
   const router = useRouter();
@@ -23,7 +23,11 @@ const AdminStoreCreatePage = () => {
   return (
     <>
       <AdminHeader backHref="/admin/dashboard/store">Nova merch</AdminHeader>
-      <AdminStoreForm loading={isLoading} onSubmit={(d) => insertMerch(d)} />
+      <AdminStoreForm
+        loading={isLoading}
+        onSubmit={(d) => insertMerch(d)}
+        submitLabel="Criar"
+      />
     </>
   );
 };
